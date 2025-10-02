@@ -17,21 +17,49 @@ public class Dish {
     private String description;
     private double price;
     private String pictureURL;
+    private DishState state;
 
-    public Dish createDish(RestaurantId restaurantId, String name, DishType dishType, List<FoodTag> foodTags, String description, double price, String pictureURL) {
+    // Factory method for creating new dishes
+    public static Dish createDish(RestaurantId restaurantId, String name, DishType dishType,
+                                  List<FoodTag> foodTags, String description, double price, String pictureURL) {
         Dish dish = new Dish();
-            dish.setRestaurantId(restaurantId);
-            dish.setName(name);
-            dish.setDishType(dishType);
-            dish.setFoodTags(foodTags);
-            dish.setDescription(description);
-            dish.setPrice(price);
-            dish.setPictureURL(pictureURL);
+        dish.setDishId(DishId.create()); // Auto-generate ID
+        dish.setRestaurantId(restaurantId);
+        dish.setName(name);
+        dish.setDishType(dishType);
+        dish.setFoodTags(foodTags);
+        dish.setDescription(description);
+        dish.setPrice(price);
+        dish.setPictureURL(pictureURL);
+        dish.setState(DishState.UNPUBLISHED); // Default state
         return dish;
     }
 
+    // Business logic methods
+    public void updateDetails(String name, DishType dishType, List<FoodTag> foodTags,
+                              String description, double price, String pictureURL) {
+        this.name = name;
+        this.dishType = dishType;
+        this.foodTags = foodTags;
+        this.description = description;
+        this.price = price;
+        this.pictureURL = pictureURL;
+    }
 
-    public Dish(DishId dishId, RestaurantId restaurantId, String name, DishType dishType, List<FoodTag> foodTags, String description, double price, String pictureURL) {
+    public void publish() {
+        this.state = DishState.PUBLISHED;
+    }
+
+    public void unpublish() {
+        this.state = DishState.UNPUBLISHED;
+    }
+
+    public void markOutOfStock() {
+        this.state = DishState.OUTOFSTOCK;
+    }
+
+    public Dish(DishId dishId, RestaurantId restaurantId, String name, DishType dishType,
+                List<FoodTag> foodTags, String description, double price, String pictureURL) {
         this.dishId = dishId;
         this.restaurantId = restaurantId;
         this.name = name;
@@ -40,6 +68,7 @@ public class Dish {
         this.description = description;
         this.price = price;
         this.pictureURL = pictureURL;
+        this.state = DishState.UNPUBLISHED;
     }
 
     public Dish() {
@@ -56,6 +85,7 @@ public class Dish {
                 ", description='" + description + '\'' +
                 ", price=" + price +
                 ", pictureURL='" + pictureURL + '\'' +
+                ", state=" + state +
                 '}';
     }
 }

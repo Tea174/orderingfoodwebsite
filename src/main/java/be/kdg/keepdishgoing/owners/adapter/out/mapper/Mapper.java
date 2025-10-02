@@ -1,6 +1,7 @@
 package be.kdg.keepdishgoing.owners.adapter.out.mapper;
 
 import be.kdg.keepdishgoing.owners.adapter.out.dish.DishJpaEntity;
+import be.kdg.keepdishgoing.owners.adapter.out.owner.OwnerJpaEntity;
 import be.kdg.keepdishgoing.owners.adapter.out.restaurant.RestaurantJpaEntity;
 import be.kdg.keepdishgoing.owners.domain.*;
 import org.springframework.stereotype.Component;
@@ -91,5 +92,30 @@ public class Mapper {
         return tags.stream()
                 .map(FoodTag::value) // record getter
                 .collect(Collectors.joining(","));
+    }
+
+
+    public Owner toDomainOwner(OwnerJpaEntity entity) {
+        return new Owner(
+                OwnerId.of(entity.getOwnerId()),
+                entity.getFirstName(),
+                entity.getLastName(),
+                entity.getEmail(),
+                entity.getPassword(),
+                entity.getPhoneNumber(),
+                entity.getAddress()
+        );
+    }
+
+    public OwnerJpaEntity toEntityOwner(Owner owner) {
+        OwnerJpaEntity entity = new OwnerJpaEntity();
+        entity.setOwnerId(owner.getOwnerId().id());
+        entity.setFirstName(owner.getFirstName());
+        entity.setLastName(owner.getLastName());
+        entity.setEmail(owner.getEmail());
+        entity.setPassword(owner.getPassword());
+        entity.setPhoneNumber(owner.getPhoneNumber());
+        entity.setAddress(owner.getAddress());
+        return entity;
     }
 }

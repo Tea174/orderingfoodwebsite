@@ -1,4 +1,4 @@
-package be.kdg.keepdishgoing.owners.port.out.dish;
+package be.kdg.keepdishgoing.owners.port.in.dish;
 
 import be.kdg.keepdishgoing.owners.domain.DishId;
 import be.kdg.keepdishgoing.owners.domain.DishType;

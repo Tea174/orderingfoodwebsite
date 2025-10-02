@@ -1,6 +1,7 @@
 package be.kdg.keepdishgoing.owners.adapter.out.dish;
 
 import be.kdg.keepdishgoing.owners.adapter.out.mapper.Mapper;
+import be.kdg.keepdishgoing.owners.adapter.out.restaurant.RestaurantJpaRepository;
 import be.kdg.keepdishgoing.owners.domain.Dish;
 import be.kdg.keepdishgoing.owners.domain.DishId;
 import be.kdg.keepdishgoing.owners.domain.RestaurantId;
@@ -17,10 +18,14 @@ import java.util.stream.Collectors;
 public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishPort {
 
     private final DishJpaRepository dishJpaRepository;
+    private final RestaurantJpaRepository restaurantJpaRepository;
     private final Mapper mapper;
 
-    public DishJpaAdapter(DishJpaRepository dishJpaRepository, Mapper mapper) {
+    public DishJpaAdapter(DishJpaRepository dishJpaRepository,
+                          RestaurantJpaRepository restaurantJpaRepository,
+                          Mapper mapper) {
         this.dishJpaRepository = dishJpaRepository;
+        this.restaurantJpaRepository = restaurantJpaRepository;
         this.mapper = mapper;
     }
 
@@ -40,9 +45,12 @@ public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishP
 
     @Override
     public Dish save(Dish dish) {
-        // Load the parent restaurant entity
-        var restaurantEntity = // need to inject RestaurantJpaRepository
-                DishJpaEntity entity = mapper.toEntityDish(dish, restaurantEntity);
+        var restaurantEntity = restaurantJpaRepository.findById(dish.getRestaurantId().id())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Restaurant not found with id: " + dish.getRestaurantId().id()
+                ));
+
+        DishJpaEntity entity = mapper.toEntityDish(dish, restaurantEntity);
         DishJpaEntity savedEntity = dishJpaRepository.save(entity);
         return mapper.toDomainDish(savedEntity);
     }
