@@ -1,6 +1,5 @@
-package be.kdg.keepdishgoing.owners.adapter.out;
+package be.kdg.keepdishgoing.owners.adapter.out.dish;
 
-import be.kdg.keepdishgoing.owners.domain.Dish;
 import be.kdg.keepdishgoing.owners.port.out.LoadDishesPort;
 import be.kdg.keepdishgoing.owners.port.out.UpdateDishesPort;
 import org.slf4j.Logger;

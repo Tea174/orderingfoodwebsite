@@ -6,6 +6,6 @@ import be.kdg.keepdishgoing.customers.domain.Order;
 
 import java.util.List;
 
-public interface FindAllOrdersPort {
+public interface FindAllDishesInBasketPort {
     List<Order> findAll();
 }

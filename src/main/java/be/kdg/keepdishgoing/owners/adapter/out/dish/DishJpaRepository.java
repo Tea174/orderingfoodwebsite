@@ -1,4 +1,4 @@
-package be.kdg.keepdishgoing.owners.adapter.out;
+package be.kdg.keepdishgoing.owners.adapter.out.dish;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

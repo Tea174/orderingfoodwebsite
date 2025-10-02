@@ -1,0 +1,30 @@
+services:
+  kdg-db:
+    image: postgres:17.2-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: 'kdg'
+      POSTGRES_USER: 'kdg'
+      POSTGRES_PASSWORD: 'kdg'
+      # Tell PostgreSQL to use our custom pg_hba.conf after initdb
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      - '2345:5432'
+    networks:
+     - backend
+
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./pg_hba.conf:/docker-entrypoint-initdb.d/pg_hba.conf
+
+
+volumes:
+  db-data:
+
+networks:
+    kc:
+      name: kc-network
+      driver: bridge
+    backend:
+      name: back-network
+      driver: bridge

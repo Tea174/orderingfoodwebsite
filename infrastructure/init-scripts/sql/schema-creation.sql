@@ -1,0 +1,8 @@
+CREATE USER kdg WITH PASSWORD 'kdg';
+CREATE DATABASE kdg;
+GRANT ALL PRIVILEGES ON DATABASE kdg TO kdg;
+
+\c kdg kdg;
+CREATE SCHEMA kdg_owners;
+CREATE SCHEMA kdg_customers;
+

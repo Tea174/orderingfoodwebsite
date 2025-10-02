@@ -26,22 +26,24 @@ repositories {
 
 extra["springModulithVersion"] = "1.4.1"
 
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.modulith:spring-modulith-bom:${property("springModulithVersion")}")
+    }
+}
+
+
 dependencies {
     implementation("org.springframework.modulith:spring-modulith-starter-core")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.modulith:spring-modulith-starter-test")
+    testImplementation("org.springframework.modulith:spring-modulith-core")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation ("org.springframework.boot:spring-boot-starter-web")
     runtimeOnly ("org.postgresql:postgresql")
     implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
-}
-
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.modulith:spring-modulith-bom:${property("springModulithVersion")}")
-    }
 }
 
 tasks.withType<Test> {

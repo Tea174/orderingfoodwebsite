@@ -14,7 +14,7 @@ public class Owner {
     private String lastName;
     private String email;
     private String password;
-    private int number;
+    private int phoneNumber;
     private String Address;
 
 
