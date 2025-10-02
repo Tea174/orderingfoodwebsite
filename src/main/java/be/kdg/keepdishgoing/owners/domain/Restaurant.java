@@ -8,9 +8,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
 public class Restaurant {
     private RestaurantId restaurantId;
     private OwnerId  ownerId;
@@ -48,4 +45,32 @@ public class Restaurant {
         );
     }
 
+    public Restaurant(RestaurantId restaurantId, OwnerId ownerId, String name, String address, String email, String pictureURL, TypeOfCuisine cuisine, Time preparationTime, Time openingTime, List<Dish> dishes) {
+        this.restaurantId = restaurantId;
+        this.ownerId = ownerId;
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.pictureURL = pictureURL;
+        this.cuisine = cuisine;
+        this.preparationTime = preparationTime;
+        this.openingTime = openingTime;
+        this.dishes = dishes;
+    }
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "restaurantId=" + restaurantId +
+                ", ownerId=" + ownerId +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", email='" + email + '\'' +
+                ", pictureURL='" + pictureURL + '\'' +
+                ", cuisine=" + cuisine +
+                ", preparationTime=" + preparationTime +
+                ", openingTime=" + openingTime +
+                ", dishes=" + dishes +
+                '}';
+    }
 }

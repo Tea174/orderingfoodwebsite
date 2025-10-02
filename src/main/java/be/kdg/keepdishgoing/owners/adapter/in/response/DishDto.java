@@ -1,4 +1,4 @@
-package be.kdg.keepdishgoing.owners.adapter.in.dto;
+package be.kdg.keepdishgoing.owners.adapter.in.response;
 
 public class DishDto {
 }

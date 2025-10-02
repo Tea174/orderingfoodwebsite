@@ -1,4 +1,4 @@
-package be.kdg.keepdishgoing.owners.port.out;
+package be.kdg.keepdishgoing.owners.port.out.dish;
 
 public interface UpdateDishesPort {
 }

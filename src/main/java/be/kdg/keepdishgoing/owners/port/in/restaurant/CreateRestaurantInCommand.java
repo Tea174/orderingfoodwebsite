@@ -1,4 +1,4 @@
-package be.kdg.keepdishgoing.owners.port.in;
+package be.kdg.keepdishgoing.owners.port.in.restaurant;
 
 public record CreateRestaurantInCommand() {
 }

@@ -1,8 +1,143 @@
+-- Database and User Setup
 CREATE USER kdg WITH PASSWORD 'kdg';
 CREATE DATABASE kdg;
 GRANT ALL PRIVILEGES ON DATABASE kdg TO kdg;
 
 \c kdg kdg;
-CREATE SCHEMA kdg_owners;
-CREATE SCHEMA kdg_customers;
 
+-- Create Schemas for Bounded Contexts
+CREATE SCHEMA IF NOT EXISTS kdg_owners;
+CREATE SCHEMA IF NOT EXISTS kdg_customers;
+
+-- Grant permissions
+GRANT ALL ON SCHEMA kdg_owners TO kdg;
+GRANT ALL ON SCHEMA kdg_customers TO kdg;
+
+-- ============================================
+-- OWNERS BOUNDED CONTEXT (kdg_owners schema)
+-- Contains: owners, restaurants, dishes, orders
+-- ============================================
+
+-- Drop tables if they exist (in reverse order due to foreign keys)
+DROP TABLE IF EXISTS kdg_owners.dishes;
+DROP TABLE IF EXISTS kdg_owners.restaurants;
+DROP TABLE IF EXISTS kdg_owners.owners;
+
+-- Create Owners table
+CREATE TABLE kdg_owners.owners (
+                                   owner_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                                   first_name VARCHAR(100) NOT NULL,
+                                   last_name VARCHAR(100) NOT NULL,
+                                   email VARCHAR(255) NOT NULL UNIQUE,
+                                   password VARCHAR(255) NOT NULL,
+                                   phone_number INTEGER,
+                                   address VARCHAR(500),
+                                   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Restaurants table
+CREATE TABLE kdg_owners.restaurants (
+                                        restaurant_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                                        owner_id UUID NOT NULL,
+                                        name VARCHAR(255) NOT NULL,
+                                        address VARCHAR(500) NOT NULL,
+                                        email VARCHAR(255) NOT NULL,
+                                        picture_url VARCHAR(500),
+                                        cuisine VARCHAR(100) NOT NULL,
+                                        preparation_time TIME NOT NULL,
+                                        opening_time TIME NOT NULL,
+                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        CONSTRAINT fk_restaurant_owner FOREIGN KEY (owner_id)
+                                            REFERENCES kdg_owners.owners(owner_id) ON DELETE CASCADE
+);
+
+-- Create Dishes table
+CREATE TABLE kdg_owners.dishes (
+                                   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                                   dish_id UUID NOT NULL,
+                                   restaurant_id UUID NOT NULL,
+                                   dish_name VARCHAR(255) NOT NULL,
+                                   dish_type VARCHAR(50) NOT NULL,
+                                   food_tags TEXT,
+                                   description TEXT,
+                                   price DECIMAL(10, 2) NOT NULL,
+                                   picture_url VARCHAR(500),
+                                   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                   CONSTRAINT fk_dish_restaurant FOREIGN KEY (restaurant_id)
+                                       REFERENCES kdg_owners.restaurants(restaurant_id) ON DELETE CASCADE
+);
+
+-- Create indexes for owners context
+CREATE INDEX idx_owners_email ON kdg_owners.owners(email);
+CREATE INDEX idx_restaurants_owner_id ON kdg_owners.restaurants(owner_id);
+CREATE INDEX idx_restaurants_cuisine ON kdg_owners.restaurants(cuisine);
+CREATE INDEX idx_dishes_restaurant_id ON kdg_owners.dishes(restaurant_id);
+CREATE INDEX idx_dishes_dish_type ON kdg_owners.dishes(dish_type);
+
+-- ================================================
+-- CUSTOMERS BOUNDED CONTEXT (kdg_customers schema)
+-- Contains: customers, basket, order
+-- ================================================
+
+-- Drop table if exists
+DROP TABLE IF EXISTS kdg_customers.customers;
+
+-- Create Customers table
+CREATE TABLE kdg_customers.customers (
+                                         customer_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                                         first_name VARCHAR(100) NOT NULL,
+                                         last_name VARCHAR(100) NOT NULL,
+                                         email VARCHAR(255) NOT NULL UNIQUE,
+                                         password VARCHAR(255) NOT NULL,
+                                         number INTEGER,
+                                         address VARCHAR(500),
+                                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create indexes for customers context
+CREATE INDEX idx_customers_email ON kdg_customers.customers(email);
+
+-- ============================================
+-- TRIGGERS for auto-updating updated_at
+-- ============================================
+
+-- Create trigger function (shared across schemas)
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Triggers for OWNERS context tables
+CREATE TRIGGER update_owners_updated_at
+    BEFORE UPDATE ON kdg_owners.owners
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_restaurants_updated_at
+    BEFORE UPDATE ON kdg_owners.restaurants
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_dishes_updated_at
+    BEFORE UPDATE ON kdg_owners.dishes
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- Trigger for CUSTOMERS context table
+CREATE TRIGGER update_customers_updated_at
+    BEFORE UPDATE ON kdg_customers.customers
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================
+-- Grant sequence permissions
+-- ============================================
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA kdg_owners TO kdg;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA kdg_customers TO kdg;
