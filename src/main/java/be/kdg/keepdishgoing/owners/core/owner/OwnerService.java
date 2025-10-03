@@ -37,9 +37,7 @@ public class OwnerService implements
             throw new IllegalArgumentException("Email already registered");
         });
 
-        // Hash the password
         String hashedPassword = passwordEncoder.encode(command.password());
-
         // Create owner
         Owner owner = Owner.createOwner(
                 command.firstName(),

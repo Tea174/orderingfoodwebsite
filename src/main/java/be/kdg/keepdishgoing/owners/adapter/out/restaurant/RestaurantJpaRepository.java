@@ -1,11 +1,13 @@
 package be.kdg.keepdishgoing.owners.adapter.out.restaurant;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.nio.channels.FileChannel;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface RestaurantJpaRepository extends JpaRepository<RestaurantJpaEntity, Integer> {
     Optional<RestaurantJpaEntity> findByName(String name);
     Optional<RestaurantJpaEntity> findByOwner(UUID id);

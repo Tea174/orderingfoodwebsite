@@ -1,8 +1,12 @@
 package be.kdg.keepdishgoing.owners.domain;
 
+import be.kdg.keepdishgoing.common.events.DomainEvent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -15,6 +19,8 @@ public class Owner {
     private String password;
     private int phoneNumber;
     private String address;
+
+    private final List<DomainEvent> domainEvents = new ArrayList<>();
 
     // Factory method for creating new owners
     public static Owner createOwner(String firstName, String lastName, String email,

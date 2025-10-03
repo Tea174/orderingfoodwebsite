@@ -8,6 +8,7 @@ import be.kdg.keepdishgoing.owners.domain.RestaurantId;
 import be.kdg.keepdishgoing.owners.port.out.dish.DeleteDishPort;
 import be.kdg.keepdishgoing.owners.port.out.dish.LoadDishesPort;
 import be.kdg.keepdishgoing.owners.port.out.dish.SaveDishPort;
+import be.kdg.keepdishgoing.owners.port.out.dish.UpdateDishPort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
-public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishPort {
+public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishPort , UpdateDishPort {
 
     private final DishJpaRepository dishJpaRepository;
     private final RestaurantJpaRepository restaurantJpaRepository;
@@ -58,5 +59,10 @@ public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishP
     @Override
     public void delete(DishId dishId) {
         dishJpaRepository.deleteByDishId(dishId.id());
+    }
+
+    @Override
+    public Dish update(Dish dish) {
+        return null;
     }
 }

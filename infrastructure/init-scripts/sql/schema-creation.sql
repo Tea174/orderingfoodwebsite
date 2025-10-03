@@ -1,9 +1,4 @@
--- Database and User Setup
-CREATE USER kdg WITH PASSWORD 'kdg';
-CREATE DATABASE kdg;
-GRANT ALL PRIVILEGES ON DATABASE kdg TO kdg;
 
-\c kdg kdg;
 
 -- Create Schemas for Bounded Contexts
 CREATE SCHEMA IF NOT EXISTS kdg_owners;

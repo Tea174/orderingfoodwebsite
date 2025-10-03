@@ -1,8 +1,10 @@
 package be.kdg.keepdishgoing.owners.domain;
 
 
+import be.kdg.keepdishgoing.owners.domain.event.dish.DishEvent;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,6 +20,8 @@ public class Dish {
     private double price;
     private String pictureURL;
     private DishState state;
+
+    private final List<DishEvent> dishEvents = new ArrayList<>();
 
     // Factory method for creating new dishes
     public static Dish createDish(RestaurantId restaurantId, String name, DishType dishType,

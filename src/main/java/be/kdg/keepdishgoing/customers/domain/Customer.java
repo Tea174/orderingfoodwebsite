@@ -1,8 +1,12 @@
 package be.kdg.keepdishgoing.customers.domain;
 
+import be.kdg.keepdishgoing.common.events.DomainEvent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,6 +20,8 @@ public class Customer {
     private String password;
     private int number;
     private String Address;
+
+    private final List<DomainEvent> domainEvents = new ArrayList<>();
 
 
 }
