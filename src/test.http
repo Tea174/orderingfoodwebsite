@@ -1,0 +1,181 @@
+POST http://localhost:8080/api/owners/register
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "phoneNumber": 123456789,
+  "address": "123 Main St"
+}
+
+
+
+### Variables
+@baseUrl = http://localhost:8080
+@email = john.doe@restaurant.com
+@password = password123
+
+### ==========================================
+### REGISTER NEW OWNER
+### ==========================================
+
+POST {{baseUrl}}/api/owners/register
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "phoneNumber": 471234567,
+  "address": "Koningsstraat 10, 9000 Gent"
+}
+
+### ==========================================
+### LOGIN WITH REGISTERED OWNER
+### ==========================================
+
+POST {{baseUrl}}/api/owners/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### ==========================================
+### LOGIN WITH EXISTING OWNER (from dummy data)
+### ==========================================
+
+POST {{baseUrl}}/api/owners/login
+Content-Type: application/json
+
+{
+  "email": "john.doe@restaurant.com",
+  "password": "password"
+}
+
+### ==========================================
+### GET OWNER BY ID
+### Replace with actual UUID from register response
+### ==========================================
+
+GET {{baseUrl}}/api/owners/a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d
+
+### ==========================================
+### GET OWNER BY EMAIL
+### ==========================================
+
+GET {{baseUrl}}/api/owners/email/{{email}}
+
+### ==========================================
+### GET OWNER BY EMAIL (from dummy data)
+### ==========================================
+
+GET {{baseUrl}}/api/owners/email/john.doe@restaurant.com
+
+### ==========================================
+### TEST CASES: REGISTRATION FAILURES
+### ==========================================
+
+### Missing required field (firstName)
+POST {{baseUrl}}/api/owners/register
+Content-Type: application/json
+
+{
+  "lastName": "Doe",
+  "email": "invalid@test.com",
+  "password": "password123",
+  "phoneNumber": 471234567,
+  "address": "Test Street"
+}
+
+### Invalid email format
+POST {{baseUrl}}/api/owners/register
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "not-an-email",
+  "password": "password123",
+  "phoneNumber": 471234567,
+  "address": "Test Street"
+}
+
+### Duplicate email (register twice)
+POST {{baseUrl}}/api/owners/register
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "email": "john.doe@restaurant.com",
+  "password": "password123",
+  "phoneNumber": 471234567,
+  "address": "Test Street"
+}
+
+### ==========================================
+### TEST CASES: LOGIN FAILURES
+### ==========================================
+
+### Wrong password
+POST {{baseUrl}}/api/owners/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "wrongpassword"
+}
+
+### Non-existent email
+POST {{baseUrl}}/api/owners/login
+Content-Type: application/json
+
+{
+  "email": "nonexistent@test.com",
+  "password": "password123"
+}
+
+### ==========================================
+### REGISTER MULTIPLE OWNERS FOR TESTING
+### ==========================================
+
+POST {{baseUrl}}/api/owners/register
+Content-Type: application/json
+
+{
+  "firstName": "Maria",
+  "lastName": "Garcia",
+  "email": "maria.garcia@test.com",
+  "password": "password123",
+  "phoneNumber": 472345678,
+  "address": "Veldstraat 25, 9000 Gent"
+}
+
+###
+
+POST {{baseUrl}}/api/owners/register
+Content-Type: application/json
+
+{
+  "firstName": "Pierre",
+  "lastName": "Dubois",
+  "email": "pierre.dubois@test.com",
+  "password": "password123",
+  "phoneNumber": 473456789,
+  "address": "Graslei 15, 9000 Gent"
+}
+
+### ==========================================
+### GET NON-EXISTENT OWNER
+### ==========================================
+
+GET {{baseUrl}}/api/owners/99999999-9999-9999-9999-999999999999
+
+###
+
+GET {{baseUrl}}/api/owners/email/nonexistent@test.com

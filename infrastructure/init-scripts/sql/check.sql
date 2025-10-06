@@ -1,0 +1,11 @@
+-- -- Run this to see what values are allowed
+-- SELECT conname, pg_get_constraintdef(oid)
+-- FROM pg_constraint
+-- WHERE conrelid = 'kdg_owners.restaurants'::regclass
+--   AND contype = 'c';
+--
+-- SELECT conname, pg_get_constraintdef(oid)
+-- FROM pg_constraint
+-- WHERE conrelid = 'kdg_owners.dishes'::regclass
+--   AND contype = 'c';
+

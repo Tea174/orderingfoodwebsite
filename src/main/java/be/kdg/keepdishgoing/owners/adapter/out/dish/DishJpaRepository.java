@@ -8,8 +8,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface DishJpaRepository extends JpaRepository<DishJpaEntity, Integer> {
-    Optional<DishJpaEntity> findByDishId(UUID dishId);
-    List<DishJpaEntity> findByRestaurant_RestaurantId(UUID restaurantId);
-    void deleteByDishId(UUID dishId);
+public interface DishJpaRepository extends JpaRepository<DishJpaEntity, UUID> {
+    Optional<DishJpaEntity> findByUuid(UUID dishId);
+    List<DishJpaEntity> findByRestaurant_uuid(UUID restaurantId);
+    void deleteByUuid(UUID dishId);
 }

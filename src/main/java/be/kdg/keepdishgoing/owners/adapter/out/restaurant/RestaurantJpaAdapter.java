@@ -1,9 +1,9 @@
 package be.kdg.keepdishgoing.owners.adapter.out.restaurant;
 
 import be.kdg.keepdishgoing.owners.adapter.out.mapper.Mapper;
-import be.kdg.keepdishgoing.owners.domain.OwnerId;
-import be.kdg.keepdishgoing.owners.domain.Restaurant;
-import be.kdg.keepdishgoing.owners.domain.RestaurantId;
+import be.kdg.keepdishgoing.owners.domain.owner.OwnerId;
+import be.kdg.keepdishgoing.owners.domain.restaurant.Restaurant;
+import be.kdg.keepdishgoing.owners.domain.restaurant.RestaurantId;
 import be.kdg.keepdishgoing.owners.port.out.restaurant.LoadRestaurantPort;
 import be.kdg.keepdishgoing.owners.port.out.restaurant.UpdateRestaurantPort;
 import org.slf4j.Logger;
@@ -28,14 +28,14 @@ public class RestaurantJpaAdapter implements UpdateRestaurantPort, LoadRestauran
     @Override
     public Optional<Restaurant> loadByOwner(OwnerId ownerId) {
         log.debug("Loading restaurant for owner: {}", ownerId.id());
-        return restaurantJpaRepository.findByOwner(ownerId.id())
+        return restaurantJpaRepository.findByOwnerId(ownerId.id())
                 .map(mapper::toDomainRestaurant);
     }
 
     @Override
     public Optional<Restaurant> loadByRestaurantId(RestaurantId restaurantId) {
         log.debug("Loading restaurant by ID: {}", restaurantId.id());
-        return restaurantJpaRepository.findById(restaurantId.id())
+        return restaurantJpaRepository.findByUuid(restaurantId.id())
                 .map(mapper::toDomainRestaurant);
     }
 
@@ -57,6 +57,6 @@ public class RestaurantJpaAdapter implements UpdateRestaurantPort, LoadRestauran
     @Override
     public void delete(RestaurantId restaurantId) {
         log.debug("Deleting restaurant: {}", restaurantId.id());
-        restaurantJpaRepository.deleteById(restaurantId.id());
+        restaurantJpaRepository.deleteByUuid(restaurantId.id());
     }
 }

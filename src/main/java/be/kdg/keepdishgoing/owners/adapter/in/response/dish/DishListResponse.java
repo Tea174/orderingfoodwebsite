@@ -1,6 +1,6 @@
 package be.kdg.keepdishgoing.owners.adapter.in.response.dish;
 
-import be.kdg.keepdishgoing.owners.domain.Dish;
+import be.kdg.keepdishgoing.owners.domain.dish.Dish;
 
 import java.util.List;
 import java.util.stream.Collectors;

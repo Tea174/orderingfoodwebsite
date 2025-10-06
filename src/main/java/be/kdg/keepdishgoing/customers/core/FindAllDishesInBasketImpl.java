@@ -7,17 +7,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class FindAllDishesInBasketImpl implements FindAllDishesInBasketPort {
-    private final LoadOrderPort loadOrderPort;
-
-
-    public FindAllDishesInBasketImpl(LoadOrderPort loadOrderPort) {
-        this.loadOrderPort = loadOrderPort;
-    }
-
-    @Override
-    public List<Order> findAll() {
-        return List.of();
-    }
-}
+//@Service
+//public class FindAllDishesInBasketImpl implements FindAllDishesInBasketPort {
+//    private final LoadOrderPort loadOrderPort;
+//
+//
+//    public FindAllDishesInBasketImpl(LoadOrderPort loadOrderPort) {
+//        this.loadOrderPort = loadOrderPort;
+//    }
+//
+//    @Override
+//    public List<Order> findAll() {
+//        return List.of();
+//    }
+//}

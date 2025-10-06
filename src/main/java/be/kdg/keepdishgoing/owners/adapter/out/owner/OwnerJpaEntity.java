@@ -1,44 +1,53 @@
 package be.kdg.keepdishgoing.owners.adapter.out.owner;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import be.kdg.keepdishgoing.owners.adapter.out.restaurant.RestaurantJpaEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "owners", schema = "kdg_owners")
-@AllArgsConstructor
 public class OwnerJpaEntity {
 
     @Id
-    private UUID ownerId;
+    @Column(name = "owner_id")
+    private UUID uuid;
+    // mappedBy refers to the "owner" field in RestaurantJpaEntity
+    @OneToOne(mappedBy = "ownerId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private RestaurantJpaEntity restaurant;
 
     @Column(nullable = false)
     private String firstName;
-
     @Column(nullable = false)
     private String lastName;
-
     @Column(nullable = false, unique = true)
     private String email;
-
     @Column(nullable = false)
-    private String password;
-
-    @Column
     private Integer phoneNumber;
-
-    @Column
+    @Column(nullable = false)
     private String address;
+    @Column
+    private Timestamp created_at;
+    @Column
+    private Timestamp updated_at;
 
     public OwnerJpaEntity() {
-        this.ownerId = UUID.randomUUID();
+        this.uuid = UUID.randomUUID();
+    }
+
+    public OwnerJpaEntity(UUID uuid, RestaurantJpaEntity restaurant, String firstName, String lastName, String email, Integer phoneNumber, String address) {
+        this.uuid = uuid;
+        this.restaurant = restaurant;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
     }
 }

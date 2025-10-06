@@ -1,8 +1,13 @@
 package be.kdg.keepdishgoing.security.api.dtos;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * DTO for demo
  */
+@Getter
+@Setter
 public class SecuredMessageDto extends UnsecuredMessageDto {
 
     private String subjectid;
@@ -24,22 +29,6 @@ public class SecuredMessageDto extends UnsecuredMessageDto {
     @Override
     public String getMessage() {
         return message;
-    }
-
-    public String getSubjectid() {
-        return subjectid;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
     }
 
     public static final Builder builder() {

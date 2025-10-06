@@ -1,8 +1,8 @@
 package be.kdg.keepdishgoing.owners.port.out.dish;
 
-import be.kdg.keepdishgoing.owners.domain.Dish;
-import be.kdg.keepdishgoing.owners.domain.DishId;
-import be.kdg.keepdishgoing.owners.domain.RestaurantId;
+import be.kdg.keepdishgoing.owners.domain.dish.Dish;
+import be.kdg.keepdishgoing.owners.domain.dish.DishId;
+import be.kdg.keepdishgoing.owners.domain.restaurant.RestaurantId;
 
 import java.util.List;
 import java.util.Optional;

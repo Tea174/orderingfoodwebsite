@@ -1,9 +1,9 @@
 package be.kdg.keepdishgoing.owners.adapter.in.response.dish;
 
-import be.kdg.keepdishgoing.owners.domain.Dish;
-import be.kdg.keepdishgoing.owners.domain.DishState;
-import be.kdg.keepdishgoing.owners.domain.DishType;
-import be.kdg.keepdishgoing.owners.domain.FoodTag;
+import be.kdg.keepdishgoing.owners.domain.dish.Dish;
+import be.kdg.keepdishgoing.owners.domain.dish.DishState;
+import be.kdg.keepdishgoing.owners.domain.dish.DishType;
+import be.kdg.keepdishgoing.owners.domain.dish.FoodTag;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

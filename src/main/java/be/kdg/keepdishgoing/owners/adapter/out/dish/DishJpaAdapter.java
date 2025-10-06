@@ -2,21 +2,20 @@ package be.kdg.keepdishgoing.owners.adapter.out.dish;
 
 import be.kdg.keepdishgoing.owners.adapter.out.mapper.Mapper;
 import be.kdg.keepdishgoing.owners.adapter.out.restaurant.RestaurantJpaRepository;
-import be.kdg.keepdishgoing.owners.domain.Dish;
-import be.kdg.keepdishgoing.owners.domain.DishId;
-import be.kdg.keepdishgoing.owners.domain.RestaurantId;
+import be.kdg.keepdishgoing.owners.domain.dish.Dish;
+import be.kdg.keepdishgoing.owners.domain.dish.DishId;
+import be.kdg.keepdishgoing.owners.domain.restaurant.RestaurantId;
 import be.kdg.keepdishgoing.owners.port.out.dish.DeleteDishPort;
 import be.kdg.keepdishgoing.owners.port.out.dish.LoadDishesPort;
 import be.kdg.keepdishgoing.owners.port.out.dish.SaveDishPort;
-import be.kdg.keepdishgoing.owners.port.out.dish.UpdateDishPort;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
-public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishPort , UpdateDishPort {
+@Repository
+public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishPort {
 
     private final DishJpaRepository dishJpaRepository;
     private final RestaurantJpaRepository restaurantJpaRepository;
@@ -32,13 +31,13 @@ public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishP
 
     @Override
     public Optional<Dish> loadByDishId(DishId dishId) {
-        return dishJpaRepository.findByDishId(dishId.id())
+        return dishJpaRepository.findByUuid(dishId.id())
                 .map(mapper::toDomainDish);
     }
 
     @Override
     public List<Dish> loadByRestaurantId(RestaurantId restaurantId) {
-        return dishJpaRepository.findByRestaurant_RestaurantId(restaurantId.id())
+        return dishJpaRepository.findByRestaurant_uuid(restaurantId.id())
                 .stream()
                 .map(mapper::toDomainDish)
                 .collect(Collectors.toList());
@@ -46,7 +45,7 @@ public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishP
 
     @Override
     public Dish save(Dish dish) {
-        var restaurantEntity = restaurantJpaRepository.findById(dish.getRestaurantId().id())
+        var restaurantEntity = restaurantJpaRepository.findByUuid(dish.getRestaurantId().id())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Restaurant not found with id: " + dish.getRestaurantId().id()
                 ));
@@ -58,11 +57,7 @@ public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishP
 
     @Override
     public void delete(DishId dishId) {
-        dishJpaRepository.deleteByDishId(dishId.id());
+        dishJpaRepository.deleteByUuid(dishId.id());
     }
 
-    @Override
-    public Dish update(Dish dish) {
-        return null;
-    }
 }

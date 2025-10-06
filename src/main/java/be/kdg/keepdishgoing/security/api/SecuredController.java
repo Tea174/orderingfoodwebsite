@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SecuredController {
 
 
+    // Method 1: Basic secured endpoint (requires authentication but doesn't use token data)
     @GetMapping("message")
     public SecuredMessageDto getMessage(){
         return SecuredMessageDto.builder()
@@ -23,13 +24,15 @@ public class SecuredController {
                 .build();
     }
 
+    // Method 2: Get JWT from SecurityContext manually
     @GetMapping("principal")
     public SecuredMessageDto getSecuredWithPrincipal(){
-        Jwt token = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Jwt token = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // Now we have access to all JWT claims
         return getInfoFromToken(token,"I got the information via the current security context");
     }
 
-    @GetMapping("annotation")
+    // Method 3: Inject JWT using @AuthenticationPrincipal (cleaner way)
+    @GetMapping("annotation")  // Spring automatically injects the JWT token
     public SecuredMessageDto getSecuredWithPrincipal(@AuthenticationPrincipal Jwt token){
         // Here can you use the subject id
         // (StandardClaimNames.SUB) to create an owner or link the owner (as an external ref)
@@ -37,7 +40,7 @@ public class SecuredController {
 
         return getInfoFromToken(token, "I got the information via an annotation");
     }
-
+    // Method 4: Role-based access control
     @GetMapping("user")
     @PreAuthorize("hasAuthority('user')")
     public SecuredMessageDto getSecuredWithUserRole(@AuthenticationPrincipal Jwt token){
@@ -46,7 +49,7 @@ public class SecuredController {
 
 
     @GetMapping("owner")
-    @PreAuthorize("hasAuthority('owner')")
+    @PreAuthorize("hasAuthority('owner')") // Only users with 'owner' role can access
     public SecuredMessageDto getSecuredWithOwnerRole(@AuthenticationPrincipal Jwt token){
         return getInfoFromToken(token, "I'm an owner");
     }

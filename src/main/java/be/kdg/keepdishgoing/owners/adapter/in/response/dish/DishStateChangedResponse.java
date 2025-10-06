@@ -1,6 +1,6 @@
 package be.kdg.keepdishgoing.owners.adapter.in.response.dish;
 
-import be.kdg.keepdishgoing.owners.domain.DishState;
+import be.kdg.keepdishgoing.owners.domain.dish.DishState;
 
 public record DishStateChangedResponse(
         DishState newState,

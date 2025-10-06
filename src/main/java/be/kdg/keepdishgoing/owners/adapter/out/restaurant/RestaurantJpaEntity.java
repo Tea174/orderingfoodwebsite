@@ -1,13 +1,14 @@
 package be.kdg.keepdishgoing.owners.adapter.out.restaurant;
 
 import be.kdg.keepdishgoing.owners.adapter.out.dish.DishJpaEntity;
-import be.kdg.keepdishgoing.owners.domain.Dish;
+import be.kdg.keepdishgoing.owners.adapter.out.owner.OwnerJpaEntity;
+import be.kdg.keepdishgoing.owners.domain.restaurant.TypeOfCuisine;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,13 +16,14 @@ import java.util.UUID;
 @Getter
 @Entity
 @Table(name="restaurants", schema = "kdg_owners")
-@AllArgsConstructor
 public class RestaurantJpaEntity {
 
     @Id
-    private UUID restaurantId;
-    @Column(nullable = false)
-    private UUID ownerId;
+    @Column(name = "restaurant_id")
+    private UUID uuid;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false, unique = true)  // Add unique=true for 1-to-1
+    private OwnerJpaEntity ownerId;
     @Column(nullable = false)
     private String  name;
     @Column(nullable = false)
@@ -33,23 +35,32 @@ public class RestaurantJpaEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private String cuisine;
+    private TypeOfCuisine cuisine;
 
     @Column(nullable = false)
     private Time preparationTime;
     @Column(nullable = false)
     private Time openingTime;
 
-    @Column(nullable = false)
+    @Column
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<DishJpaEntity> dishes;
 
+    @Column
+    private Timestamp created_at;
+    @Column
+    private Timestamp updated_at;
+
     public RestaurantJpaEntity() {
-        this.restaurantId = UUID.randomUUID();
+        this.uuid = UUID.randomUUID();
     }
 
-    public RestaurantJpaEntity(UUID ownerId, String name, String address, String email, String pictureURL, String cuisine, Time preparationTime, Time openingTime) {
-        this();
+    public UUID getOwnerId() {
+        return ownerId != null ? ownerId.getUuid() : null;
+    }
+
+    public RestaurantJpaEntity(UUID uuid, OwnerJpaEntity ownerId, String name, String address, String email, String pictureURL, TypeOfCuisine cuisine, Time preparationTime, Time openingTime, List<DishJpaEntity> dishes) {
+        this.uuid = uuid;
         this.ownerId = ownerId;
         this.name = name;
         this.address = address;
@@ -58,5 +69,6 @@ public class RestaurantJpaEntity {
         this.cuisine = cuisine;
         this.preparationTime = preparationTime;
         this.openingTime = openingTime;
+        this.dishes = dishes;
     }
 }

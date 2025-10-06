@@ -1,7 +1,7 @@
 package be.kdg.keepdishgoing.owners.port.out.owner;
 
-import be.kdg.keepdishgoing.owners.domain.Owner;
-import be.kdg.keepdishgoing.owners.domain.OwnerId;
+import be.kdg.keepdishgoing.owners.domain.owner.Owner;
+import be.kdg.keepdishgoing.owners.domain.owner.OwnerId;
 
 import java.util.Optional;
 

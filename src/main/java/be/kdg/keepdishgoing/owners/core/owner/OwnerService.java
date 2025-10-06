@@ -1,15 +1,15 @@
 package be.kdg.keepdishgoing.owners.core.owner;
 
-import be.kdg.keepdishgoing.owners.domain.Owner;
-import be.kdg.keepdishgoing.owners.domain.OwnerId;
+import be.kdg.keepdishgoing.owners.domain.owner.Owner;
+import be.kdg.keepdishgoing.owners.domain.owner.OwnerId;
 import be.kdg.keepdishgoing.owners.port.in.owner.GetOwnerUseCase;
 import be.kdg.keepdishgoing.owners.port.in.owner.RegisterOwnerUseCase;
 import be.kdg.keepdishgoing.owners.port.in.owner.UpdateOwnerProfileUseCase;
 import be.kdg.keepdishgoing.owners.port.out.owner.LoadOwnerPort;
-import be.kdg.keepdishgoing.owners.port.out.owner.SaveOwnerPort;
+import be.kdg.keepdishgoing.owners.port.out.owner.UpdateOwnerPort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 @Service
 @Transactional
@@ -18,16 +18,15 @@ public class OwnerService implements
         UpdateOwnerProfileUseCase,
         GetOwnerUseCase {
 
-    private final SaveOwnerPort saveOwnerPort;
+    private final UpdateOwnerPort updateOwnerPort;
     private final LoadOwnerPort loadOwnerPort;
-    private final PasswordEncoder passwordEncoder;
 
-    public OwnerService(SaveOwnerPort saveOwnerPort,
-                        LoadOwnerPort loadOwnerPort,
-                        PasswordEncoder passwordEncoder) {
-        this.saveOwnerPort = saveOwnerPort;
+
+    public OwnerService(UpdateOwnerPort updateOwnerPort,
+                        LoadOwnerPort loadOwnerPort)             {
+        this.updateOwnerPort = updateOwnerPort;
         this.loadOwnerPort = loadOwnerPort;
-        this.passwordEncoder = passwordEncoder;
+
     }
 
     @Override
@@ -37,18 +36,16 @@ public class OwnerService implements
             throw new IllegalArgumentException("Email already registered");
         });
 
-        String hashedPassword = passwordEncoder.encode(command.password());
-        // Create owner
+        // Create owner (ID is auto-generated in createOwner)
         Owner owner = Owner.createOwner(
                 command.firstName(),
                 command.lastName(),
                 command.email(),
-                hashedPassword,
                 command.phoneNumber(),
                 command.address()
         );
-
-        Owner savedOwner = saveOwnerPort.save(owner);
+        // Save and publish events
+        Owner savedOwner = updateOwnerPort.update(owner);
         return savedOwner.getOwnerId();
     }
 
@@ -64,7 +61,7 @@ public class OwnerService implements
                 command.address()
         );
 
-        saveOwnerPort.save(owner);
+        updateOwnerPort.update(owner);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package be.kdg.keepdishgoing.owners.adapter.in.request.dish;
 
-import be.kdg.keepdishgoing.owners.domain.DishType;
+import be.kdg.keepdishgoing.owners.domain.dish.DishType;
 import jakarta.validation.constraints.*;
 import java.util.List;
 

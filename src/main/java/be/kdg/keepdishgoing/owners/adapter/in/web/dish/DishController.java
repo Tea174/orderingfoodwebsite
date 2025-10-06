@@ -3,10 +3,10 @@ package be.kdg.keepdishgoing.owners.adapter.in.web.dish;
 import be.kdg.keepdishgoing.owners.adapter.in.request.dish.AddDishRequest;
 import be.kdg.keepdishgoing.owners.adapter.in.request.dish.UpdateDishRequest;
 import be.kdg.keepdishgoing.owners.adapter.in.response.dish.*;
-import be.kdg.keepdishgoing.owners.domain.Dish;
-import be.kdg.keepdishgoing.owners.domain.DishId;
-import be.kdg.keepdishgoing.owners.domain.FoodTag;
-import be.kdg.keepdishgoing.owners.domain.RestaurantId;
+import be.kdg.keepdishgoing.owners.domain.dish.Dish;
+import be.kdg.keepdishgoing.owners.domain.dish.DishId;
+import be.kdg.keepdishgoing.owners.domain.dish.FoodTag;
+import be.kdg.keepdishgoing.owners.domain.restaurant.RestaurantId;
 import be.kdg.keepdishgoing.owners.port.in.dish.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -76,13 +76,13 @@ public class DishController {
         );
 
         updateDishUseCase.updateDish(command);
-        return ResponseEntity.ok(DishUpdatedResponse.success());
+        return ResponseEntity.ok(DishUpdatedResponse.createSuccess());
     }
 
     @DeleteMapping("/{dishId}")
     public ResponseEntity<DishDeletedResponse> deleteDish(@PathVariable UUID dishId) {
         deleteDishUseCase.deleteDish(DishId.of(dishId));
-        return ResponseEntity.ok(DishDeletedResponse.success());
+        return ResponseEntity.ok(DishDeletedResponse.deletedSuccess());
     }
 
     @PatchMapping("/{dishId}/publish")
@@ -108,7 +108,6 @@ public class DishController {
         List<Dish> dishes = getDishesByRestaurantUseCase.getDishesByRestaurant(
                 RestaurantId.of(restaurantId)
         );
-
         return ResponseEntity.ok(DishListResponse.fromDomain(dishes));
     }
 
