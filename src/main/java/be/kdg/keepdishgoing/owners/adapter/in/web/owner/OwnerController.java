@@ -1,7 +1,9 @@
 package be.kdg.keepdishgoing.owners.adapter.in.web.owner;
 
+import be.kdg.keepdishgoing.owners.adapter.in.request.owner.LoginOwnerRequest;
 import be.kdg.keepdishgoing.owners.adapter.in.request.owner.OwnerResponse;
 import be.kdg.keepdishgoing.owners.adapter.in.request.owner.RegisterOwnerRequest;
+import be.kdg.keepdishgoing.owners.adapter.in.response.owner.OwnerLoginResponse;
 import be.kdg.keepdishgoing.owners.adapter.in.response.owner.OwnerRegisteredResponse;
 import be.kdg.keepdishgoing.owners.domain.owner.Owner;
 import be.kdg.keepdishgoing.owners.domain.owner.OwnerId;
@@ -32,6 +34,22 @@ public class OwnerController {
         this.registerOwnerUseCase = registerOwnerUseCase;
         this.getOwnerUseCase = getOwnerUseCase;
         this.keycloakService = keycloakService;
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<OwnerLoginResponse> login(@Valid @RequestBody LoginOwnerRequest request) {
+
+        // Get JWT from Keycloak
+        var tokenResponse = keycloakService.authenticate(request.email(), request.password());
+
+        // Optional: verify owner exists in DB
+        Owner owner = getOwnerUseCase.getOwnerByEmail(request.email());
+
+        return ResponseEntity.ok(new OwnerLoginResponse(
+                tokenResponse.accessToken(),
+                tokenResponse.refreshToken(),
+                tokenResponse.expiresIn()
+        ));
     }
 
     @PostMapping("/register")
