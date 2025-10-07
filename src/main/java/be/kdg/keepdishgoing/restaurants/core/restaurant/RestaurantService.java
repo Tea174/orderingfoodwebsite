@@ -1,9 +1,9 @@
 package be.kdg.keepdishgoing.restaurants.core.restaurant;
 
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
-import be.kdg.keepdishgoing.restaurants.port.in.restaurant.CreateRestaurantPort;
+import be.kdg.keepdishgoing.restaurants.port.in.restaurant.CreateRestaurantUseCase;
 
-public class CreateRestaurantImpl implements CreateRestaurantPort {
+public class CreateRestaurantService implements CreateRestaurantUseCase {
     @Override
     public Restaurant createRestaurant() {
         return null;
