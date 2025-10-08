@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 public class Owner {
     private OwnerId ownerId;
+    private String keycloakSubjectId;
     private RestaurantId restaurantId; // can be null first
     private String firstName;
     private String lastName;
@@ -22,11 +23,14 @@ public class Owner {
 
     private final List<DomainEvent> domainEvents = new ArrayList<>();
 
-    // Factory method for creating new owners
-    public static Owner createOwner(String firstName, String lastName, String email,
-                                int phoneNumber, String address) {
+
+    // Factory method for creating NEW owners (during registration)
+    public static Owner createOwner(String keycloakSubjectId, String firstName,
+                                    String lastName, String email,
+                                    int phoneNumber, String address) {
         Owner owner = new Owner();
         owner.setOwnerId(OwnerId.create());
+        owner.setKeycloakSubjectId(keycloakSubjectId);  // ADD THIS
         owner.setRestaurantId(null);
         owner.setFirstName(firstName);
         owner.setLastName(lastName);
@@ -61,8 +65,12 @@ public class Owner {
         return firstName + " " + lastName;
     }
 
-    public Owner(OwnerId ownerId, RestaurantId restaurantId, String firstName, String lastName, String email,  int phoneNumber, String address) {
+    // Constructor for loading EXISTING owners from database
+    public Owner(OwnerId ownerId, String keycloakSubjectId, RestaurantId restaurantId,
+                 String firstName, String lastName, String email,
+                 int phoneNumber, String address) {
         this.ownerId = ownerId;
+        this.keycloakSubjectId = keycloakSubjectId;
         this.restaurantId = restaurantId;
         this.firstName = firstName;
         this.lastName = lastName;

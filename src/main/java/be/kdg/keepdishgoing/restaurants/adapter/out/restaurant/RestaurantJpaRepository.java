@@ -9,9 +9,13 @@ import java.util.UUID;
 
 @Repository
 public interface RestaurantJpaRepository extends JpaRepository<RestaurantJpaEntity, UUID> {
-    Optional<RestaurantJpaEntity> findByName(String name);
-    @Query("SELECT r FROM RestaurantJpaEntity r WHERE r.ownerId.uuid = :ownerUuid")
-    Optional<RestaurantJpaEntity> findByOwnerId(@Param("ownerUuid") UUID ownerUuid);
-    Optional<RestaurantJpaEntity> findByUuid(UUID restaurantId);
+
+    Optional<RestaurantJpaEntity> findByOwnerId_Uuid(UUID ownerUuid);
+
     void deleteByUuid(UUID restaurantId);
+
+    @Query("SELECT r FROM RestaurantJpaEntity r LEFT JOIN FETCH r.dishes WHERE r.uuid = :id")
+    Optional<RestaurantJpaEntity> findByIdWithDishes(@Param("id") UUID id);
+
+    Optional<RestaurantJpaEntity> findByName(String name);
 }

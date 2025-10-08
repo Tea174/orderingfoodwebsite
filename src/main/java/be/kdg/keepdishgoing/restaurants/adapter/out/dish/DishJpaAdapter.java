@@ -45,7 +45,7 @@ public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishP
 
     @Override
     public Dish save(Dish dish) {
-        var restaurantEntity = restaurantJpaRepository.findByUuid(dish.getRestaurantId().id())
+        var restaurantEntity = restaurantJpaRepository.findById(dish.getRestaurantId().id())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Restaurant not found with id: " + dish.getRestaurantId().id()
                 ));

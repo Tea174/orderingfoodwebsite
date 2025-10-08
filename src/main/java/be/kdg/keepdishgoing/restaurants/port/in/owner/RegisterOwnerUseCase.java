@@ -7,7 +7,7 @@ public interface RegisterOwnerUseCase {
     OwnerId register(RegisterOwnerCommand command);
 
     record RegisterOwnerCommand(
-            String keycloakSubjectId,  // ← Add this
+            String keycloakSubjectId,
             String email,
             String firstName,
             String lastName,

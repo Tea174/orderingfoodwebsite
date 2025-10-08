@@ -2,6 +2,7 @@ package be.kdg.keepdishgoing.restaurants.adapter.out.mapper;
 
 import be.kdg.keepdishgoing.restaurants.adapter.out.dish.DishJpaEntity;
 import be.kdg.keepdishgoing.restaurants.adapter.out.owner.OwnerJpaEntity;
+import be.kdg.keepdishgoing.restaurants.adapter.out.owner.OwnerJpaRepository;
 import be.kdg.keepdishgoing.restaurants.adapter.out.restaurant.RestaurantJpaEntity;
 import be.kdg.keepdishgoing.restaurants.domain.owner.Owner;
 import be.kdg.keepdishgoing.restaurants.domain.owner.OwnerId;
@@ -18,6 +19,11 @@ import java.util.stream.Collectors;
 
 @Component
 public class Mapper {
+    private final OwnerJpaRepository ownerJpaRepository;
+
+    public Mapper(OwnerJpaRepository ownerJpaRepository) {
+        this.ownerJpaRepository = ownerJpaRepository;
+    }
 
     public Restaurant toDomainRestaurant(RestaurantJpaEntity entity) {
         return new Restaurant(
@@ -30,17 +36,23 @@ public class Mapper {
                 entity.getCuisine(),
                 entity.getPreparationTime(),
                 entity.getOpeningTime(),
-                entity.getDishes()
-                        .stream()
-                        .map(this::toDomainDish)
-                        .toList()
+                entity.getDishes() != null ?
+                        entity.getDishes().stream()
+                                .map(this::toDomainDish)
+                                .toList() :
+                        List.of()
         );
     }
 
     public RestaurantJpaEntity toEntityRestaurant(Restaurant restaurant) {
         RestaurantJpaEntity entity = new RestaurantJpaEntity();
         entity.setUuid(restaurant.getRestaurantId().id());
-        // Note: owner is set separately in the adapter/repository layer
+
+        // Fetch owner entity and set relationship
+        OwnerJpaEntity ownerEntity = ownerJpaRepository.findById(restaurant.getOwnerId().id())
+                .orElseThrow(() -> new IllegalArgumentException("Owner not found"));
+        entity.setOwner(ownerEntity);  // Set the relationship
+
         entity.setName(restaurant.getName());
         entity.setAddress(restaurant.getAddress());
         entity.setEmail(restaurant.getEmail());
@@ -48,63 +60,51 @@ public class Mapper {
         entity.setCuisine(restaurant.getCuisine());
         entity.setPreparationTime(restaurant.getPreparationTime());
         entity.setOpeningTime(restaurant.getOpeningTime());
-
-        // Map dishes with proper parent reference
-        List<DishJpaEntity> dishEntities = restaurant.getDishes()
-                .stream()
-                .map(dish -> toEntityDish(dish, entity))
-                .toList();
-        entity.setDishes(dishEntities);
-
         return entity;
     }
 
     public Dish toDomainDish(DishJpaEntity entity) {
-        // When loading from DB, use constructor with existing ID
-        return new Dish(
+        Dish dish = new Dish(
                 DishId.of(entity.getUuid()),
-                RestaurantId.of(entity.getRestaurantId()),
+                RestaurantId.of(entity.getRestaurant().getUuid()),
                 entity.getDishName(),
                 entity.getDishType(),
-                parseFoodTags(entity.getFoodTags()),
+                entity.getFoodTags(),
                 entity.getDescription(),
                 entity.getPrice(),
                 entity.getPictureURL()
         );
+
+        // Set state and publishedDishUuid after construction
+        dish.setState(entity.getState());
+        if (entity.getPublishedDishUuid() != null) {
+            dish.setPublishedDishId(DishId.of(entity.getPublishedDishUuid()));
+        }
+
+        return dish;
     }
 
     public DishJpaEntity toEntityDish(Dish dish, RestaurantJpaEntity parent) {
         DishJpaEntity entity = new DishJpaEntity();
-        // Use the domain's dishId - it's already generated
         entity.setUuid(dish.getDishId().id());
         entity.setRestaurant(parent);
+        entity.setPublishedDishUuid(dish.getPublishedDishId() != null ? dish.getPublishedDishId().id() : null);
         entity.setDishName(dish.getName());
         entity.setDescription(dish.getDescription());
         entity.setPrice(dish.getPrice());
         entity.setPictureURL(dish.getPictureURL());
         entity.setDishType(dish.getDishType());
-        entity.setFoodTags(joinFoodTags(dish.getFoodTags()));
+        entity.setFoodTags(dish.getFoodTags());
+        entity.setState(dish.getState());
+
         return entity;
     }
 
-    private List<FoodTag> parseFoodTags(String tags) {
-        if (tags == null || tags.isBlank()) return List.of();
-        return Arrays.stream(tags.split(","))
-                .map(String::trim)
-                .map(FoodTag::new)
-                .toList();
-    }
-
-    private String joinFoodTags(List<FoodTag> tags) {
-        if (tags == null || tags.isEmpty()) return "";
-        return tags.stream()
-                .map(FoodTag::value)
-                .collect(Collectors.joining(","));
-    }
 
     public Owner toDomainOwner(OwnerJpaEntity entity) {
         return new Owner(
                 OwnerId.of(entity.getUuid()),
+                entity.getKeycloakSubjectId(),
                 entity.getRestaurant() != null ?
                         RestaurantId.of(entity.getRestaurant().getUuid()) : null,
                 entity.getFirstName(),
@@ -118,12 +118,13 @@ public class Mapper {
     public OwnerJpaEntity toEntityOwner(Owner owner) {
         OwnerJpaEntity entity = new OwnerJpaEntity();
         entity.setUuid(owner.getOwnerId().id());
+        entity.setKeycloakSubjectId(owner.getKeycloakSubjectId());
         entity.setFirstName(owner.getFirstName());
         entity.setLastName(owner.getLastName());
         entity.setEmail(owner.getEmail());
         entity.setPhoneNumber(owner.getPhoneNumber());
         entity.setAddress(owner.getAddress());
-        // Note: restaurant relationship should be set in the adapter/repository layer
+        // Note: restaurant relationship is set in the adapter/repository layer
         return entity;
     }
 }

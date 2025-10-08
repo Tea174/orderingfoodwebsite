@@ -38,6 +38,7 @@ public class OwnerService implements
 
         // Create owner (ID is auto-generated in createOwner)
         Owner owner = Owner.createOwner(
+                command.keycloakSubjectId(),
                 command.firstName(),
                 command.lastName(),
                 command.email(),
@@ -76,5 +77,13 @@ public class OwnerService implements
     public Owner getOwnerByEmail(String email) {
         return loadOwnerPort.loadByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Owner not found"));
+    }
+
+    @Override
+    public Owner getOwnerByKeycloakId(String keycloakSubjectId) {
+        return loadOwnerPort.findByKeycloakId(keycloakSubjectId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Owner not found for Keycloak ID: " + keycloakSubjectId
+                ));
     }
 }

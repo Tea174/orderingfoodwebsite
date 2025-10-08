@@ -9,4 +9,8 @@ import java.util.Optional;
 public interface LoadRestaurantPort {
     Optional<Restaurant> loadByOwner(OwnerId ownerId);
     Optional<Restaurant> loadByRestaurantId(RestaurantId restaurantId);
+    Optional<Restaurant> loadByName(String name);
+    Optional<Restaurant> loadByEmail(String email);
+    Optional<Restaurant> findByOwnerId(OwnerId ownerId);
+
 }

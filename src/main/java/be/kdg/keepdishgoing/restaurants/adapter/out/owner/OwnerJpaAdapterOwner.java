@@ -9,21 +9,20 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class RegisterJpaAdapterOwner implements LoadOwnerPort, DeleteOwnerPort, RegisterOwnerPort {
+public class OwnerJpaAdapterOwner implements LoadOwnerPort, DeleteOwnerPort {
 
     private final OwnerJpaRepository ownerJpaRepository;
     private final Mapper mapper;
 
-    public RegisterJpaAdapterOwner(OwnerJpaRepository ownerJpaRepository, Mapper mapper) {
+    public OwnerJpaAdapterOwner(OwnerJpaRepository ownerJpaRepository, Mapper mapper) {
         this.ownerJpaRepository = ownerJpaRepository;
         this.mapper = mapper;
     }
 
     @Override
-    public Owner SignUp(Owner owner) {
-        OwnerJpaEntity entity = mapper.toEntityOwner(owner);
-        OwnerJpaEntity savedEntity = ownerJpaRepository.save(entity);
-        return mapper.toDomainOwner(savedEntity);
+    public Optional<Owner> findByKeycloakId(String keycloakSubjectId) {
+        return ownerJpaRepository.findByKeycloakSubjectId(keycloakSubjectId)
+                .map(mapper::toDomainOwner);
     }
 
     @Override
@@ -42,5 +41,14 @@ public class RegisterJpaAdapterOwner implements LoadOwnerPort, DeleteOwnerPort, 
     public void delete(OwnerId ownerId) {
         ownerJpaRepository.deleteById(ownerId.id());
     }
+
+
+    //
+//    @Override
+//    public Owner SignUp(Owner owner) {
+//        OwnerJpaEntity entity = mapper.toEntityOwner(owner);
+//        OwnerJpaEntity savedEntity = ownerJpaRepository.save(entity);
+//        return mapper.toDomainOwner(savedEntity);
+//    }
 
 }

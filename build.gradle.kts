@@ -50,7 +50,7 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     implementation ("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation ("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.keycloak:keycloak-admin-client:23.0.7")
+    implementation("org.keycloak:keycloak-admin-client:26.0.0")
 }
 
 tasks.withType<Test> {

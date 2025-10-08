@@ -28,21 +28,6 @@ public class OwnerController {
         this.keycloakService = keycloakService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<OwnerLoginResponse> login(@Valid @RequestBody LoginOwnerRequest request) {
-
-        // Get JWT from Keycloak
-        var tokenResponse = keycloakService.authenticate(request.email(), request.password());
-
-        // Optional: verify owner exists in DB
-        Owner owner = getOwnerUseCase.getOwnerByEmail(request.email());
-
-        return ResponseEntity.ok(new OwnerLoginResponse(
-                tokenResponse.accessToken(),
-                tokenResponse.refreshToken(),
-                tokenResponse.expiresIn()
-        ));
-    }
 
     @PostMapping("/register")
     public ResponseEntity<OwnerRegisteredResponse> register(
@@ -69,6 +54,23 @@ public class OwnerController {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(OwnerRegisteredResponse.fromDomain(owner));
+    }
+
+
+    @PostMapping("/login")
+    public ResponseEntity<OwnerLoginResponse> login(@Valid @RequestBody LoginOwnerRequest request) {
+
+        // Get JWT from Keycloak
+        var tokenResponse = keycloakService.authenticate(request.email(), request.password());
+
+        // verify owner exists in DB
+        Owner owner = getOwnerUseCase.getOwnerByEmail(request.email());
+
+        return ResponseEntity.ok(new OwnerLoginResponse(
+                tokenResponse.accessToken(),
+                tokenResponse.refreshToken(),
+                tokenResponse.expiresIn()
+        ));
     }
 
     // PROTECTED - Only accessible to users with 'owner' role

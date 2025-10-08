@@ -1,5 +1,6 @@
 package be.kdg.keepdishgoing.restaurants.adapter.in.request.dish;
 
+import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -21,7 +22,7 @@ public record AddDishRequest(
         @NotNull(message = "Dish type is required")
         DishType dishType,
 
-        List<String> foodTags,
+        List<FoodTag> foodTags,
 
         @Size(max = 500, message = "Description cannot exceed 500 characters")
         String description,

@@ -1,53 +1,82 @@
 package be.kdg.keepdishgoing.restaurants.adapter.out.dish;
 
-
-import be.kdg.keepdishgoing.restaurants.adapter.out.restaurant.RestaurantJpaEntity;
+import be.kdg.keepdishgoing.restaurants.domain.dish.DishState;
 import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
+import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
+import be.kdg.keepdishgoing.restaurants.adapter.out.restaurant.RestaurantJpaEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "dishes", schema = "kdg_owners")
-@AllArgsConstructor
 @Getter
 @Setter
 public class DishJpaEntity {
+
     @Id
     @Column(name = "dish_id")
     private UUID uuid;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private RestaurantJpaEntity restaurant;
-    @Column(nullable = false)
+
+    @Column(name = "dish_name", nullable = false)
     private String dishName;
-    @Column(nullable = false)
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "dish_type", nullable = false)
     private DishType dishType;
-    @Column(nullable = false)
-    private String foodTags;
-    @Column(nullable = false)
+
+    // FIX: Use @ElementCollection for List of enums
+    @ElementCollection(targetClass = FoodTag.class)
+    @CollectionTable(
+            name = "dish_food_tags",
+            schema = "kdg_owners",
+            joinColumns = @JoinColumn(name = "dish_id")
+    )
+    @Enumerated(EnumType.STRING)
+    @Column(name = "food_tag")
+    private List<FoodTag> foodTags = new ArrayList<>();
+
+    @Column(nullable = false, length = 1000)
     private String description;
+
     @Column(nullable = false)
     private double price;
-    @Column
+
+    @Column(name = "picture_url")
     private String pictureURL;
-    @Column
-    private Timestamp created_at;
-    @Column
-    private Timestamp updated_at;
 
-    public DishJpaEntity() {
-        this.uuid = UUID.randomUUID();
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DishState state = DishState.DRAFT; // Default value
+
+    // For draft/publish workflow
+    @Column(name = "published_dish_uuid")
+    private UUID publishedDishUuid;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = Timestamp.from(Instant.now());
+        updatedAt = Timestamp.from(Instant.now());
     }
 
-    public UUID getRestaurantId() {
-        return restaurant != null ? restaurant.getUuid() : null;
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = Timestamp.from(Instant.now());
     }
-
-
 }

@@ -5,20 +5,25 @@ import be.kdg.keepdishgoing.restaurants.adapter.in.request.dish.UpdateDishReques
 import be.kdg.keepdishgoing.restaurants.adapter.in.response.dish.*;
 import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
 import be.kdg.keepdishgoing.restaurants.domain.dish.DishId;
-import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
-import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
+import be.kdg.keepdishgoing.restaurants.domain.owner.Owner;
+import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
 import be.kdg.keepdishgoing.restaurants.port.in.dish.*;
+import be.kdg.keepdishgoing.restaurants.port.in.owner.GetOwnerUseCase;
+import be.kdg.keepdishgoing.restaurants.port.in.restaurant.GetRestaurantUseCase;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/dishes")
+@AllArgsConstructor
 public class DishController {
 
     private final AddDishUseCase addDishUseCase;
@@ -26,28 +31,24 @@ public class DishController {
     private final DeleteDishUseCase deleteDishUseCase;
     private final PublishDishUseCase publishDishUseCase;
     private final GetDishesByRestaurantUseCase getDishesByRestaurantUseCase;
-
-    public DishController(AddDishUseCase addDishUseCase,
-                          UpdateDishUseCase updateDishUseCase,
-                          DeleteDishUseCase deleteDishUseCase,
-                          PublishDishUseCase publishDishUseCase,
-                          GetDishesByRestaurantUseCase getDishesByRestaurantUseCase) {
-        this.addDishUseCase = addDishUseCase;
-        this.updateDishUseCase = updateDishUseCase;
-        this.deleteDishUseCase = deleteDishUseCase;
-        this.publishDishUseCase = publishDishUseCase;
-        this.getDishesByRestaurantUseCase = getDishesByRestaurantUseCase;
-    }
+    private final GetDishUseCase getDishUseCase;
+    private final GetOwnerUseCase getOwnerUseCase;
+    private final GetRestaurantUseCase getRestaurantUseCase;
 
     @PostMapping
-    public ResponseEntity<DishCreatedResponse> addDish(@Valid @RequestBody AddDishRequest request) {
+    public ResponseEntity<DishCreatedResponse> addDish(
+            @Valid @RequestBody AddDishRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        String keycloakSubjectId = jwt.getSubject();
+        Owner owner = getOwnerUseCase.getOwnerByKeycloakId(keycloakSubjectId);
+        Restaurant restaurant = getRestaurantUseCase.getRestaurantByOwnerId(owner.getOwnerId());
+
         var command = new AddDishUseCase.AddDishCommand(
-                RestaurantId.of(request.restaurantId()),
+                restaurant.getRestaurantId(),
                 request.name(),
                 request.dishType(),
-                request.foodTags() != null ?
-                        request.foodTags().stream().map(FoodTag::new).collect(Collectors.toList()) :
-                        List.of(),
+                request.foodTags(),
                 request.description(),
                 request.price(),
                 request.pictureURL()
@@ -62,14 +63,16 @@ public class DishController {
     @PutMapping("/{dishId}")
     public ResponseEntity<DishUpdatedResponse> updateDish(
             @PathVariable UUID dishId,
-            @Valid @RequestBody UpdateDishRequest request) {
+            @Valid @RequestBody UpdateDishRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        verifyOwnership(DishId.of(dishId), jwt);
+
         var command = new UpdateDishUseCase.UpdateDishCommand(
                 DishId.of(dishId),
                 request.name(),
                 request.dishType(),
-                request.foodTags() != null ?
-                        request.foodTags().stream().map(FoodTag::new).collect(Collectors.toList()) :
-                        List.of(),
+                request.foodTags(),
                 request.description(),
                 request.price(),
                 request.pictureURL()
@@ -80,41 +83,69 @@ public class DishController {
     }
 
     @DeleteMapping("/{dishId}")
-    public ResponseEntity<DishDeletedResponse> deleteDish(@PathVariable UUID dishId) {
+    public ResponseEntity<DishDeletedResponse> deleteDish(
+            @PathVariable UUID dishId,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        verifyOwnership(DishId.of(dishId), jwt);
         deleteDishUseCase.deleteDish(DishId.of(dishId));
         return ResponseEntity.ok(DishDeletedResponse.deletedSuccess());
     }
 
     @PatchMapping("/{dishId}/publish")
-    public ResponseEntity<DishStateChangedResponse> publishDish(@PathVariable UUID dishId) {
+    public ResponseEntity<DishStateChangedResponse> publishDish(
+            @PathVariable UUID dishId,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        verifyOwnership(DishId.of(dishId), jwt);
         publishDishUseCase.publishDish(DishId.of(dishId));
         return ResponseEntity.ok(DishStateChangedResponse.published());
     }
 
     @PatchMapping("/{dishId}/unpublish")
-    public ResponseEntity<DishStateChangedResponse> unpublishDish(@PathVariable UUID dishId) {
+    public ResponseEntity<DishStateChangedResponse> unpublishDish(
+            @PathVariable UUID dishId,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        verifyOwnership(DishId.of(dishId), jwt);
         publishDishUseCase.unpublishDish(DishId.of(dishId));
         return ResponseEntity.ok(DishStateChangedResponse.unpublished());
     }
 
     @PatchMapping("/{dishId}/out-of-stock")
-    public ResponseEntity<DishStateChangedResponse> markOutOfStock(@PathVariable UUID dishId) {
+    public ResponseEntity<DishStateChangedResponse> markOutOfStock(
+            @PathVariable UUID dishId,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        verifyOwnership(DishId.of(dishId), jwt);
         publishDishUseCase.markOutOfStock(DishId.of(dishId));
         return ResponseEntity.ok(DishStateChangedResponse.outOfStock());
     }
 
-    @GetMapping("/restaurant/{restaurantId}")
-    public ResponseEntity<DishListResponse> getDishesByRestaurant(@PathVariable UUID restaurantId) {
+    @GetMapping
+    public ResponseEntity<DishListResponse> getMyDishes(@AuthenticationPrincipal Jwt jwt) {
+        String keycloakSubjectId = jwt.getSubject();
+        Owner owner = getOwnerUseCase.getOwnerByKeycloakId(keycloakSubjectId);
+        Restaurant restaurant = getRestaurantUseCase.getRestaurantByOwnerId(owner.getOwnerId());
+
         List<Dish> dishes = getDishesByRestaurantUseCase.getDishesByRestaurant(
-                RestaurantId.of(restaurantId)
+                restaurant.getRestaurantId()
         );
         return ResponseEntity.ok(DishListResponse.fromDomain(dishes));
     }
 
-    @GetMapping("/{dishId}")
-    public ResponseEntity<DishResponse> getDishById(@PathVariable UUID dishId) {
-        // need to add GetDishByIdUseCase to your ports
-        // For now, this is a placeholder showing the structure
-        return ResponseEntity.ok().build();
+    private void verifyOwnership(DishId dishId, Jwt jwt) {
+        // Get authenticated owner
+        String keycloakSubjectId = jwt.getSubject();
+        Owner owner = getOwnerUseCase.getOwnerByKeycloakId(keycloakSubjectId);
+        Restaurant ownerRestaurant = getRestaurantUseCase.getRestaurantByOwnerId(owner.getOwnerId());
+
+        // Get the dish
+        Dish dish = getDishUseCase.getDishById(dishId);
+
+        // Verify dish belongs to owner's restaurant
+        if (!dish.getRestaurantId().equals(ownerRestaurant.getRestaurantId())) {
+            throw new SecurityException("You don't have permission to access this dish");
+        }
     }
 }

@@ -22,7 +22,7 @@ public class Restaurant {
     private Time openingTime;
     private List<Dish> dishes;
 
-    public static Restaurant createForOwner(
+    public static Restaurant createRestaurant(
             OwnerId ownerId,
             String name,
             String address,

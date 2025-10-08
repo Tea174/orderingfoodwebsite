@@ -1,6 +1,9 @@
 package be.kdg.keepdishgoing.restaurants.domain.restaurant;
 
 
+import lombok.Getter;
+
+@Getter
 public enum TypeOfCuisine {
     // European
     ITALIAN("Italian"),
@@ -106,10 +109,6 @@ public enum TypeOfCuisine {
 
     TypeOfCuisine(String displayName) {
         this.displayName = displayName;
-    }
-
-    public String getDisplayName() {
-        return displayName;
     }
 
     @Override

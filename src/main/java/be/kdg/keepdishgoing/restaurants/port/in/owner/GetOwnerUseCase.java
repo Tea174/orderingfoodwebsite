@@ -6,4 +6,5 @@ import be.kdg.keepdishgoing.restaurants.domain.owner.OwnerId;
 public interface GetOwnerUseCase {
     Owner getOwnerById(OwnerId ownerId);
     Owner getOwnerByEmail(String email);
+    Owner getOwnerByKeycloakId(String keycloakSubjectId);
 }

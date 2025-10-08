@@ -13,7 +13,7 @@ public record DishResponse(
         UUID restaurantId,
         String name,
         DishType dishType,
-        List<String> foodTags,
+        List<FoodTag> foodTags,
         String description,
         double price,
         String pictureURL,
@@ -25,11 +25,7 @@ public record DishResponse(
                 dish.getRestaurantId().id(),
                 dish.getName(),
                 dish.getDishType(),
-                dish.getFoodTags() != null ?
-                        dish.getFoodTags().stream()
-                                .map(FoodTag::value)
-                                .collect(Collectors.toList()) :
-                        List.of(),
+                dish.getFoodTags() != null ? dish.getFoodTags() : List.of(),
                 dish.getDescription(),
                 dish.getPrice(),
                 dish.getPictureURL(),

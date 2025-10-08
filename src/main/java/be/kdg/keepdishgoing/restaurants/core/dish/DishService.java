@@ -19,7 +19,7 @@ public class DishService implements
         UpdateDishUseCase,
         DeleteDishUseCase,
         PublishDishUseCase,
-        GetDishesByRestaurantUseCase {
+        GetDishesByRestaurantUseCase, GetDishUseCase {
 
     private final SaveDishPort saveDishPort;
     private final LoadDishesPort loadDishesPort;
@@ -31,6 +31,13 @@ public class DishService implements
         this.saveDishPort = saveDishPort;
         this.loadDishesPort = loadDishesPort;
         this.deleteDishPort = deleteDishPort;
+    }
+
+    @Override
+    public Dish getDishById(DishId dishId) {
+        return loadDishesPort.loadByDishId(dishId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Dish not found with id: " + dishId.id()));
     }
 
     @Override
@@ -75,9 +82,25 @@ public class DishService implements
     public void publishDish(DishId dishId) {
         Dish dish = loadDishesPort.loadByDishId(dishId)
                 .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+        System.out.println("Before publish: " + dish.getState());
+        // For NEW dishes (publishedDishUuid is null)
+        if(dish.getPublishedDishId() == null) {
+            dish.publish();
+            System.out.println("After publish: " + dish.getState());
+            Dish saved = saveDishPort.save(dish);
+            System.out.println("After save: " + saved.getState());
+        }
+        // For drafts of existing published dishes
+        else {
+            Dish publishedDish = loadDishesPort.loadByDishId(dish.getPublishedDishId())
+                    .orElseThrow(() -> new IllegalArgumentException("Published dish not found"));
 
-        dish.publish();
-        saveDishPort.save(dish);
+            publishedDish.applyDraftChanges(dish);
+            saveDishPort.save(publishedDish);
+            deleteDishPort.delete(dishId); // Delete the draft
+        }
+
+
     }
 
     @Override
@@ -87,6 +110,9 @@ public class DishService implements
 
         dish.unpublish();
         saveDishPort.save(dish);
+//        // Delete any pending drafts for this dish
+//        loadDishesPort.loadByDishId(dishId)
+//                .ifPresent(draft -> deleteDishPort.delete(draft.getDishId()));
     }
 
     @Override

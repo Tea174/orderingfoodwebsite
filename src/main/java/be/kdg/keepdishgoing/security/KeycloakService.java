@@ -35,6 +35,10 @@ public class KeycloakService {
                            @Value("${keycloak.admin.password}") String adminPassword) {
         this.keycloakUrl = keycloakUrl;
         this.realm = realm;
+
+    //Configure to ignore unknown properties
+        System.setProperty("resteasy.preferJacksonOverJsonB", "true");
+
         this.keycloak = KeycloakBuilder.builder()
                 .serverUrl(keycloakUrl)
                 .realm("master")

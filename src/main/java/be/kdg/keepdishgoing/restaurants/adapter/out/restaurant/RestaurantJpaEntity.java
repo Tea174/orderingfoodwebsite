@@ -21,9 +21,11 @@ public class RestaurantJpaEntity {
     @Id
     @Column(name = "restaurant_id")
     private UUID uuid;
+
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", nullable = false, unique = true)  // Add unique=true for 1-to-1
+    @JoinColumn(name = "owner_id", nullable = false, unique = true)
     private OwnerJpaEntity ownerId;
+
     @Column(nullable = false)
     private String  name;
     @Column(nullable = false)
@@ -53,6 +55,9 @@ public class RestaurantJpaEntity {
 
     public RestaurantJpaEntity() {
         this.uuid = UUID.randomUUID();
+    }
+    public void setOwner(OwnerJpaEntity owner) {
+        this.ownerId = owner;
     }
 
     public UUID getOwnerId() {
