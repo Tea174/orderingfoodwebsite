@@ -2,62 +2,34 @@
 -- DUMMY DATA FOR KEEPDISHGOING
 -- ============================================
 
-DELETE FROM kdg_owners.dishes;
-DELETE FROM kdg_owners.restaurants;
-DELETE FROM kdg_owners.owners;
+DELETE FROM kdg_restaurants.dishes;
+DELETE FROM kdg_restaurants.restaurants;
+DELETE FROM kdg_restaurants.owners;
 
--- ============================================
--- INSERT OWNERS
--- ============================================
-INSERT INTO kdg_owners.owners (owner_id, first_name, last_name, email, password, phone_number, address, created_at, updated_at) VALUES
-                                                                                                                                    ('a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d', 'John', 'Doe', 'john.doe@restaurant.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjNE5mVVKlCyfJMH4ZmDQMGgNEIKvGq', 471234567, 'Koningsstraat 10, 9000 Gent', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                    ('b2c3d4e5-f6a7-4b5c-9d0e-1f2a3b4c5d6e', 'Maria', 'Garcia', 'maria.garcia@foodplace.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjNE5mVVKlCyfJMH4ZmDQMGgNEIKvGq', 472345678, 'Veldstraat 25, 9000 Gent', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                    ('c3d4e5f6-a7b8-4c5d-0e1f-2a3b4c5d6e7f', 'Pierre', 'Dubois', 'pierre.dubois@bistro.be', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjNE5mVVKlCyfJMH4ZmDQMGgNEIKvGq', 473456789, 'Graslei 15, 9000 Gent', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                    ('d4e5f6a7-b8c9-4d5e-1f2a-3b4c5d6e7f8a', 'Yuki', 'Tanaka', 'yuki.tanaka@sushi.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjNE5mVVKlCyfJMH4ZmDQMGgNEIKvGq', 474567890, 'Sint-Pietersnieuwstraat 45, 9000 Gent', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                    ('e5f6a7b8-c9d0-4e5f-2a3b-4c5d6e7f8a9b', 'Ahmed', 'Hassan', 'ahmed.hassan@kebab.be', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjNE5mVVKlCyfJMH4ZmDQMGgNEIKvGq', 475678901, 'Overpoortstraat 30, 9000 Gent', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
--- ============================================
--- INSERT RESTAURANTS
--- ============================================
-INSERT INTO kdg_owners.restaurants (restaurant_id, owner_id, name, address, email, pictureurl, cuisine, preparation_time, opening_time, created_at, updated_at) VALUES
-                                                                                                                                                                    ('f6a7b8c9-d0e1-4f5a-3b4c-5d6e7f8a9b0c', 'a1b2c3d4-e5f6-4a5b-8c9d-0e1f2a3b4c5d', 'The Golden Spoon', 'Koningsstraat 10, 9000 Gent', 'contact@goldenspoon.be', 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4', 'FRENCH', '00:30:00', '11:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                                    ('a7b8c9d0-e1f2-4a5b-4c5d-6e7f8a9b0c1d', 'b2c3d4e5-f6a7-4b5c-9d0e-1f2a3b4c5d6e', 'La Tapas Loca', 'Veldstraat 25, 9000 Gent', 'info@tapas-loca.be', 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1', 'SPANISH', '00:25:00', '12:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                                    ('b8c9d0e1-f2a3-4b5c-5d6e-7f8a9b0c1d2e', 'c3d4e5f6-a7b8-4c5d-0e1f-2a3b4c5d6e7f', 'Bistro Le Français', 'Graslei 15, 9000 Gent', 'bonjour@bistro-francais.be', 'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17', 'FRENCH', '00:40:00', '18:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                                    ('c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f', 'd4e5f6a7-b8c9-4d5e-1f2a-3b4c5d6e7f8a', 'Tokyo Sushi Bar', 'Sint-Pietersnieuwstraat 45, 9000 Gent', 'hello@tokyosushi.be', 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351', 'JAPANESE', '00:20:00', '11:30:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                                    ('d0e1f2a3-b4c5-4d5e-7f8a-9b0c1d2e3f4a', 'e5f6a7b8-c9d0-4e5f-2a3b-4c5d6e7f8a9b', 'Istanbul Grill House', 'Overpoortstraat 30, 9000 Gent', 'order@istanbul-grill.be', 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783', 'MIDDLE_EASTERN', '00:15:00', '10:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- Insert restaurant
+INSERT INTO kdg_restaurants.restaurants (restaurant_id, owner_id, name, address, email, picture_url, cuisine, preparation_time, opening_time, created_at, updated_at)
+VALUES ('660e8400-e29b-41d4-a716-446655440000',
+        '550e8400-e29b-41d4-a716-446655440000',
+        'Bella Italia',
+        '123 Main Street, City',
+        'info@bellaitalia.com',
+        'https://example.com/restaurant.jpg',
+        'ITALIAN',
+        '00:30:00',
+        '11:00:00',
+        NOW(),
+        NOW());
 
--- ============================================
--- INSERT DISHES (excluding drinks since 'drink' is not in CHECK constraint)
--- ============================================
+-- Insert dishes
+INSERT INTO kdg_restaurants.dishes (dish_id, restaurant_id, dish_name, dish_type, description, price, picture_url, state, created_at, updated_at)
+VALUES
+    ('770e8400-e29b-41d4-a716-446655440001', '660e8400-e29b-41d4-a716-446655440000', 'Margherita Pizza', 'MAIN_COURSE', 'Classic pizza with tomato and mozzarella', 12.50, 'https://example.com/pizza.jpg', 'PUBLISHED', NOW(), NOW()),
+    ('770e8400-e29b-41d4-a716-446655440002', '660e8400-e29b-41d4-a716-446655440000', 'Caesar Salad', 'APPETIZER', 'Fresh romaine lettuce with parmesan', 8.50, 'https://example.com/salad.jpg', 'PUBLISHED', NOW(), NOW());
 
--- Dishes for The Golden Spoon (French)
-INSERT INTO kdg_owners.dishes (dish_id, restaurant_id, dish_name, dish_type, food_tags, description, price, pictureurl, created_at, updated_at) VALUES
-                                                                                                                                                    ('11111111-1111-1111-1111-111111111111', 'f6a7b8c9-d0e1-4f5a-3b4c-5d6e7f8a9b0c', 'Belgian Beef Stew', 'main', 'beef,stew,comfort food', 'Traditional Flemish beef stew with Belgian beer', 18.50, 'https://images.unsplash.com/photo-1546833999-b9f581a1996d', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('11111111-1111-1111-1111-111111111112', 'f6a7b8c9-d0e1-4f5a-3b4c-5d6e7f8a9b0c', 'Caesar Salad', 'starter', 'salad,chicken,healthy', 'Fresh romaine lettuce with parmesan and croutons', 12.00, 'https://images.unsplash.com/photo-1546793665-c74683f339c1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('11111111-1111-1111-1111-111111111113', 'f6a7b8c9-d0e1-4f5a-3b4c-5d6e7f8a9b0c', 'Chocolate Mousse', 'dessert', 'chocolate,sweet,rich', 'Belgian dark chocolate mousse with whipped cream', 8.50, 'https://images.unsplash.com/photo-1541599468348-e96984315921', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- Dishes for La Tapas Loca (Spanish)
-INSERT INTO kdg_owners.dishes (dish_id, restaurant_id, dish_name, dish_type, food_tags, description, price, pictureurl, created_at, updated_at) VALUES
-                                                                                                                                                    ('22222222-2222-2222-2222-222222222221', 'a7b8c9d0-e1f2-4a5b-4c5d-6e7f8a9b0c1d', 'Patatas Bravas', 'starter', 'potatoes,spicy,traditional', 'Crispy potatoes with spicy tomato sauce', 7.50, 'https://images.unsplash.com/photo-1607532941433-304659e8198a', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('22222222-2222-2222-2222-222222222222', 'a7b8c9d0-e1f2-4a5b-4c5d-6e7f8a9b0c1d', 'Paella Valenciana', 'main', 'rice,seafood,saffron', 'Traditional Spanish rice with seafood and chicken', 22.00, 'https://images.unsplash.com/photo-1534080564583-6be75777b70a', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('22222222-2222-2222-2222-222222222223', 'a7b8c9d0-e1f2-4a5b-4c5d-6e7f8a9b0c1d', 'Churros con Chocolate', 'dessert', 'fried,sweet,chocolate', 'Fried dough pastries with hot chocolate dip', 6.50, 'https://images.unsplash.com/photo-1543257580-7269da773bf5', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- Dishes for Bistro Le Français (French)
-INSERT INTO kdg_owners.dishes (dish_id, restaurant_id, dish_name, dish_type, food_tags, description, price, pictureurl, created_at, updated_at) VALUES
-                                                                                                                                                    ('33333333-3333-3333-3333-333333333331', 'b8c9d0e1-f2a3-4b5c-5d6e-7f8a9b0c1d2e', 'French Onion Soup', 'starter', 'soup,cheese,warm', 'Caramelized onions in beef broth with gruyere', 10.00, 'https://images.unsplash.com/photo-1547592166-23ac45744acd', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('33333333-3333-3333-3333-333333333332', 'b8c9d0e1-f2a3-4b5c-5d6e-7f8a9b0c1d2e', 'Coq au Vin', 'main', 'chicken,wine,french', 'Braised chicken in red wine with mushrooms', 24.50, 'https://images.unsplash.com/photo-1598103442097-8b74394b95c6', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('33333333-3333-3333-3333-333333333333', 'b8c9d0e1-f2a3-4b5c-5d6e-7f8a9b0c1d2e', 'Crème Brûlée', 'dessert', 'custard,caramel,creamy', 'Rich vanilla custard with caramelized sugar', 9.00, 'https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- Dishes for Tokyo Sushi Bar (Japanese)
-INSERT INTO kdg_owners.dishes (dish_id, restaurant_id, dish_name, dish_type, food_tags, description, price, pictureurl, created_at, updated_at) VALUES
-                                                                                                                                                    ('44444444-4444-4444-4444-444444444441', 'c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f', 'Miso Soup', 'starter', 'soup,tofu,seaweed', 'Traditional Japanese soup with miso paste', 4.50, 'https://images.unsplash.com/photo-1546833998-877b37c2e5c6', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('44444444-4444-4444-4444-444444444442', 'c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f', 'Salmon Nigiri Set', 'main', 'sushi,salmon,fresh', '8 pieces of fresh salmon nigiri', 16.00, 'https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('44444444-4444-4444-4444-444444444443', 'c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f', 'Ramen Bowl', 'main', 'noodles,pork,egg', 'Rich pork broth with noodles and toppings', 14.50, 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('44444444-4444-4444-4444-444444444444', 'c9d0e1f2-a3b4-4c5d-6e7f-8a9b0c1d2e3f', 'Green Tea Ice Cream', 'dessert', 'ice cream,matcha,japanese', 'Traditional matcha flavored ice cream', 5.50, 'https://images.unsplash.com/photo-1563805042-7684c019e1cb', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
-
--- Dishes for Istanbul Grill House (Middle Eastern)
-INSERT INTO kdg_owners.dishes (dish_id, restaurant_id, dish_name, dish_type, food_tags, description, price, pictureurl, created_at, updated_at) VALUES
-                                                                                                                                                    ('55555555-5555-5555-5555-555555555551', 'd0e1f2a3-b4c5-4d5e-7f8a-9b0c1d2e3f4a', 'Hummus Platter', 'starter', 'chickpea,tahini,dip', 'Creamy hummus with pita bread and olive oil', 8.00, 'https://images.unsplash.com/photo-1621510456681-2330135e5871', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('55555555-5555-5555-5555-555555555552', 'd0e1f2a3-b4c5-4d5e-7f8a-9b0c1d2e3f4a', 'Mixed Kebab Plate', 'main', 'grilled,meat,turkish', 'Lamb and chicken kebabs with rice and salad', 19.50, 'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('55555555-5555-5555-5555-555555555553', 'd0e1f2a3-b4c5-4d5e-7f8a-9b0c1d2e3f4a', 'Falafel Wrap', 'main', 'vegetarian,chickpea,wrap', 'Crispy falafel in flatbread with tahini sauce', 11.00, 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-                                                                                                                                                    ('55555555-5555-5555-5555-555555555554', 'd0e1f2a3-b4c5-4d5e-7f8a-9b0c1d2e3f4a', 'Baklava', 'dessert', 'pastry,nuts,honey', 'Sweet phyllo pastry with pistachios and honey', 6.00, 'https://images.unsplash.com/photo-1519676867240-f03562e64548', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+-- Insert food tags
+INSERT INTO kdg_restaurants.dish_food_tags (dish_id, food_tag)
+VALUES
+    ('770e8400-e29b-41d4-a716-446655440001', 'PIZZA'),
+    ('770e8400-e29b-41d4-a716-446655440001', 'ITALIAN'),
+    ('770e8400-e29b-41d4-a716-446655440002', 'VEGETARIAN');

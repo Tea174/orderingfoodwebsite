@@ -4,7 +4,10 @@ import be.kdg.keepdishgoing.restaurants.adapter.out.mapper.Mapper;
 import be.kdg.keepdishgoing.restaurants.adapter.out.restaurant.RestaurantJpaRepository;
 import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
 import be.kdg.keepdishgoing.restaurants.domain.dish.DishId;
+import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
+import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
+import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.DeleteDishPort;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.LoadDishesPort;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.SaveDishPort;
@@ -15,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
-public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishPort {
+public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishPort{
 
     private final DishJpaRepository dishJpaRepository;
     private final RestaurantJpaRepository restaurantJpaRepository;
@@ -44,6 +47,22 @@ public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishP
     }
 
     @Override
+    public List<Dish> loadByType(DishType dishType) {
+        return dishJpaRepository.findByDishType(dishType)
+                .stream()
+                .map(mapper::toDomainDish)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Dish> loadByFoodTag(FoodTag foodTag) {
+        return dishJpaRepository.findByFoodTag(foodTag)
+                .stream()
+                .map(mapper::toDomainDish)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Dish save(Dish dish) {
         var restaurantEntity = restaurantJpaRepository.findById(dish.getRestaurantId().id())
                 .orElseThrow(() -> new IllegalArgumentException(
@@ -55,9 +74,9 @@ public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishP
         return mapper.toDomainDish(savedEntity);
     }
 
+
     @Override
     public void delete(DishId dishId) {
-        dishJpaRepository.deleteByUuid(dishId.id());
-    }
 
+    }
 }

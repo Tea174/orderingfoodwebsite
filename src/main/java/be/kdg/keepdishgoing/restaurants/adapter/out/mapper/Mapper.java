@@ -36,6 +36,9 @@ public class Mapper {
                 entity.getCuisine(),
                 entity.getPreparationTime(),
                 entity.getOpeningTime(),
+                entity.getMinPrice(),
+                entity.getMaxPrice(),
+                entity.getEstimatedDeliveryTime(),
                 entity.getDishes() != null ?
                         entity.getDishes().stream()
                                 .map(this::toDomainDish)
@@ -60,6 +63,9 @@ public class Mapper {
         entity.setCuisine(restaurant.getCuisine());
         entity.setPreparationTime(restaurant.getPreparationTime());
         entity.setOpeningTime(restaurant.getOpeningTime());
+        entity.setMinPrice(restaurant.getMinPrice());
+        entity.setMaxPrice(restaurant.getMaxPrice());
+        entity.setEstimatedDeliveryTime(restaurant.getEstimatedDeliveryTime());
         return entity;
     }
 

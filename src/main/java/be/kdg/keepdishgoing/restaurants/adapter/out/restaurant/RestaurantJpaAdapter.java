@@ -4,6 +4,8 @@ import be.kdg.keepdishgoing.restaurants.adapter.out.mapper.Mapper;
 import be.kdg.keepdishgoing.restaurants.domain.owner.OwnerId;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
+import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
+import be.kdg.keepdishgoing.restaurants.port.in.restaurant.FilterRestaurantByTypeOfCuisine;
 import be.kdg.keepdishgoing.restaurants.port.out.restaurant.LoadRestaurantPort;
 import be.kdg.keepdishgoing.restaurants.port.out.restaurant.SaveRestaurantPort;
 import org.slf4j.Logger;
@@ -11,11 +13,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Component
 @Primary
-public class RestaurantJpaAdapter implements SaveRestaurantPort, LoadRestaurantPort {
+public class RestaurantJpaAdapter implements SaveRestaurantPort, LoadRestaurantPort{
 
     private static final Logger log = LoggerFactory.getLogger(RestaurantJpaAdapter.class);
 
@@ -28,22 +32,16 @@ public class RestaurantJpaAdapter implements SaveRestaurantPort, LoadRestaurantP
     }
 
     @Override
-    public Optional<Restaurant> loadByOwner(OwnerId ownerId) {
-        log.debug("Loading restaurant for owner: {}", ownerId.id());
-        return restaurantJpaRepository.findByOwnerId_Uuid(ownerId.id())
-                .map(mapper::toDomainRestaurant);
-    }
-
-    @Override
     public Optional<Restaurant> loadByRestaurantId(RestaurantId restaurantId) {
         log.debug("Loading restaurant by ID: {}", restaurantId.id());
-        return restaurantJpaRepository.findByIdWithDishes(restaurantId.id())
+        return restaurantJpaRepository.findById(restaurantId.id())
                 .map(mapper::toDomainRestaurant);
     }
 
     @Override
     public Optional<Restaurant> loadByName(String name) {
-        return Optional.empty();
+        return restaurantJpaRepository.findByName(name)
+                .map(mapper::toDomainRestaurant);
     }
 
     @Override
@@ -52,9 +50,19 @@ public class RestaurantJpaAdapter implements SaveRestaurantPort, LoadRestaurantP
     }
 
     @Override
-    public Optional<Restaurant> findByOwnerId(OwnerId ownerId) {
+    public Optional<Restaurant> loadByOwnerId(OwnerId ownerId) {
+        log.debug("Loading restaurant for owner: {}", ownerId.id());
         return restaurantJpaRepository.findByOwnerId_Uuid(ownerId.id())
                 .map(mapper::toDomainRestaurant);
+    }
+
+    @Override
+    public List<Restaurant> loadByType(TypeOfCuisine typeOfCuisine) {
+        log.debug("Loading restaurant for type: {}", typeOfCuisine.name());
+        return restaurantJpaRepository.findByCuisine(typeOfCuisine)
+                .stream()
+                .map(mapper::toDomainRestaurant)
+                .toList();
     }
 
 
@@ -66,6 +74,8 @@ public class RestaurantJpaAdapter implements SaveRestaurantPort, LoadRestaurantP
         System.out.println(savedEntity);
         return restaurant;
     }
+
+
 //
 //    @Override
 //    public void update(Restaurant restaurant) {

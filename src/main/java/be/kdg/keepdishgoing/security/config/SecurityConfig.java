@@ -42,6 +42,8 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/unsecured").permitAll()
+                        .requestMatchers("/api/restaurants/type/**").permitAll()
+                        .requestMatchers("/api/dishes/filter/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/owners/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/owners/login").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()

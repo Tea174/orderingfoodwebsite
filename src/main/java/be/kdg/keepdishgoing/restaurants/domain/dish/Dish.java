@@ -116,6 +116,10 @@ public class Dish {
         return this.state == DishState.PUBLISHED;
     }
 
+    public List<FoodTag> getFoodTags() {
+        return foodTags == null ? List.of() : foodTags;
+    }
+
     public boolean hasDraft() {
         // This would be checked via repository
         return false;

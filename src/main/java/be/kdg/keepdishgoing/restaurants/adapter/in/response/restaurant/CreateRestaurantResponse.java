@@ -20,6 +20,9 @@ public record CreateRestaurantResponse(
         TypeOfCuisine cuisine,
         Time preparationTime,
         Time openingTime,
+        Double minPrice,
+        Double maxPrice,
+        Integer estimatedDeliveryTime,
         List<DishResponse> dishes
 ) {
     public static CreateRestaurantResponse fromDomain(Restaurant restaurant) {
@@ -33,6 +36,9 @@ public record CreateRestaurantResponse(
                 restaurant.getCuisine(),
                 restaurant.getPreparationTime(),
                 restaurant.getOpeningTime(),
+                restaurant.getMinPrice(),
+                restaurant.getMaxPrice(),
+                restaurant.getEstimatedDeliveryTime(),
                 restaurant.getDishes() != null
                         ? restaurant.getDishes().stream()
                         .map(DishResponse::fromDomain)

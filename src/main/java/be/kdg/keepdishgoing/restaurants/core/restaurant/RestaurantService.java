@@ -4,13 +4,17 @@ import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
 import be.kdg.keepdishgoing.restaurants.domain.owner.OwnerId;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
+import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
 import be.kdg.keepdishgoing.restaurants.port.in.restaurant.CreateRestaurantUseCase;
+import be.kdg.keepdishgoing.restaurants.port.in.restaurant.FilterRestaurantByTypeOfCuisine;
 import be.kdg.keepdishgoing.restaurants.port.in.restaurant.GetRestaurantUseCase;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.SaveDishPort;
 import be.kdg.keepdishgoing.restaurants.port.out.restaurant.LoadRestaurantPort;
 import be.kdg.keepdishgoing.restaurants.port.out.restaurant.SaveRestaurantPort;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,25 +24,26 @@ import java.util.List;
 @AllArgsConstructor
 public class RestaurantService implements
         CreateRestaurantUseCase,
-        GetRestaurantUseCase {
+        GetRestaurantUseCase,
+        FilterRestaurantByTypeOfCuisine {
 
     private final LoadRestaurantPort loadRestaurantPort;
     private final SaveRestaurantPort saveRestaurantPort;
     private final SaveDishPort saveDishPort;
 
+    private static final Logger logger = LoggerFactory.getLogger(RestaurantService.class);
 
     @Override
     public Restaurant getRestaurantByOwnerId(OwnerId ownerId) {
-        return loadRestaurantPort.findByOwnerId(ownerId)
+        logger.debug("Getting restaurant by owner id {}", ownerId);
+        return loadRestaurantPort.loadByOwnerId(ownerId)
                 .orElseThrow(() -> new IllegalStateException(
                         "No restaurant found for this owner. Please create a restaurant first."));
     }
 
-
-
     @Override
     public RestaurantId createRestaurant(CreateRestaurantCommand command) {
-        // Check if restaurant exists
+        logger.debug("Check if restaurant exists");
         loadRestaurantPort.loadByEmail(command.email()).ifPresent(r -> {
             throw new IllegalArgumentException("email already registered");
         });
@@ -53,6 +58,9 @@ public class RestaurantService implements
                 command.cuisine(),
                 command.preparationTime(),
                 command.openingTime(),
+                command.minPrice(),
+                command.maxPrice(),
+                command.estimatedDeliveryTime(),
                 List.of() // Empty list initially
         );
 
@@ -79,10 +87,26 @@ public class RestaurantService implements
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Restaurant getRestaurantById(RestaurantId restaurantId) {
-        return loadRestaurantPort.loadByRestaurantId(restaurantId)
+        logger.debug("Getting restaurant by id {}", restaurantId);
+        Restaurant restaurant = loadRestaurantPort.loadByRestaurantId(restaurantId)
                 .orElseThrow(() -> new IllegalArgumentException("restaurant not found"));
+
+        // Force initialization of lazy collections
+        restaurant.getDishes().forEach(dish -> dish.getFoodTags().size());
+
+        return restaurant;
     }
 
 
+    @Override
+    public List<Restaurant> filterRestaurantByTypeOfCuisine(TypeOfCuisine typeOfCuisine) {
+        logger.debug("filter restaurant by type of cuisine {}", typeOfCuisine);
+        List<Restaurant> restaurants = loadRestaurantPort.loadByType(typeOfCuisine);
+        if (restaurants.isEmpty()) {
+            throw new IllegalArgumentException("No restaurant found");
+        }
+        return restaurants;
+    }
 }

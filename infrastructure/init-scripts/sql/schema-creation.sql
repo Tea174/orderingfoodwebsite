@@ -1,7 +1,10 @@
 -- Create Schemas for Bounded Contexts
--- CREATE SCHEMA IF NOT EXISTS kdg_owners;
--- CREATE SCHEMA IF NOT EXISTS kdg_customers;
---
+DROP SCHEMA IF EXISTS kdg_owners CASCADE;
+DROP SCHEMA IF EXISTS kdg_customers CASCADE;
+CREATE SCHEMA IF NOT EXISTS kdg_restaurants;
+CREATE SCHEMA IF NOT EXISTS kdg_customers;
+CREATE SCHEMA IF NOT EXISTS kdg_orders;
+CREATE SCHEMA IF NOT EXISTS kdg_deliveries;
 -- -- Grant permissions
 -- GRANT ALL ON SCHEMA kdg_owners TO kdg;
 -- GRANT ALL ON SCHEMA kdg_customers TO kdg;
@@ -12,9 +15,9 @@
 -- ============================================
 
 -- Drop tables if they exist (in reverse order due to foreign keys)
-DROP TABLE IF EXISTS kdg_owners.dishes CASCADE ;
-DROP TABLE IF EXISTS kdg_owners.restaurants CASCADE;
-DROP TABLE IF EXISTS kdg_owners.owners CASCADE;
+-- DROP TABLE IF EXISTS kdg_owners.dishes CASCADE ;
+-- DROP TABLE IF EXISTS kdg_owners.restaurants CASCADE;
+-- DROP TABLE IF EXISTS kdg_owners.owners CASCADE;
 
 -- -- Create Owners table
 -- CREATE TABLE kdg_owners.owners (

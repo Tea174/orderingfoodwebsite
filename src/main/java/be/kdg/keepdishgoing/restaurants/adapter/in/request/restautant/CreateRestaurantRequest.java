@@ -33,6 +33,11 @@ public record CreateRestaurantRequest(
         @NotNull(message = "Opening time is required")
         Time openingTime,
 
+        Double minPrice,
+        Double maxPrice,
+        Integer estimatedDeliveryTime,
+
+
         @Valid
         List<DishRequest> dishes
 ) {

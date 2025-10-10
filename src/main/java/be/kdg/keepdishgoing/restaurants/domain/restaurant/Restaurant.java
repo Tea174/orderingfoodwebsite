@@ -20,7 +20,11 @@ public class Restaurant {
     private TypeOfCuisine cuisine;
     private Time preparationTime;
     private Time openingTime;
+    private Double minPrice;
+    private Double maxPrice;
+    private Integer estimatedDeliveryTime;
     private List<Dish> dishes;
+
 
     public static Restaurant createRestaurant(
             OwnerId ownerId,
@@ -31,6 +35,9 @@ public class Restaurant {
             TypeOfCuisine cuisine,
             Time preparationTime,
             Time openingTime,
+            Double minPrice,
+            Double maxPrice,
+            Integer estimatedDeliveryTime,
             List<Dish> dishes
     ) {
         return new Restaurant(
@@ -43,11 +50,14 @@ public class Restaurant {
                 cuisine,
                 preparationTime,
                 openingTime,
+                minPrice,
+                maxPrice,
+                estimatedDeliveryTime,
                 dishes
         );
     }
 
-    public Restaurant(RestaurantId restaurantId, OwnerId ownerId, String name, String address, String email, String pictureURL, TypeOfCuisine cuisine, Time preparationTime, Time openingTime, List<Dish> dishes) {
+    public Restaurant(RestaurantId restaurantId, OwnerId ownerId, String name, String address, String email, String pictureURL, TypeOfCuisine cuisine, Time preparationTime, Time openingTime, Double minPrice, Double maxPrice,Integer estimatedDeliveryTime, List<Dish> dishes) {
         this.restaurantId = restaurantId;
         this.ownerId = ownerId;
         this.name = name;
@@ -57,6 +67,9 @@ public class Restaurant {
         this.cuisine = cuisine;
         this.preparationTime = preparationTime;
         this.openingTime = openingTime;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
+        this.estimatedDeliveryTime = estimatedDeliveryTime;
         this.dishes = dishes;
     }
 
@@ -72,6 +85,9 @@ public class Restaurant {
                 ", cuisine=" + cuisine +
                 ", preparationTime=" + preparationTime +
                 ", openingTime=" + openingTime +
+                ", minPrice=" + minPrice +
+                ", maxPrice=" + maxPrice +
+                ", estimatedDeliveryTime=" + estimatedDeliveryTime +
                 ", dishes=" + dishes +
                 '}';
     }

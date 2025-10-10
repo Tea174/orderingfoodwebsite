@@ -21,6 +21,9 @@ public interface CreateRestaurantUseCase {
             TypeOfCuisine cuisine,
             Time preparationTime,
             Time openingTime,
+            Double minPrice,
+            Double maxPrice,
+            Integer estimatedDeliveryTime,
             List<AddDishUseCase.AddDishCommand> dishCommands
     )
     {

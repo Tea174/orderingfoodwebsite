@@ -5,6 +5,8 @@ import be.kdg.keepdishgoing.restaurants.adapter.in.request.dish.UpdateDishReques
 import be.kdg.keepdishgoing.restaurants.adapter.in.response.dish.*;
 import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
 import be.kdg.keepdishgoing.restaurants.domain.dish.DishId;
+import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
+import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
 import be.kdg.keepdishgoing.restaurants.domain.owner.Owner;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
 import be.kdg.keepdishgoing.restaurants.port.in.dish.*;
@@ -34,6 +36,32 @@ public class DishController {
     private final GetDishUseCase getDishUseCase;
     private final GetOwnerUseCase getOwnerUseCase;
     private final GetRestaurantUseCase getRestaurantUseCase;
+    public final FilterDishesUseCase filterDishesUseCase;
+
+    @GetMapping("/filter/type/{dishType}")
+    public List<DishFilteredResponse> getDishesByType(@PathVariable DishType dishType) {
+        List<Dish> dishes = filterDishesUseCase.filterDishByType(dishType);
+        return dishes.stream()
+                .map(dish -> {
+                    Restaurant restaurant = getRestaurantUseCase.getRestaurantById(dish.getRestaurantId());
+                    return DishFilteredResponse.fromDomain(dish, restaurant.getName());
+                })
+                .toList();
+    }
+
+    @GetMapping("/filter/tag/{foodTag}")
+    public List<DishFilteredResponse> getDishesByFoodTag(@PathVariable FoodTag foodTag) {
+        List<Dish> dishes = filterDishesUseCase.filterDishesByFoodTagUseCase(foodTag);
+        return dishes.stream()
+                .map(dish -> {
+                    Restaurant restaurant = getRestaurantUseCase.getRestaurantById(dish.getRestaurantId());
+                    return DishFilteredResponse.fromDomain(dish, restaurant.getName());
+                })
+                .toList();
+    }
+
+
+
 
     @PostMapping
     public ResponseEntity<DishCreatedResponse> addDish(

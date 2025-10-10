@@ -2,12 +2,14 @@ package be.kdg.keepdishgoing.restaurants.core.dish;
 
 import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
 import be.kdg.keepdishgoing.restaurants.domain.dish.DishId;
+import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
+import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
 import be.kdg.keepdishgoing.restaurants.port.in.dish.*;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.DeleteDishPort;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.LoadDishesPort;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.SaveDishPort;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +21,9 @@ public class DishService implements
         UpdateDishUseCase,
         DeleteDishUseCase,
         PublishDishUseCase,
-        GetDishesByRestaurantUseCase, GetDishUseCase {
+        GetDishesByRestaurantUseCase,
+        GetDishUseCase,
+        FilterDishesUseCase {
 
     private final SaveDishPort saveDishPort;
     private final LoadDishesPort loadDishesPort;
@@ -128,5 +132,21 @@ public class DishService implements
 //    @Transactional(readOnly = true)
     public List<Dish> getDishesByRestaurant(RestaurantId restaurantId) {
         return loadDishesPort.loadByRestaurantId(restaurantId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Dish> filterDishByType(DishType dishType) {
+        List<Dish> dishes = loadDishesPort.loadByType(dishType);
+        dishes.forEach(dish -> dish.getFoodTags().size());
+        return dishes;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Dish> filterDishesByFoodTagUseCase(FoodTag foodTag) {
+        List<Dish> dishes = loadDishesPort.loadByFoodTag(foodTag);
+        dishes.forEach(dish -> dish.getFoodTags().size());
+        return dishes;
     }
 }

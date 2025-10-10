@@ -1,4 +1,4 @@
 package be.kdg.keepdishgoing.customers.adapter.out;
 
-public class OrderDataAdapter {
+public class CustomerJpaAdapter {
 }

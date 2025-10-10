@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter
 @Getter
 @Entity
-@Table(name="restaurants", schema = "kdg_owners")
+@Table(name="restaurants", schema = "kdg_restaurants")
 public class RestaurantJpaEntity {
 
     @Id
@@ -44,14 +44,25 @@ public class RestaurantJpaEntity {
     @Column(nullable = false)
     private Time openingTime;
 
-    @Column
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
-    private List<DishJpaEntity> dishes;
 
     @Column
     private Timestamp created_at;
     @Column
     private Timestamp updated_at;
+
+    @Column(name = "min_price")
+    private Double minPrice;
+
+    @Column(name = "max_price")
+    private Double maxPrice;
+    @Column(name = "estimated_delivery_time")
+    private Integer estimatedDeliveryTime; // in minutes
+
+
+    @Column
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    private List<DishJpaEntity> dishes;
+
 
     public RestaurantJpaEntity() {
         this.uuid = UUID.randomUUID();

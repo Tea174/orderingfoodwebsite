@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "dishes", schema = "kdg_owners")
+@Table(name = "dishes", schema = "kdg_restaurants")
 @Getter
 @Setter
 public class DishJpaEntity {
@@ -39,7 +39,7 @@ public class DishJpaEntity {
     @ElementCollection(targetClass = FoodTag.class)
     @CollectionTable(
             name = "dish_food_tags",
-            schema = "kdg_owners",
+            schema = "kdg_restaurants",
             joinColumns = @JoinColumn(name = "dish_id")
     )
     @Enumerated(EnumType.STRING)

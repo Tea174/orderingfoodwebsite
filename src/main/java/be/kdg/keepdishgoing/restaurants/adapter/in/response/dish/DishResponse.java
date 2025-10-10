@@ -25,7 +25,7 @@ public record DishResponse(
                 dish.getRestaurantId().id(),
                 dish.getName(),
                 dish.getDishType(),
-                dish.getFoodTags() != null ? dish.getFoodTags() : List.of(),
+                dish.getFoodTags(),
                 dish.getDescription(),
                 dish.getPrice(),
                 dish.getPictureURL(),
