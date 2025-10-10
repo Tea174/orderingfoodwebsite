@@ -4,6 +4,7 @@ import be.kdg.keepdishgoing.common.events.DomainEvent;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class Owner {
     private OwnerId ownerId;
     private String keycloakSubjectId;
@@ -30,7 +32,7 @@ public class Owner {
                                     int phoneNumber, String address) {
         Owner owner = new Owner();
         owner.setOwnerId(OwnerId.create());
-        owner.setKeycloakSubjectId(keycloakSubjectId);  // ADD THIS
+        owner.setKeycloakSubjectId(keycloakSubjectId);
         owner.setRestaurantId(null);
         owner.setFirstName(firstName);
         owner.setLastName(lastName);

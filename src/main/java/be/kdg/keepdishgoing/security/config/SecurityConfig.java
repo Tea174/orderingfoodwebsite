@@ -46,6 +46,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/dishes/filter/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/owners/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/owners/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/customers/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/customers/login").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )

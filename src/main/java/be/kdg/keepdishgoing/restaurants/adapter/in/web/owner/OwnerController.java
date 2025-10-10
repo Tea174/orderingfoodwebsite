@@ -65,6 +65,7 @@ public class OwnerController {
 
         // verify owner exists in DB
         Owner owner = getOwnerUseCase.getOwnerByEmail(request.email());
+        System.out.println(owner);
 
         return ResponseEntity.ok(new OwnerLoginResponse(
                 tokenResponse.accessToken(),
@@ -73,15 +74,4 @@ public class OwnerController {
         ));
     }
 
-    // PROTECTED - Only accessible to users with 'owner' role
-//    @PutMapping("/{ownerId}")
-//    @PreAuthorize("hasAuthority('owner')")
-//    public ResponseEntity<OwnerResponse> updateOwner(
-//            @PathVariable UUID ownerId,
-//            @Valid @RequestBody UpdateOwnerRequest request,
-//            @AuthenticationPrincipal Jwt token) {
-//
-//        // Update owner logic...
-//        return ResponseEntity.ok(updatedOwner);
-//    }
 }
