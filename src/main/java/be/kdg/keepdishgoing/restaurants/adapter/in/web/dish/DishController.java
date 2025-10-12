@@ -9,6 +9,7 @@ import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
 import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
 import be.kdg.keepdishgoing.restaurants.domain.owner.Owner;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
+import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
 import be.kdg.keepdishgoing.restaurants.port.in.dish.*;
 import be.kdg.keepdishgoing.restaurants.port.in.owner.GetOwnerUseCase;
 import be.kdg.keepdishgoing.restaurants.port.in.restaurant.GetRestaurantUseCase;
@@ -36,7 +37,26 @@ public class DishController {
     private final GetDishUseCase getDishUseCase;
     private final GetOwnerUseCase getOwnerUseCase;
     private final GetRestaurantUseCase getRestaurantUseCase;
-    public final FilterDishesUseCase filterDishesUseCase;
+    private final FilterDishesUseCase filterDishesUseCase;
+
+
+
+    @GetMapping("/published/restaurant/{restaurantId}")
+    public List<DishPublishedResponse> getPublishedDishesByRestaurant(@PathVariable String restaurantId) {
+        List<GetDishUseCase.PublishedDishDto> dishes =
+                getDishUseCase.getPublishedDishesByRestaurant(
+                        new RestaurantId(UUID.fromString(restaurantId))
+                );
+
+        return dishes.stream()
+                .map(dto -> new DishPublishedResponse(
+                        dto.dishId().id().toString(),
+                        dto.name(),
+                        dto.price(),
+                        dto.inStock()
+                ))
+                .toList();
+    }
 
     @GetMapping("/filter/type/{dishType}")
     public List<DishFilteredResponse> getDishesByType(@PathVariable DishType dishType) {
@@ -141,13 +161,23 @@ public class DishController {
     }
 
     @PatchMapping("/{dishId}/out-of-stock")
-    public ResponseEntity<DishStateChangedResponse> markOutOfStock(
+    public ResponseEntity<DishStockChangedResponse> markOutOfStock(
             @PathVariable UUID dishId,
             @AuthenticationPrincipal Jwt jwt) {
 
         verifyOwnership(DishId.of(dishId), jwt);
         publishDishUseCase.markOutOfStock(DishId.of(dishId));
-        return ResponseEntity.ok(DishStateChangedResponse.outOfStock());
+        return ResponseEntity.ok(DishStockChangedResponse.outOfStock());
+    }
+
+    @PatchMapping("/{dishId}/back-in-stock")
+    public ResponseEntity<DishStockChangedResponse> markBackInStock(
+            @PathVariable UUID dishId,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        verifyOwnership(DishId.of(dishId), jwt);
+        publishDishUseCase.markBackInStock(DishId.of(dishId));
+        return ResponseEntity.ok(DishStockChangedResponse.backInStock());
     }
 
     @GetMapping

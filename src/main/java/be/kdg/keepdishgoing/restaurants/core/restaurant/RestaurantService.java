@@ -92,10 +92,8 @@ public class RestaurantService implements
         logger.debug("Getting restaurant by id {}", restaurantId);
         Restaurant restaurant = loadRestaurantPort.loadByRestaurantId(restaurantId)
                 .orElseThrow(() -> new IllegalArgumentException("restaurant not found"));
-
         // Force initialization of lazy collections
         restaurant.getDishes().forEach(dish -> dish.getFoodTags().size());
-
         return restaurant;
     }
 

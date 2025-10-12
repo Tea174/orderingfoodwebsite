@@ -6,4 +6,5 @@ public interface PublishDishUseCase {
     void publishDish(DishId dishId);
     void unpublishDish(DishId dishId);
     void markOutOfStock(DishId dishId);
+    void markBackInStock(DishId dishId);
 }

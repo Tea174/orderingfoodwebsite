@@ -9,6 +9,7 @@ import be.kdg.keepdishgoing.restaurants.port.in.dish.*;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.DeleteDishPort;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.LoadDishesPort;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.SaveDishPort;
+import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class DishService implements
         AddDishUseCase,
         UpdateDishUseCase,
@@ -23,19 +25,44 @@ public class DishService implements
         PublishDishUseCase,
         GetDishesByRestaurantUseCase,
         GetDishUseCase,
-        FilterDishesUseCase {
+        FilterDishesUseCase{
 
     private final SaveDishPort saveDishPort;
     private final LoadDishesPort loadDishesPort;
     private final DeleteDishPort deleteDishPort;
 
-    public DishService(SaveDishPort saveDishPort,
-                       LoadDishesPort loadDishesPort,
-                       DeleteDishPort deleteDishPort) {
-        this.saveDishPort = saveDishPort;
-        this.loadDishesPort = loadDishesPort;
-        this.deleteDishPort = deleteDishPort;
+    @Override
+    public List<PublishedDishDto> getPublishedDishesByRestaurant(RestaurantId restaurantId) {
+        return loadDishesPort.loadPublishedByRestaurantId(restaurantId)
+                .stream()
+                .map(dish -> new PublishedDishDto(
+                        dish.getDishId(),
+                        dish.getName(),
+                        dish.getPrice(),
+                        dish.isInStock(),
+                        dish.getRestaurantId()
+                ))
+                .toList();
     }
+
+    @Override
+    public PublishedDishDto getPublishedDish(DishId dishId) {
+        Dish dish = loadDishesPort.loadByPublished(dishId)
+                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+
+        if (!dish.isPublished()) {
+            throw new IllegalStateException("Dish is not published");
+        }
+
+        return new PublishedDishDto(
+                dish.getDishId(),
+                dish.getName(),
+                dish.getPrice(),
+                dish.isInStock(),
+                dish.getRestaurantId()
+        );
+    }
+
 
     @Override
     public Dish getDishById(DishId dishId) {
@@ -103,8 +130,6 @@ public class DishService implements
             saveDishPort.save(publishedDish);
             deleteDishPort.delete(dishId); // Delete the draft
         }
-
-
     }
 
     @Override
@@ -114,9 +139,6 @@ public class DishService implements
 
         dish.unpublish();
         saveDishPort.save(dish);
-//        // Delete any pending drafts for this dish
-//        loadDishesPort.loadByDishId(dishId)
-//                .ifPresent(draft -> deleteDishPort.delete(draft.getDishId()));
     }
 
     @Override
@@ -125,6 +147,14 @@ public class DishService implements
                 .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
 
         dish.markOutOfStock();
+        saveDishPort.save(dish);
+    }
+
+    @Override
+    public void markBackInStock(DishId dishId) {
+        Dish dish = loadDishesPort.loadByDishId(dishId)
+                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+        dish.markBackInStock();
         saveDishPort.save(dish);
     }
 
@@ -149,4 +179,6 @@ public class DishService implements
         dishes.forEach(dish -> dish.getFoodTags().size());
         return dishes;
     }
+
+
 }

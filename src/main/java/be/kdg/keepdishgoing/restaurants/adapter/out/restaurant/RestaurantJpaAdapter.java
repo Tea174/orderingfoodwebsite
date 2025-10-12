@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @Primary
@@ -63,6 +64,11 @@ public class RestaurantJpaAdapter implements SaveRestaurantPort, LoadRestaurantP
                 .stream()
                 .map(mapper::toDomainRestaurant)
                 .toList();
+    }
+
+    @Override
+    public String loadByNameById(UUID restaurantId) {
+        return restaurantJpaRepository.nameById(restaurantId);
     }
 
 

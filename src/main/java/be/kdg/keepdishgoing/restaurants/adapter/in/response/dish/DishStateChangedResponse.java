@@ -23,11 +23,4 @@ public record DishStateChangedResponse(
         );
     }
 
-    public static DishStateChangedResponse outOfStock() {
-        return new DishStateChangedResponse(
-                DishState.OUTOFSTOCK,
-                "Dish marked as out of stock",
-                true
-        );
-    }
 }

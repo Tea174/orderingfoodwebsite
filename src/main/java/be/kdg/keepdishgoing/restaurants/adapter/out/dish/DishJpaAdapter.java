@@ -2,10 +2,7 @@ package be.kdg.keepdishgoing.restaurants.adapter.out.dish;
 
 import be.kdg.keepdishgoing.restaurants.adapter.out.mapper.Mapper;
 import be.kdg.keepdishgoing.restaurants.adapter.out.restaurant.RestaurantJpaRepository;
-import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
-import be.kdg.keepdishgoing.restaurants.domain.dish.DishId;
-import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
-import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
+import be.kdg.keepdishgoing.restaurants.domain.dish.*;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.DeleteDishPort;
@@ -60,6 +57,23 @@ public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishP
                 .stream()
                 .map(mapper::toDomainDish)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Dish> loadPublishedByRestaurantId(RestaurantId restaurantId) {
+        return dishJpaRepository.findByRestaurant_UuidAndState(
+                        restaurantId.id(),
+                        DishState.PUBLISHED
+                )
+                .stream()
+                .map(mapper::toDomainDish)
+                .toList();
+    }
+
+    @Override
+    public Optional<Dish> loadByPublished(DishId dishId) {
+        return dishJpaRepository.findPublishedDish(dishId.id())
+                .map(mapper::toDomainDish);
     }
 
     @Override

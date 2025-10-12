@@ -81,8 +81,8 @@ public class Mapper {
                 entity.getPictureURL()
         );
 
-        // Set state and publishedDishUuid after construction
         dish.setState(entity.getState());
+        dish.setInStock(entity.isInStock());
         if (entity.getPublishedDishUuid() != null) {
             dish.setPublishedDishId(DishId.of(entity.getPublishedDishUuid()));
         }
@@ -102,10 +102,10 @@ public class Mapper {
         entity.setDishType(dish.getDishType());
         entity.setFoodTags(dish.getFoodTags());
         entity.setState(dish.getState());
+        entity.setInStock(dish.isInStock());
 
         return entity;
     }
-
 
     public Owner toDomainOwner(OwnerJpaEntity entity) {
         return new Owner(

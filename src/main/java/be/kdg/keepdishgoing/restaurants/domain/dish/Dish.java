@@ -21,6 +21,7 @@ public class Dish {
     private double price;
     private String pictureURL;
     private DishState state;
+    private boolean inStock = false;
 
     // Links draft to its published version
     private DishId publishedDishId;  // null if this is not a draft
@@ -99,15 +100,23 @@ public class Dish {
     public void unpublish() {
         this.state = DishState.UNPUBLISHED;
     }
-
     public void markOutOfStock() {
         if (this.state != DishState.PUBLISHED) {
             throw new IllegalStateException("Only published dishes can be marked out of stock");
         }
-        this.state = DishState.OUTOFSTOCK;
+        this.inStock = false;
     }
 
-    // NEW: Helper methods
+    public void markBackInStock() {
+        if (this.state != DishState.PUBLISHED) {
+            throw new IllegalStateException("Only published dishes can have stock");
+        }
+        this.inStock = true;
+    }
+
+    public boolean isAvailable() {
+        return this.state == DishState.PUBLISHED && this.inStock;
+    }
     public boolean isDraft() {
         return this.state == DishState.DRAFT;
     }
@@ -121,7 +130,6 @@ public class Dish {
     }
 
     public boolean hasDraft() {
-        // This would be checked via repository
         return false;
     }
 

@@ -7,6 +7,7 @@ import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface LoadRestaurantPort {
     Optional<Restaurant> loadByRestaurantId(RestaurantId restaurantId);
@@ -14,5 +15,6 @@ public interface LoadRestaurantPort {
     Optional<Restaurant> loadByEmail(String email);
     Optional<Restaurant> loadByOwnerId(OwnerId ownerId);
     List<Restaurant> loadByType(TypeOfCuisine typeOfCuisine);
+    String loadByNameById(UUID restaurantId);
 
 }

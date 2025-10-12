@@ -34,23 +34,32 @@ dependencyManagement {
 
 
 dependencies {
-    implementation("org.springframework.modulith:spring-modulith-starter-core")
+    // Spring Modulith
+//    implementation("org.springframework.modulith:spring-modulith-core")
+//    implementation("org.springframework.modulith:spring-modulith-starter-core")
+//    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
+
+    // Lombok
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.modulith:spring-modulith-starter-test")
-    testImplementation("org.springframework.modulith:spring-modulith-core")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    implementation ("org.springframework.boot:spring-boot-starter-web")
-    runtimeOnly ("org.postgresql:postgresql")
-    implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    // Spring Boot
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation ("org.springframework.boot:spring-boot-starter-oauth2-client")
-    implementation ("org.springframework.boot:spring-boot-starter-security")
-    implementation ("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-    implementation ("org.springframework.boot:spring-boot-starter-oauth2-client")
-    implementation ("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    // Database
+    runtimeOnly("org.postgresql:postgresql")
+
+    // Keycloak
     implementation("org.keycloak:keycloak-admin-client:26.0.0")
+
+    // Testing
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<Test> {

@@ -1,6 +1,5 @@
 package be.kdg.keepdishgoing.restaurants.adapter.out.dish;
 
-import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
 import be.kdg.keepdishgoing.restaurants.domain.dish.DishState;
 import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
 import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
@@ -17,6 +16,15 @@ import java.util.UUID;
 public interface DishJpaRepository extends JpaRepository<DishJpaEntity, UUID> {
     @Query("SELECT d FROM DishJpaEntity d JOIN d.foodTags ft WHERE ft = :foodTag")
     List<DishJpaEntity> findByFoodTag(@Param("foodTag") FoodTag foodTag);
+
+//    @Query("SELECT d FROM DishJpaEntity d WHERE d.state =: PUBLISHED")
+//    Optional<DishJpaEntity> findByPublishedState(@Param("PUBLISHED")DishState published);
+
+    @Query("SELECT d FROM DishJpaEntity d WHERE d.uuid = :dishId AND d.state = 'PUBLISHED'")
+    Optional<DishJpaEntity> findPublishedDish(@Param("dishId") UUID dishId);
+
+
+    List<DishJpaEntity> findByRestaurant_UuidAndState(UUID restaurantId, DishState state);
 
     Optional<DishJpaEntity> findByUuid(UUID dishId);
     List<DishJpaEntity> findByRestaurant_uuid(UUID restaurantId);

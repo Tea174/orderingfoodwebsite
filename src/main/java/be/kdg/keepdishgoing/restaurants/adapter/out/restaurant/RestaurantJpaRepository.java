@@ -20,6 +20,9 @@ public interface RestaurantJpaRepository extends JpaRepository<RestaurantJpaEnti
 
     void deleteByUuid(UUID restaurantId);
 
+    @Query("SELECT r FROM RestaurantJpaEntity r WHERE r.uuid = :restaurantId")
+    String nameById(@Param("restaurantId") UUID restaurantId);
+
 
 
     Optional<RestaurantJpaEntity> findByName(String name);

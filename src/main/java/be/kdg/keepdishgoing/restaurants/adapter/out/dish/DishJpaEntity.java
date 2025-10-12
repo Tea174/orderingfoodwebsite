@@ -57,7 +57,10 @@ public class DishJpaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DishState state = DishState.DRAFT; // Default value
+    private DishState state = DishState.DRAFT;
+
+    @Column(name = "in_stock", nullable = false, columnDefinition = "boolean default false")
+    private boolean inStock = false;
 
     // For draft/publish workflow
     @Column(name = "published_dish_uuid")

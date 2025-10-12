@@ -1,0 +1,64 @@
+### Variables
+@baseUrl = http://localhost:8080/api/baskets
+@customerToken = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+@customerId = 123e4567-e89b-12d3-a456-426614174000
+@restaurantId = ffaa5320-286e-4bf5-90eb-cc9e8e2425ee
+@dishId = 025c2675-d7f9-4d87-9c29-6c9c711feabc
+@dishId2 = bf0ac3f2-25aa-4a31-8669-afb3a9410a93
+@guestBasketId = 4cebb35b-d2cf-4b38-9e65-7f8364df9121
+
+### ========== GUEST BASKET FLOW ==========
+
+### 1. Create guest basket
+POST {{baseUrl}}/guest
+
+### 2. Add item to guest basket (use basketId from step 1)
+POST {{baseUrl}}/guest/{{guestBasketId}}/items
+Content-Type: application/json
+
+{
+  "restaurantId": "{{restaurantId}}",
+  "dishId": "{{dishId}}",
+  "quantity": 2
+}
+
+### 3. Add another item to guest basket
+POST {{baseUrl}}/guest/{{guestBasketId}}/items
+Content-Type: application/json
+
+{
+  "restaurantId": "{{restaurantId}}",
+  "dishId": "{{dishId2}}",
+  "quantity": 1
+}
+
+### 4. Checkout as guest
+POST {{baseUrl}}/checkout/guest/{{guestBasketId}}
+Content-Type: application/json
+
+{
+  "name": "John Guest",
+  "email": "guest@example.com",
+  "deliveryAddress": "123 Guest Street, City, Country"
+}
+
+### ========== CUSTOMER BASKET FLOW ==========
+
+### 5. Add item to customer basket
+POST {{baseUrl}}/{{customerId}}/items
+Authorization: Bearer {{customerToken}}
+Content-Type: application/json
+
+{
+  "restaurantId": "{{restaurantId}}",
+  "dishId": "{{dishId}}",
+  "quantity": 3
+}
+
+### 6. Validate customer basket
+GET {{baseUrl}}/{{customerId}}/validate
+Authorization: Bearer {{customerToken}}
+
+### 7. Checkout as customer
+POST {{baseUrl}}/checkout/{{customerId}}
+Authorization: Bearer {{customerToken}}

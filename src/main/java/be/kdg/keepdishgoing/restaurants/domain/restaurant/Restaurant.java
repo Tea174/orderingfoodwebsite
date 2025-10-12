@@ -10,6 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class Restaurant {
     private RestaurantId restaurantId;
     private OwnerId ownerId;
@@ -73,22 +74,5 @@ public class Restaurant {
         this.dishes = dishes;
     }
 
-    @Override
-    public String toString() {
-        return "Restaurant{" +
-                "restaurantId=" + restaurantId +
-                ", ownerId=" + ownerId +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                ", pictureURL='" + pictureURL + '\'' +
-                ", cuisine=" + cuisine +
-                ", preparationTime=" + preparationTime +
-                ", openingTime=" + openingTime +
-                ", minPrice=" + minPrice +
-                ", maxPrice=" + maxPrice +
-                ", estimatedDeliveryTime=" + estimatedDeliveryTime +
-                ", dishes=" + dishes +
-                '}';
-    }
+
 }
