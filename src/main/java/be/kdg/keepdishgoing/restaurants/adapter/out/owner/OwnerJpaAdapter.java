@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class OwnerJpaAdapterOwner implements LoadOwnerPort, DeleteOwnerPort {
+public class OwnerJpaAdapter implements LoadOwnerPort, DeleteOwnerPort {
 
     private final OwnerJpaRepository ownerJpaRepository;
     private final Mapper mapper;
 
-    public OwnerJpaAdapterOwner(OwnerJpaRepository ownerJpaRepository, Mapper mapper) {
+    public OwnerJpaAdapter(OwnerJpaRepository ownerJpaRepository, Mapper mapper) {
         this.ownerJpaRepository = ownerJpaRepository;
         this.mapper = mapper;
     }

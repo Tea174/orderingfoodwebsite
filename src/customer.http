@@ -1,0 +1,20 @@
+POST http://localhost:8080/api/customers/register
+Content-Type: application/json
+
+{
+  "firstName": "sdfg",
+  "lastName": "wer",
+  "email": "ndfng@example.com",
+  "password": "password123",
+  "phoneNumber": 123456789,
+  "address": "123 Main St"
+}
+
+### log in
+POST http://localhost:8080/api/customers/login
+Content-Type: application/json
+
+{
+  "email": "ndfng@example.com",
+  "password": "password123"
+}

@@ -1,6 +1,7 @@
 package be.kdg.keepdishgoing.customers.adapter.out;
 
 
+import be.kdg.keepdishgoing.customers.domain.CustomerId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -36,13 +37,13 @@ public class CustomerJpaEntity {
         this.uuid = UUID.randomUUID();
     }
 
-    public CustomerJpaEntity(String address, Integer phoneNumber, String email, String lastName, String firstName, String keycloakSubjectId, UUID uuid) {
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.keycloakSubjectId = keycloakSubjectId;
+    public CustomerJpaEntity(UUID uuid, String keycloakSubjectId, String firstName, String lastName, String email, int phoneNumber, String address) {
         this.uuid = uuid;
+        this.keycloakSubjectId = keycloakSubjectId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
     }
 }

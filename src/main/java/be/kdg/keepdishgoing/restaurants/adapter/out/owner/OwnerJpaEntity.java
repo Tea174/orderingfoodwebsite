@@ -19,8 +19,6 @@ public class OwnerJpaEntity {
     private UUID uuid;
     @Column(name = "keycloak_subject_id", unique = true)
     private String keycloakSubjectId;
-
-    // mappedBy refers to the "owner" field in RestaurantJpaEntity
     @OneToOne(mappedBy = "ownerId", cascade = CascadeType.ALL, orphanRemoval = true)
     private RestaurantJpaEntity restaurant;
 
