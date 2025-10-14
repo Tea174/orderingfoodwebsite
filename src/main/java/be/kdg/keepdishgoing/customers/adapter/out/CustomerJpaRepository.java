@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface CustomerJpaRepository extends JpaRepository<CustomerJpaEntity, UUID> {
     Optional<CustomerJpaEntity> findByEmail(String email);
+    Optional<CustomerJpaEntity> findByKeycloakSubjectId(String keycloakId);
 
 }

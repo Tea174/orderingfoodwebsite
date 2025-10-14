@@ -1,9 +1,9 @@
 package be.kdg.keepdishgoing.restaurants.adapter.in.response.dish;
 
 import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
-import be.kdg.keepdishgoing.restaurants.domain.dish.DishState;
-import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
-import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishState;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishType;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.FoodTag;
 
 import java.util.List;
 

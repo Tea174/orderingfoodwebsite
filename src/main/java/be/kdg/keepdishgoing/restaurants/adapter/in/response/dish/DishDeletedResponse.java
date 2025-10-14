@@ -5,6 +5,6 @@ public record DishDeletedResponse(
         boolean success
 ) {
     public static DishDeletedResponse deletedSuccess() {
-        return new DishDeletedResponse("Dish deleted successfully", true);
+        return new DishDeletedResponse("DishProjectorRecord deleted successfully", true);
     }
 }

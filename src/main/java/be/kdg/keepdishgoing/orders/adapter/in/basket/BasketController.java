@@ -5,12 +5,16 @@ import be.kdg.keepdishgoing.customers.port.in.GetCustomerUseCase;
 import be.kdg.keepdishgoing.orders.adapter.in.basket.request.AddItemRequest;
 import be.kdg.keepdishgoing.orders.adapter.in.basket.request.GuestCheckoutRequest;
 import be.kdg.keepdishgoing.orders.adapter.in.basket.response.CheckoutResponse;
+import be.kdg.keepdishgoing.orders.adapter.out.customer.CustomerProjectorEntity;
+import be.kdg.keepdishgoing.orders.adapter.out.customer.CustomerProjectorJpaRepository;
 import be.kdg.keepdishgoing.orders.domain.order.OrderId;
 import be.kdg.keepdishgoing.orders.port.in.basket.AddItemToBasketUseCase;
 import be.kdg.keepdishgoing.orders.port.in.basket.CheckoutBasketUseCase;
 import be.kdg.keepdishgoing.orders.port.in.basket.CreateGuestBasketUseCase;
 import be.kdg.keepdishgoing.orders.port.in.basket.ValidateBasketUseCase;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -27,7 +31,8 @@ public class BasketController {
     private final ValidateBasketUseCase validateBasketUseCase;
     private final CheckoutBasketUseCase checkoutBasketUseCase;
     private final CreateGuestBasketUseCase createGuestBasketUseCase;
-    private final GetCustomerUseCase getCustomerUseCase; // From Restaurant BC
+    private final CustomerProjectorJpaRepository customerRepository;
+    private final Logger logger =  LoggerFactory.getLogger(BasketController.class);
 
     // Create guest basket & add items (no auth)
     @PostMapping("/guest")
@@ -89,12 +94,11 @@ public class BasketController {
     }
 
     private void verifyCustomership(UUID customerId, Jwt jwt) {
-        String keycloakSubjectId = jwt.getSubject();
-        Customer customer = getCustomerUseCase.getCustomerByKeycloakId(keycloakSubjectId);
-
-        if (customer == null) {
-            throw new SecurityException("Customer not found for this user");
-        }
+        String keycloakId = jwt.getSubject();
+        logger.info("Looking for customer with keycloakId: {}", keycloakId);
+        CustomerProjectorEntity customer = customerRepository
+                .findByKeycloakId(keycloakId)
+                .orElseThrow(() -> new SecurityException("Customer not found"));
 
         if (!customer.getCustomerId().equals(customerId)) {
             throw new SecurityException("You don't have permission to access this customer's data");

@@ -1,10 +1,12 @@
 package be.kdg.keepdishgoing.restaurants.adapter.out.dish;
 
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishState;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishType;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.FoodTag;
 import be.kdg.keepdishgoing.restaurants.adapter.out.mapper.Mapper;
 import be.kdg.keepdishgoing.restaurants.adapter.out.restaurant.RestaurantJpaRepository;
 import be.kdg.keepdishgoing.restaurants.domain.dish.*;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
-import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.DeleteDishPort;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.LoadDishesPort;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.SaveDishPort;
@@ -80,12 +82,12 @@ public class DishJpaAdapter implements LoadDishesPort, SaveDishPort, DeleteDishP
     public Dish save(Dish dish) {
         var restaurantEntity = restaurantJpaRepository.findById(dish.getRestaurantId().id())
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "Restaurant not found with id: " + dish.getRestaurantId().id()
+                        "RestaurantProjectorRecord not found with id: " + dish.getRestaurantId().id()
                 ));
-
         DishJpaEntity entity = mapper.toEntityDish(dish, restaurantEntity);
-        DishJpaEntity savedEntity = dishJpaRepository.save(entity);
-        return mapper.toDomainDish(savedEntity);
+        dishJpaRepository.save(entity);
+
+        return dish;
     }
 
 

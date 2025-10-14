@@ -1,8 +1,8 @@
 package be.kdg.keepdishgoing.restaurants.adapter.in.request.restautant;
 
-import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
-import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
-import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishType;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.FoodTag;
+import be.kdg.keepdishgoing.common.commonEnum.commonRestaurantEnum.TypeOfCuisine;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Email;
@@ -13,7 +13,7 @@ import java.sql.Time;
 import java.util.List;
 
 public record CreateRestaurantRequest(
-        @NotBlank(message = "Restaurant name is required")
+        @NotBlank(message = "RestaurantProjectorRecord name is required")
         String name,
 
         @NotBlank(message = "Address is required")
@@ -35,17 +35,17 @@ public record CreateRestaurantRequest(
 
         Double minPrice,
         Double maxPrice,
-        Integer estimatedDeliveryTime,
+        Time estimatedDeliveryTime,
 
 
         @Valid
         List<DishRequest> dishes
 ) {
     public record DishRequest(
-            @NotBlank(message = "Dish name is required")
+            @NotBlank(message = "DishProjectorRecord name is required")
             String name,
 
-            @NotNull(message = "Dish type is required")
+            @NotNull(message = "DishProjectorRecord type is required")
             DishType dishType,
 
             List<FoodTag> foodTags,

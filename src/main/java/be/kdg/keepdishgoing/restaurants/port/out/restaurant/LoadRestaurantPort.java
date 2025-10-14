@@ -3,7 +3,7 @@ package be.kdg.keepdishgoing.restaurants.port.out.restaurant;
 import be.kdg.keepdishgoing.restaurants.domain.owner.OwnerId;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
-import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
+import be.kdg.keepdishgoing.common.commonEnum.commonRestaurantEnum.TypeOfCuisine;
 
 import java.util.List;
 import java.util.Optional;

@@ -143,13 +143,13 @@ public class BasketService implements
 
     @Override
     public void addItem(UUID customerId, UUID restaurantId, UUID dishId, int quantity) {
-        // 1. Get dish details from Restaurant BC
+        // 1. Get dish details from RestaurantProjectorRecord BC
         PublishedDishDto dish = getDishUseCase.getPublishedDish(new DishId(dishId));
         if (!dish.inStock()) {
-            throw new IllegalStateException("Dish is out of stock");
+            throw new IllegalStateException("DishProjectorRecord is out of stock");
         }
         if (!dish.restaurantId().id().equals(restaurantId)) {
-            throw new IllegalArgumentException("Dish does not belong to this restaurant");
+            throw new IllegalArgumentException("DishProjectorRecord does not belong to this restaurant");
         }
         Basket basket = loadBasketPort.loadByCustomerId(customerId)
                 .orElse(Basket.createBasket(customerId, restaurantId, new ArrayList<>()));

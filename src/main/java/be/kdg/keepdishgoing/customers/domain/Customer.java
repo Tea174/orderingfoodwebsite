@@ -1,10 +1,12 @@
 package be.kdg.keepdishgoing.customers.domain;
 
-import be.kdg.keepdishgoing.common.events.DomainEvent;
+import be.kdg.keepdishgoing.common.event.DomainEvent;
+import be.kdg.keepdishgoing.common.event.customerEvents.CustomerCreatedEvent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,13 @@ public class Customer {
         customer.setEmail(email);
         customer.setPhoneNumber(phoneNumber);
         customer.setAddress(address);
+
+        customer.domainEvents.add(new CustomerCreatedEvent(
+                LocalDateTime.now(),
+                customer.customerId.id(),
+                customer.keycloakSubjectId
+        ));
+
         return customer;
     }
 
@@ -60,5 +69,8 @@ public class Customer {
     }
 
     public Customer() {
+    }
+    public void clearDomainEvents() {
+        domainEvents.clear();
     }
 }

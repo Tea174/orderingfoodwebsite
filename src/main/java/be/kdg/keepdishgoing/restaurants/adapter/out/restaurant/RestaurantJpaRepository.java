@@ -1,6 +1,6 @@
 package be.kdg.keepdishgoing.restaurants.adapter.out.restaurant;
 
-import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
+import be.kdg.keepdishgoing.common.commonEnum.commonRestaurantEnum.TypeOfCuisine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

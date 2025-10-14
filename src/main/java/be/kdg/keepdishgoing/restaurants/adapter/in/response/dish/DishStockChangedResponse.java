@@ -8,7 +8,7 @@ public record DishStockChangedResponse(
     public static DishStockChangedResponse outOfStock() {
         return new DishStockChangedResponse(
                 false,
-                "Dish marked as out of stock",
+                "DishProjectorRecord marked as out of stock",
                 true
         );
     }
@@ -16,7 +16,7 @@ public record DishStockChangedResponse(
     public static DishStockChangedResponse backInStock() {
         return new DishStockChangedResponse(
                 true,
-                "Dish marked as in stock",
+                "DishProjectorRecord marked as in stock",
                 true
         );
     }

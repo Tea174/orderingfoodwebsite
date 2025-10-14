@@ -8,14 +8,11 @@ import be.kdg.keepdishgoing.restaurants.domain.owner.Owner;
 import be.kdg.keepdishgoing.restaurants.domain.owner.OwnerId;
 import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
 import be.kdg.keepdishgoing.restaurants.domain.dish.DishId;
-import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class Mapper {

@@ -4,12 +4,14 @@ import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
 import be.kdg.keepdishgoing.restaurants.domain.owner.OwnerId;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
-import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
+import be.kdg.keepdishgoing.common.commonEnum.commonRestaurantEnum.TypeOfCuisine;
 import be.kdg.keepdishgoing.restaurants.port.in.restaurant.CreateRestaurantUseCase;
 import be.kdg.keepdishgoing.restaurants.port.in.restaurant.FilterRestaurantByTypeOfCuisine;
 import be.kdg.keepdishgoing.restaurants.port.in.restaurant.GetRestaurantUseCase;
+import be.kdg.keepdishgoing.restaurants.port.out.dish.PublishDishEventsPort;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.SaveDishPort;
 import be.kdg.keepdishgoing.restaurants.port.out.restaurant.LoadRestaurantPort;
+import be.kdg.keepdishgoing.restaurants.port.out.restaurant.PublishRestaurantEventsPort;
 import be.kdg.keepdishgoing.restaurants.port.out.restaurant.SaveRestaurantPort;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,8 @@ public class RestaurantService implements
     private final LoadRestaurantPort loadRestaurantPort;
     private final SaveRestaurantPort saveRestaurantPort;
     private final SaveDishPort saveDishPort;
+    private final PublishRestaurantEventsPort publishRestaurantEventsPort;
+    private final PublishDishEventsPort publishDishEventsPort;
 
     private static final Logger logger = LoggerFactory.getLogger(RestaurantService.class);
 
@@ -51,6 +55,7 @@ public class RestaurantService implements
         // Create restaurant WITHOUT dishes first
         Restaurant restaurant = Restaurant.createRestaurant(
                 command.ownerId(),
+                command.ownerKeycloakId(),
                 command.name(),
                 command.address(),
                 command.email(),
@@ -65,6 +70,7 @@ public class RestaurantService implements
         );
 
         Restaurant savedRestaurant = saveRestaurantPort.save(restaurant);
+        publishRestaurantEventsPort.publishEvents(savedRestaurant);
         RestaurantId restaurantId = savedRestaurant.getRestaurantId();
 
         // create dishes linked to this restaurant
@@ -79,7 +85,8 @@ public class RestaurantService implements
                         dishCmd.price(),
                         dishCmd.pictureURL()
                 );
-                saveDishPort.save(dish);
+                Dish savedDish = saveDishPort.save(dish);
+                publishDishEventsPort.publishEvents(savedDish);
             });
         }
 

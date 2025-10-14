@@ -2,9 +2,9 @@ POST http://localhost:8080/api/customers/register
 Content-Type: application/json
 
 {
-  "firstName": "sdfg",
-  "lastName": "wer",
-  "email": "ndfng@example.com",
+  "firstName": "gfd",
+  "lastName": "gfd",
+  "email": "oiy@example.com",
   "password": "password123",
   "phoneNumber": 123456789,
   "address": "123 Main St"
@@ -15,6 +15,6 @@ POST http://localhost:8080/api/customers/login
 Content-Type: application/json
 
 {
-  "email": "ndfng@example.com",
+  "email": "oiy@example.com",
   "password": "password123"
 }

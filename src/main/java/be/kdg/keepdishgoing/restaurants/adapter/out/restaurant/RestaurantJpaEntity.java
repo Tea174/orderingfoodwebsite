@@ -2,7 +2,7 @@ package be.kdg.keepdishgoing.restaurants.adapter.out.restaurant;
 
 import be.kdg.keepdishgoing.restaurants.adapter.out.dish.DishJpaEntity;
 import be.kdg.keepdishgoing.restaurants.adapter.out.owner.OwnerJpaEntity;
-import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
+import be.kdg.keepdishgoing.common.commonEnum.commonRestaurantEnum.TypeOfCuisine;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,7 +56,7 @@ public class RestaurantJpaEntity {
     @Column(name = "max_price")
     private Double maxPrice;
     @Column(name = "estimated_delivery_time")
-    private Integer estimatedDeliveryTime; // in minutes
+    private Time estimatedDeliveryTime; // in minutes
 
 
     @Column

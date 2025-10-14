@@ -4,8 +4,7 @@ import be.kdg.keepdishgoing.restaurants.adapter.out.mapper.Mapper;
 import be.kdg.keepdishgoing.restaurants.domain.owner.OwnerId;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
-import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
-import be.kdg.keepdishgoing.restaurants.port.in.restaurant.FilterRestaurantByTypeOfCuisine;
+import be.kdg.keepdishgoing.common.commonEnum.commonRestaurantEnum.TypeOfCuisine;
 import be.kdg.keepdishgoing.restaurants.port.out.restaurant.LoadRestaurantPort;
 import be.kdg.keepdishgoing.restaurants.port.out.restaurant.SaveRestaurantPort;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -84,7 +82,7 @@ public class RestaurantJpaAdapter implements SaveRestaurantPort, LoadRestaurantP
 
 //
 //    @Override
-//    public void update(Restaurant restaurant) {
+//    public void update(RestaurantProjectorRecord restaurant) {
 //        log.debug("Updating restaurant: {}", restaurant.getRestaurantId().id());
 //        var entity = mapper.toEntityRestaurant(restaurant);
 //        restaurantJpaRepository.save(entity);

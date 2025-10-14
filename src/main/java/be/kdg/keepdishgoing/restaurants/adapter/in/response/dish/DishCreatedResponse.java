@@ -10,7 +10,7 @@ public record DishCreatedResponse(
     public static DishCreatedResponse of(UUID dishId) {
         return new DishCreatedResponse(
                 dishId,
-                "Dish created successfully",
+                "DishProjectorRecord created successfully",
                 true
         );
     }

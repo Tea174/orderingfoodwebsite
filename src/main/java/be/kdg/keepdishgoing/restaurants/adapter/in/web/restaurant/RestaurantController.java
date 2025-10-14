@@ -7,7 +7,7 @@ import be.kdg.keepdishgoing.restaurants.adapter.in.response.restaurant.Restauran
 import be.kdg.keepdishgoing.restaurants.domain.owner.Owner;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
-import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
+import be.kdg.keepdishgoing.common.commonEnum.commonRestaurantEnum.TypeOfCuisine;
 import be.kdg.keepdishgoing.restaurants.port.in.dish.AddDishUseCase;
 import be.kdg.keepdishgoing.restaurants.port.in.owner.GetOwnerUseCase;
 import be.kdg.keepdishgoing.restaurants.port.in.restaurant.CreateRestaurantUseCase;
@@ -63,6 +63,7 @@ public class RestaurantController {
 
         CreateRestaurantUseCase.CreateRestaurantCommand command = new CreateRestaurantUseCase.CreateRestaurantCommand(
                 owner.getOwnerId(),
+                owner.getKeycloakSubjectId(),
                 request.name(),
                 request.address(),
                 request.email(),

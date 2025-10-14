@@ -7,14 +7,14 @@ DELETE FROM kdg_restaurants.restaurants;
 DELETE FROM kdg_restaurants.owners;
 
 
--- Insert restaurant
+-- Insert restaurantProjectorRecord
 INSERT INTO kdg_restaurants.restaurants (restaurant_id, owner_id, name, address, email, picture_url, cuisine, preparation_time, opening_time, created_at, updated_at)
 VALUES ('660e8400-e29b-41d4-a716-446655440000',
         '550e8400-e29b-41d4-a716-446655440000',
         'Bella Italia',
         '123 Main Street, City',
         'info@bellaitalia.com',
-        'https://example.com/restaurant.jpg',
+        'https://example.com/restaurantProjectorRecord.jpg',
         'ITALIAN',
         '00:30:00',
         '11:00:00',

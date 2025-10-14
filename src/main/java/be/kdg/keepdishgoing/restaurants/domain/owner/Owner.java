@@ -1,6 +1,6 @@
 package be.kdg.keepdishgoing.restaurants.domain.owner;
 
-import be.kdg.keepdishgoing.common.events.DomainEvent;
+import be.kdg.keepdishgoing.common.event.DomainEvent;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
 import lombok.Getter;
 import lombok.Setter;

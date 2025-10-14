@@ -1,8 +1,6 @@
 ### Variables
 @baseUrl = http://localhost:8080/api
-@customerToken = eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJQV2NhT2tKdDR3WTBCX3l0eXpodnlzRF9xdmo1LTNKUDh3OEk3S1dfV040In0.eyJleHAiOjE3NjAzMDA0MTAsImlhdCI6MTc2MDMwMDExMCwianRpIjoib25ydHJvOjQyMDRmMzRmLTU3ZTAtZjRkOC0zZGIxLTJhMWZmOTljMTUzZCIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMva2VlcGRpc2hnb2luZyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI3MTEzNjcwZS1iY2FhLTRhYTAtOTRmOC1hYjE2ZjVhNWYwYzQiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJrZWVwZGlzaGdvaW5nLWNsaWVudCIsInNpZCI6IjJiNTYzZjNkLWQyY2YtNGZjNy04ZmYzLWY4MTUwODhlMDI5ZCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMta2VlcGRpc2hnb2luZyIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJjdXN0b21lciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJuZGZuZ0BleGFtcGxlLmNvbSIsImVtYWlsIjoibmRmbmdAZXhhbXBsZS5jb20ifQ.LAue8SFa8fSqKTITAsDg-cmrMXLSh_-4wtqZwRECQPqJkXaSiAJD5gh5EoHUUIMWGp_XLPpCtHnGBMzLvcvRbB2rlUrb-yZmlqO6eys1fs9femcdNitlt-jcAD-I50wrtNUrgdHpeWsGZo_tWnQnI_g1AKlJ79vQ7UQX20YMT2TyOuR_OD0PcCJz4dBiacpSVpKj-H2UkuZ9MsDoM-V5GeRC2vzMVsDByZSwtdsbasL2otrhjkQZ2lc91DgYLCTcqKmU64vPTnLc0HBsMTBP7jRtFGYDlQ9xva5_XIY5eYW1zSvdAGqqM_SpUQuYI4mqix3E8ixyHFIlZqcySeaOjw
-@ownerToken = eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJQV2NhT2tKdDR3WTBCX3l0eXpodnlzRF9xdmo1LTNKUDh3OEk3S1dfV040In0.eyJleHAiOjE3NjAzMDA0NTMsImlhdCI6MTc2MDMwMDE1MywianRpIjoib25ydHJvOjU4MTIxMTU5LTgyZjctZGJmOC1mZGM5LTk4YTEyZThmZWRmYSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMva2VlcGRpc2hnb2luZyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI4ZDQzNGFjZC00N2RkLTQzMTUtODEwYy0zZDI3YWE5NWE2NmYiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJrZWVwZGlzaGdvaW5nLWNsaWVudCIsInNpZCI6IjU1NmIwMWJlLWQxYzktNDU4OS04NDEyLTcwODVkZDhkYTJhMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm93bmVyIiwiZGVmYXVsdC1yb2xlcy1rZWVwZGlzaGdvaW5nIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJtbmJ2QGV4YW1wbGUuY29tIiwiZW1haWwiOiJtbmJ2QGV4YW1wbGUuY29tIn0.VNkP23WWTvvOUAYFuZEry1T5Z-X7MXjisHd6-Ukd9XzLdrzEHaYbKbzQi1y4szGdYk7nxZdbzYc0pkHGcbNrKmL2HYyXpqnC7aWLr5CVPsuxUS3wmDEKjF441G4IxQqM5F64l-kn2CREJBeFiTt4QkeHtn_TV-7ongNVVVmm1OdD329Pv53fE4TZwRXFUAXt3qOKpumJNa9GIfGnrduVznt4SBI9I8uE7DlJohW8YBcH2bQ07-y52YNSvf1SJXreQon4305iZMvliLuOK1PCj8XQBmJwfNT8e33kKG2bZkqtkN7REFJnS84v2oqdVf6qpXnsPcRe87r40S2lXElnww
-@customerId = 6b02ceca-b4e0-4b30-b35a-dbf19b2e3ca1
+@ownerToken = eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJQV2NhT2tKdDR3WTBCX3l0eXpodnlzRF9xdmo1LTNKUDh3OEk3S1dfV040In0.eyJleHAiOjE3NjA0NzUzMjMsImlhdCI6MTc2MDQ3NTAyMywianRpIjoib25ydHJvOjBhMWMyYmYxLTI1ZmYtYjYxMS1mZDJlLTgzNGZmZmUwNzU3MCIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMva2VlcGRpc2hnb2luZyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI5OWVkZTVkNS00ZDA3LTQ3YWItOGNkYy1iNDJmZWNjMDY4N2YiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJrZWVwZGlzaGdvaW5nLWNsaWVudCIsInNpZCI6IjI4NzliZmFhLTc4NWYtNDE2OC1iMDFhLTQzOTE4NDEzNzEyMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm93bmVyIiwiZGVmYXVsdC1yb2xlcy1rZWVwZGlzaGdvaW5nIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0cnVAZXhhbXBsZS5jb20iLCJlbWFpbCI6InRydUBleGFtcGxlLmNvbSJ9.IHyqFJsgUcGj7aj8cPHPtgEefHn2b6AQ7a_nhfhKPFXANT2iMC3C-q2H9sZO1QosBdvA8-QzZLjo42TkQw-iFPK9yMRfK5ztWWx6dvvAgbRHDnFPlWk8ZSIfgKnsMRAeNxBbkxeEuS88kkD8vRmXeWPSLBJ8sYa4cOqPxkAvBUKBs2GBxD4qfelmAb-uegF_EQdhuO0AAUVuWVXX_gzC5FzmdKsC4Dfp7zJTMlBQY0JdxCaRJOIDi46qeDVNm4mMzouEbBdsy-PXap1zUt6RZx7PsWUwJDd0AL6BX11M8JlRjogL9gIouoOEzRVMcDMIlmtmywKbbZgV8SgVNGaN6Q
 @restaurantId = ffaa5320-286e-4bf5-90eb-cc9e8e2425ee
 @basketId = 123e4567-e89b-12d3-a456-426614174002
 @orderId = 123e4567-e89b-12d3-a456-426614174003
@@ -14,7 +12,7 @@ Content-Type: application/json
 {
   "firstName": "sdfg",
   "lastName": "wer",
-  "email": "mnbv@example.com",
+  "email": "tru@example.com",
   "password": "password123",
   "phoneNumber": 123456789,
   "address": "123 Main St"
@@ -25,26 +23,27 @@ POST http://localhost:8080/api/owners/login
 Content-Type: application/json
 
 {
-  "email": "mnbv@example.com",
+  "email": "tru@example.com",
   "password": "password123"
 }
 
-#### test creating restaurant
+#### test creating restaurantProjectorRecord
 POST http://localhost:8080/api/restaurants
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJQV2NhT2tKdDR3WTBCX3l0eXpodnlzRF9xdmo1LTNKUDh3OEk3S1dfV040In0.eyJleHAiOjE3NjAzMDAyMjcsImlhdCI6MTc2MDI5OTkyNywianRpIjoib25ydHJvOmVkMWUxMDU5LTIxOTYtMDVhZC1hMDhmLTA3Y2U5OTJhYjFmNiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMva2VlcGRpc2hnb2luZyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI4ZDQzNGFjZC00N2RkLTQzMTUtODEwYy0zZDI3YWE5NWE2NmYiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJrZWVwZGlzaGdvaW5nLWNsaWVudCIsInNpZCI6Ijk3ZmVlZjQzLWU4NzMtNDY0MS05N2ZjLWFhMWU5NGNkMjE3YSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm93bmVyIiwiZGVmYXVsdC1yb2xlcy1rZWVwZGlzaGdvaW5nIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJtbmJ2QGV4YW1wbGUuY29tIiwiZW1haWwiOiJtbmJ2QGV4YW1wbGUuY29tIn0.C5juQrQbSWwi-4cVJdLGjtjLNaV59q8EExsYh6ff30dHogTk_UcaHm8eMLg20mO0URCfhJzwFwxOJRVtOkezbzo4voDu6uGmWIfrndVlYePpgrHa4-8nHwRqDvSlCFZwgUk_Y0ehVR07h6AlSvmXdqmdh0adLP6vxx2Db41vdkEXfXWAVDlk0MtjS6yVlT-e4ZB6CZAWCp3pCmtSaWyEKMMk4Pit0_exzsBzZkktBYMy1o50PjD-PEZp1PO-1pHcSKYhaIQvuUdxdvy_-WBpQGp2ytxkIgIBUz6RX1l4EM2vYiReGT7pFIp5nprR11GmXd7BEg6QRXintCQ7_wjuxA
+Authorization: Bearer {{ownerToken}}
+
 
 {
-  "name": "La Bella Italia",
-  "address": "456 Grand Place, Brussels",
+  "name": "14 Oct",
+  "address": "987 small Place, adsv",
   "email": "contact@labellaitalia.be",
-  "pictureURL": "https://example.com/restaurant.jpg",
-  "cuisine": "ITALIAN",
-  "preparationTime": "00:30:00",
-  "openingTime": "11:00:00",
+  "pictureURL": "https://example.com/restaurantProjectorRecord.jpg",
+  "cuisine": "SPANISH",
+  "preparationTime": "00:70:00",
+  "openingTime": "15:00:00",
   "minPrice": 6.00,
   "maxPrice": 50.00,
-  "estimatedDeliveryTime": 12,
+  "estimatedDeliveryTime": "00:20:00" ,
   "dishes": [
     {
       "name": "Margherita Pizza",
@@ -65,10 +64,31 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJQV2NhT2
   ]
 }
 
+#### test creating restaurant
+POST http://localhost:8080/api/restaurants
+Content-Type: application/json
+Authorization: Bearer {{ownerToken}}
+
+
+{
+  "name": "22h50 uiii",
+  "address": "67 small Place, adsv",
+  "email": "avds@labellaitalia.be",
+  "pictureURL": "https://example.com/restaurantProjectorRecord.jpg",
+  "cuisine": "SWISS",
+  "preparationTime": "00:70:00",
+  "openingTime": "15:00:00",
+  "minPrice": 7.00,
+  "maxPrice": 80.00,
+  "estimatedDeliveryTime": "00:20:00" ,
+  "dishes": []
+}
+
+
 #### add dish after login
 POST http://localhost:8080/api/dishes
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJQV2NhT2tKdDR3WTBCX3l0eXpodnlzRF9xdmo1LTNKUDh3OEk3S1dfV040In0.eyJleHAiOjE3NjAzMDAyMjcsImlhdCI6MTc2MDI5OTkyNywianRpIjoib25ydHJvOmVkMWUxMDU5LTIxOTYtMDVhZC1hMDhmLTA3Y2U5OTJhYjFmNiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMva2VlcGRpc2hnb2luZyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI4ZDQzNGFjZC00N2RkLTQzMTUtODEwYy0zZDI3YWE5NWE2NmYiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJrZWVwZGlzaGdvaW5nLWNsaWVudCIsInNpZCI6Ijk3ZmVlZjQzLWU4NzMtNDY0MS05N2ZjLWFhMWU5NGNkMjE3YSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm93bmVyIiwiZGVmYXVsdC1yb2xlcy1rZWVwZGlzaGdvaW5nIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJtbmJ2QGV4YW1wbGUuY29tIiwiZW1haWwiOiJtbmJ2QGV4YW1wbGUuY29tIn0.C5juQrQbSWwi-4cVJdLGjtjLNaV59q8EExsYh6ff30dHogTk_UcaHm8eMLg20mO0URCfhJzwFwxOJRVtOkezbzo4voDu6uGmWIfrndVlYePpgrHa4-8nHwRqDvSlCFZwgUk_Y0ehVR07h6AlSvmXdqmdh0adLP6vxx2Db41vdkEXfXWAVDlk0MtjS6yVlT-e4ZB6CZAWCp3pCmtSaWyEKMMk4Pit0_exzsBzZkktBYMy1o50PjD-PEZp1PO-1pHcSKYhaIQvuUdxdvy_-WBpQGp2ytxkIgIBUz6RX1l4EM2vYiReGT7pFIp5nprR11GmXd7BEg6QRXintCQ7_wjuxA
+Authorization: Bearer {{ownerToken}}
 
 {
 
@@ -79,5 +99,20 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJQV2NhT2
   "description": "Classic Italian pizza with fresh mozzarella",
   "price": 10.00,
   "pictureURL": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002"
+}
+
+###
+POST http://localhost:8080/api/dishes
+Content-Type: application/json
+Authorization: Bearer {{ownerToken}}
+
+{
+  "restaurantId": "91ddc323-3f3f-4554-bde5-fb7558c9eb77",
+  "name": "testing event",
+  "dishType": "main",
+  "foodTags": ["PIZZA", "VEGETARIAN"],
+  "description": "Classic tomato and mozzarella pizza",
+  "price": 10.50,
+  "pictureURL": "https://example.com/margherita.jpg"
 }
 

@@ -11,7 +11,7 @@ public interface RejectOrderUseCase {
 
     enum RejectionReason {
         INGREDIENTS_UNAVAILABLE("Ingredients not available"),
-        RESTAURANT_BUSY("Restaurant is too busy"),
+        RESTAURANT_BUSY("RestaurantProjectorRecord is too busy"),
         KITCHEN_CLOSED("Kitchen is closed"),
         ITEM_OUT_OF_STOCK("Item out of stock"),
         DELIVERY_UNAVAILABLE("Delivery unavailable to this area"),

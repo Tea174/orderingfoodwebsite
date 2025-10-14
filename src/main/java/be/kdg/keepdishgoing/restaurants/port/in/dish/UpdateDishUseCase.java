@@ -1,8 +1,8 @@
 package be.kdg.keepdishgoing.restaurants.port.in.dish;
 
 import be.kdg.keepdishgoing.restaurants.domain.dish.DishId;
-import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
-import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishType;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.FoodTag;
 
 import java.util.List;
 

@@ -5,6 +5,10 @@ import be.kdg.keepdishgoing.customers.port.in.GetCustomerUseCase;
 import be.kdg.keepdishgoing.orders.adapter.in.order.request.RejectRequest;
 import be.kdg.keepdishgoing.orders.adapter.in.order.request.UpdateStatusRequest;
 import be.kdg.keepdishgoing.orders.adapter.in.order.response.OrderResponse;
+import be.kdg.keepdishgoing.orders.adapter.out.customer.CustomerProjectorEntity;
+import be.kdg.keepdishgoing.orders.adapter.out.customer.CustomerProjectorJpaRepository;
+import be.kdg.keepdishgoing.orders.adapter.out.restaurant.RestaurantProjectorEntity;
+import be.kdg.keepdishgoing.orders.adapter.out.restaurant.RestaurantProjectorJpaRepository;
 import be.kdg.keepdishgoing.orders.domain.order.Order;
 import be.kdg.keepdishgoing.orders.domain.order.OrderId;
 import be.kdg.keepdishgoing.orders.port.in.order.*;
@@ -33,23 +37,25 @@ public class OrderController {
     private final CancelOrderUseCase cancelOrderUseCase;
     private final AcceptOrderUseCase acceptOrderUseCase;
     private final RejectOrderUseCase rejectOrderUseCase;
-    private final GetOwnerUseCase getOwnerUseCase; // From Restaurant BC
-    private final GetRestaurantUseCase getRestaurantUseCase; // From Restaurant BC
-    private final GetCustomerUseCase  getCustomerUseCase; // From Restaurant BC
+    private final RestaurantProjectorJpaRepository restaurantRepository;
+    private final CustomerProjectorJpaRepository customerRepository;
 
     private void verifyRestaurantOwnership(UUID restaurantId, Jwt jwt) {
-        String keycloakSubjectId = jwt.getSubject();
-        Owner owner = getOwnerUseCase.getOwnerByKeycloakId(keycloakSubjectId);
-        Restaurant ownerRestaurant = getRestaurantUseCase.getRestaurantByOwnerId(owner.getOwnerId());
+        String keycloakId = jwt.getSubject();
+        RestaurantProjectorEntity restaurant = restaurantRepository
+                .findByOwnerKeycloakId(keycloakId)
+                .orElseThrow(() -> new SecurityException("RestaurantProjectorRecord not found for owner"));
 
-        if (!ownerRestaurant.getRestaurantId().equals(restaurantId)) {
+        if (!restaurant.getRestaurantId().equals(restaurantId)) {
             throw new SecurityException("You don't have permission for this restaurant");
         }
     }
 
     private void verifyCustomership(UUID customerId, Jwt jwt) {
-        String keycloakSubjectId = jwt.getSubject();
-        Customer customer = getCustomerUseCase.getCustomerByKeycloakId(keycloakSubjectId);
+        String keycloakId = jwt.getSubject();
+        CustomerProjectorEntity customer = customerRepository
+                .findByKeycloakId(keycloakId)
+                .orElseThrow(() -> new SecurityException("Customer not found"));
 
         if (!customer.getCustomerId().equals(customerId)) {
             throw new SecurityException("You don't have permission to access this customer's data");
@@ -104,7 +110,7 @@ public class OrderController {
                 .toList());
     }
 
-    // Restaurant owner views  orders
+    // RestaurantProjectorRecord owner views  orders
     @GetMapping("/restaurant/{restaurantId}")
     public ResponseEntity<List<OrderResponse>> getRestaurantOrders(@PathVariable UUID restaurantId,
                                                                    @AuthenticationPrincipal Jwt jwt) {
@@ -115,7 +121,7 @@ public class OrderController {
                 .toList());
     }
 
-    // Restaurant updates order status
+    // RestaurantProjectorRecord updates order status
     @PatchMapping("/{orderId}/status")
     public ResponseEntity<String> updateOrderStatus(
             @PathVariable UUID orderId,

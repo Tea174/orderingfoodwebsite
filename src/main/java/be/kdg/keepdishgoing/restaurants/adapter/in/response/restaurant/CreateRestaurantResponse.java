@@ -1,10 +1,10 @@
 package be.kdg.keepdishgoing.restaurants.adapter.in.response.restaurant;
 
 import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
-import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
-import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishType;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.FoodTag;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
-import be.kdg.keepdishgoing.restaurants.domain.restaurant.TypeOfCuisine;
+import be.kdg.keepdishgoing.common.commonEnum.commonRestaurantEnum.TypeOfCuisine;
 
 import java.sql.Time;
 import java.util.List;
@@ -22,7 +22,7 @@ public record CreateRestaurantResponse(
         Time openingTime,
         Double minPrice,
         Double maxPrice,
-        Integer estimatedDeliveryTime,
+        Time estimatedDeliveryTime,
         List<DishResponse> dishes
 ) {
     public static CreateRestaurantResponse fromDomain(Restaurant restaurant) {

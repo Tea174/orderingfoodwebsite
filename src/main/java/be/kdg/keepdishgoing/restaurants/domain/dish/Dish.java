@@ -1,10 +1,15 @@
 package be.kdg.keepdishgoing.restaurants.domain.dish;
 
 
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishState;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishType;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.FoodTag;
+import be.kdg.keepdishgoing.common.event.DomainEvent;
+import be.kdg.keepdishgoing.common.event.dishEvents.*;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
-import be.kdg.keepdishgoing.restaurants.domain.event.dish.DishEvent;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +30,7 @@ public class Dish {
 
     // Links draft to its published version
     private DishId publishedDishId;  // null if this is not a draft
-
-    private final List<DishEvent> dishEvents = new ArrayList<>();
+     private final List<DomainEvent>  domainEvents = new ArrayList<>();
 
     // Factory method for creating new dishes
     public static Dish createDish(RestaurantId restaurantId, String name, DishType dishType,
@@ -41,6 +45,21 @@ public class Dish {
         dish.setPrice(price);
         dish.setPictureURL(pictureURL);
         dish.setState(DishState.DRAFT);
+
+        //  publish created event
+        dish.domainEvents.add(new DishesCreatedEvent(
+                LocalDateTime.now(),
+                dish.dishId.id(),
+                dish.restaurantId.id(),
+                name,
+                dishType,
+                foodTags,
+                description,
+                price,
+                pictureURL,
+                false // inStock = false initially
+        ));
+
         return dish;
     }
 
@@ -72,6 +91,20 @@ public class Dish {
         this.description = description;
         this.price = price;
         this.pictureURL = pictureURL;
+
+        this.domainEvents.add(new DishUpdatedEvent(
+                LocalDateTime.now(),
+                this.dishId.id(),
+                this.restaurantId.id(),
+                name,
+                dishType,
+                foodTags,
+                description,
+                price,
+                pictureURL
+        ));
+
+
     }
 
     public void applyDraftChanges(Dish draft) {
@@ -93,18 +126,25 @@ public class Dish {
     public void publish() {
         if (this.state == DishState.DRAFT && this.publishedDishId != null) {
             throw new IllegalStateException("Cannot publish a draft directly. Use publishDraft() instead.");
-        }
+       }
         this.state = DishState.PUBLISHED;
+        this.domainEvents.add(new DishPublishedEvent(LocalDateTime.now(), dishId.id(), restaurantId.id()));
+
     }
 
     public void unpublish() {
+        if (this.state == DishState.DRAFT && this.publishedDishId != null) {
+            throw new IllegalStateException("Cannot unpublish a draft directly. Use publishDraft() instead.");
+        }
         this.state = DishState.UNPUBLISHED;
+        this.domainEvents.add(new DishUnpublishedEvent(LocalDateTime.now(), dishId.id(), restaurantId.id()));
     }
     public void markOutOfStock() {
         if (this.state != DishState.PUBLISHED) {
             throw new IllegalStateException("Only published dishes can be marked out of stock");
         }
         this.inStock = false;
+        this.domainEvents.add(new DishOutOfStockEvent(LocalDateTime.now(), dishId.id(), restaurantId.id()));
     }
 
     public void markBackInStock() {
@@ -112,6 +152,11 @@ public class Dish {
             throw new IllegalStateException("Only published dishes can have stock");
         }
         this.inStock = true;
+        this.domainEvents.add(new DishBackInStockEvent(LocalDateTime.now(), dishId.id(), restaurantId.id()));
+    }
+
+    public void clearDomainEvents() {
+        domainEvents.clear();
     }
 
     public boolean isAvailable() {
@@ -151,7 +196,7 @@ public class Dish {
 
     @Override
     public String toString() {
-        return "Dish{" +
+        return "DishProjectorRecord{" +
                 "dishId=" + dishId +
                 ", restaurantId=" + restaurantId +
                 ", name='" + name + '\'' +

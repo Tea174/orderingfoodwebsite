@@ -1,6 +1,6 @@
 package be.kdg.keepdishgoing.restaurants.adapter.in.response.dish;
 
-import be.kdg.keepdishgoing.restaurants.domain.dish.DishState;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishState;
 
 public record DishStateChangedResponse(
         DishState newState,
@@ -10,7 +10,7 @@ public record DishStateChangedResponse(
     public static DishStateChangedResponse published() {
         return new DishStateChangedResponse(
                 DishState.PUBLISHED,
-                "Dish published successfully",
+                "DishProjectorRecord published successfully",
                 true
         );
     }
@@ -18,7 +18,7 @@ public record DishStateChangedResponse(
     public static DishStateChangedResponse unpublished() {
         return new DishStateChangedResponse(
                 DishState.UNPUBLISHED,
-                "Dish unpublished successfully",
+                "DishProjectorRecord unpublished successfully",
                 true
         );
     }

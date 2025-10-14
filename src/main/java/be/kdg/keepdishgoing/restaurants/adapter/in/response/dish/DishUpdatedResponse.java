@@ -5,6 +5,6 @@ public record DishUpdatedResponse(
         boolean success
 ) {
     public static DishUpdatedResponse createSuccess() {  // More explicit
-        return new DishUpdatedResponse("Dish updated successfully", true);
+        return new DishUpdatedResponse("DishProjectorRecord updated successfully", true);
     }
 }

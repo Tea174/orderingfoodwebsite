@@ -2,13 +2,15 @@ package be.kdg.keepdishgoing.restaurants.core.dish;
 
 import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
 import be.kdg.keepdishgoing.restaurants.domain.dish.DishId;
-import be.kdg.keepdishgoing.restaurants.domain.dish.DishType;
-import be.kdg.keepdishgoing.restaurants.domain.dish.FoodTag;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishType;
+import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.FoodTag;
 import be.kdg.keepdishgoing.restaurants.domain.restaurant.RestaurantId;
 import be.kdg.keepdishgoing.restaurants.port.in.dish.*;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.DeleteDishPort;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.LoadDishesPort;
+import be.kdg.keepdishgoing.restaurants.port.out.dish.PublishDishEventsPort;
 import be.kdg.keepdishgoing.restaurants.port.out.dish.SaveDishPort;
+import be.kdg.keepdishgoing.restaurants.port.out.restaurant.PublishRestaurantEventsPort;
 import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class DishService implements
     private final SaveDishPort saveDishPort;
     private final LoadDishesPort loadDishesPort;
     private final DeleteDishPort deleteDishPort;
+    private final PublishDishEventsPort publishDishEventsPort;
 
     @Override
     public List<PublishedDishDto> getPublishedDishesByRestaurant(RestaurantId restaurantId) {
@@ -48,10 +51,10 @@ public class DishService implements
     @Override
     public PublishedDishDto getPublishedDish(DishId dishId) {
         Dish dish = loadDishesPort.loadByPublished(dishId)
-                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+                .orElseThrow(() -> new IllegalArgumentException("DishProjectorRecord not found"));
 
         if (!dish.isPublished()) {
-            throw new IllegalStateException("Dish is not published");
+            throw new IllegalStateException("DishProjectorRecord is not published");
         }
 
         return new PublishedDishDto(
@@ -68,7 +71,7 @@ public class DishService implements
     public Dish getDishById(DishId dishId) {
         return loadDishesPort.loadByDishId(dishId)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "Dish not found with id: " + dishId.id()));
+                        "DishProjectorRecord not found with id: " + dishId.id()));
     }
 
     @Override
@@ -84,13 +87,14 @@ public class DishService implements
         );
 
         Dish savedDish = saveDishPort.save(dish);
+        publishDishEventsPort.publishEvents(savedDish);
         return savedDish.getDishId();
     }
 
     @Override
     public void updateDish(UpdateDishCommand command) {
         Dish dish = loadDishesPort.loadByDishId(command.dishId())
-                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+                .orElseThrow(() -> new IllegalArgumentException("DishProjectorRecord not found"));
 
         dish.updateDetails(
                 command.name(),
@@ -102,6 +106,7 @@ public class DishService implements
         );
 
         saveDishPort.save(dish);
+        publishDishEventsPort.publishEvents(dish);
     }
 
     @Override
@@ -112,7 +117,7 @@ public class DishService implements
     @Override
     public void publishDish(DishId dishId) {
         Dish dish = loadDishesPort.loadByDishId(dishId)
-                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+                .orElseThrow(() -> new IllegalArgumentException("DishProjectorRecord not found"));
         System.out.println("Before publish: " + dish.getState());
         // For NEW dishes (publishedDishUuid is null)
         if(dish.getPublishedDishId() == null) {
@@ -120,6 +125,7 @@ public class DishService implements
             System.out.println("After publish: " + dish.getState());
             Dish saved = saveDishPort.save(dish);
             System.out.println("After save: " + saved.getState());
+            publishDishEventsPort.publishEvents(saved);
         }
         // For drafts of existing published dishes
         else {
@@ -129,33 +135,37 @@ public class DishService implements
             publishedDish.applyDraftChanges(dish);
             saveDishPort.save(publishedDish);
             deleteDishPort.delete(dishId); // Delete the draft
+            publishDishEventsPort.publishEvents(publishedDish);
         }
     }
 
     @Override
     public void unpublishDish(DishId dishId) {
         Dish dish = loadDishesPort.loadByDishId(dishId)
-                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+                .orElseThrow(() -> new IllegalArgumentException("DishProjectorRecord not found"));
 
         dish.unpublish();
         saveDishPort.save(dish);
+        publishDishEventsPort.publishEvents(dish);
     }
 
     @Override
     public void markOutOfStock(DishId dishId) {
         Dish dish = loadDishesPort.loadByDishId(dishId)
-                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+                .orElseThrow(() -> new IllegalArgumentException("DishProjectorRecord not found"));
 
         dish.markOutOfStock();
         saveDishPort.save(dish);
+        publishDishEventsPort.publishEvents(dish);
     }
 
     @Override
     public void markBackInStock(DishId dishId) {
         Dish dish = loadDishesPort.loadByDishId(dishId)
-                .orElseThrow(() -> new IllegalArgumentException("Dish not found"));
+                .orElseThrow(() -> new IllegalArgumentException("DishProjectorRecord not found"));
         dish.markBackInStock();
         saveDishPort.save(dish);
+        publishDishEventsPort.publishEvents(dish);
     }
 
     @Override
