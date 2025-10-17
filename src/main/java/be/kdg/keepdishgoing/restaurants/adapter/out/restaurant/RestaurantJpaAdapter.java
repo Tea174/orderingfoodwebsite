@@ -69,6 +69,13 @@ public class RestaurantJpaAdapter implements SaveRestaurantPort, LoadRestaurantP
         return restaurantJpaRepository.nameById(restaurantId);
     }
 
+    @Override
+    public Optional<Restaurant> loadByOwnerKeycloakId(String keycloakId) {
+        log.debug("Loading restaurant for owner (in restaurantJpaAdapter): {}", keycloakId);
+        return restaurantJpaRepository.findByOwnerKeycloakId(keycloakId)
+                .map(mapper::toDomainRestaurant);
+    }
+
 
     @Override
     public Restaurant save(Restaurant restaurant) {

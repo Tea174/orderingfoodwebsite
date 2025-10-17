@@ -1,12 +1,10 @@
 package be.kdg.keepdishgoing.orders.adapter.in.basket;
 
-import be.kdg.keepdishgoing.customers.domain.Customer;
-import be.kdg.keepdishgoing.customers.port.in.GetCustomerUseCase;
 import be.kdg.keepdishgoing.orders.adapter.in.basket.request.AddItemRequest;
 import be.kdg.keepdishgoing.orders.adapter.in.basket.request.GuestCheckoutRequest;
 import be.kdg.keepdishgoing.orders.adapter.in.basket.response.CheckoutResponse;
-import be.kdg.keepdishgoing.orders.adapter.out.customer.CustomerProjectorEntity;
-import be.kdg.keepdishgoing.orders.adapter.out.customer.CustomerProjectorJpaRepository;
+import be.kdg.keepdishgoing.orders.adapter.out.customerProjector.CustomerProjectorEntity;
+import be.kdg.keepdishgoing.orders.adapter.out.customerProjector.CustomerProjectorJpaRepository;
 import be.kdg.keepdishgoing.orders.domain.order.OrderId;
 import be.kdg.keepdishgoing.orders.port.in.basket.AddItemToBasketUseCase;
 import be.kdg.keepdishgoing.orders.port.in.basket.CheckoutBasketUseCase;

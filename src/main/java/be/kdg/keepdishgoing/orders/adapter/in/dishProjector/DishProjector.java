@@ -1,8 +1,8 @@
 package be.kdg.keepdishgoing.orders.adapter.in.dishProjector;
 
 import be.kdg.keepdishgoing.common.event.dishEvents.*;
-import be.kdg.keepdishgoing.orders.adapter.out.dish.DishProjectorJpaAdapter;
-import be.kdg.keepdishgoing.orders.adapter.out.dish.DishProjectorJpaRepository;
+import be.kdg.keepdishgoing.orders.adapter.out.dishProjector.DishProjectorJpaAdapter;
+import be.kdg.keepdishgoing.orders.adapter.out.dishProjector.DishProjectorJpaRepository;
 import be.kdg.keepdishgoing.orders.domain.dishRecord.DishProjectorRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

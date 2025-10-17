@@ -1,7 +1,7 @@
 package be.kdg.keepdishgoing.orders.adapter.in.customerProjector;
 
 import be.kdg.keepdishgoing.common.event.customerEvents.CustomerCreatedEvent;
-import be.kdg.keepdishgoing.orders.adapter.out.customer.CustomerProjectorJpaAdapter;
+import be.kdg.keepdishgoing.orders.adapter.out.customerProjector.CustomerProjectorJpaAdapter;
 import be.kdg.keepdishgoing.orders.domain.customerRecord.CustomerProjectorRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

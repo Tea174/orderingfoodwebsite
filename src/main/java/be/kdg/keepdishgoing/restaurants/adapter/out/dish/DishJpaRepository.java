@@ -1,6 +1,6 @@
 package be.kdg.keepdishgoing.restaurants.adapter.out.dish;
 
-import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishState;
+import be.kdg.keepdishgoing.restaurants.domain.dish.DishState;
 import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishType;
 import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.FoodTag;
 import org.springframework.data.jpa.repository.JpaRepository;

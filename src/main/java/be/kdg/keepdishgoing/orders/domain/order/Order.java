@@ -1,12 +1,13 @@
-// domain/order/Order.java
 package be.kdg.keepdishgoing.orders.domain.order;
 
+import be.kdg.keepdishgoing.common.event.DomainEvent;
+import be.kdg.keepdishgoing.common.event.orderEvents.OrderCreatedEvent;
 import be.kdg.keepdishgoing.orders.domain.basket.Basket;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @Setter
 public class Order {
     private OrderId orderId;
-    private UUID customerId;  // null for guest customers
+    private UUID customerId; // null for guest customers
 
     // Guest customer details
     private String guestName;
@@ -31,16 +32,27 @@ public class Order {
     private LocalDateTime updatedAt;
     private List<OrderItem> items;
 
+    private final List<DomainEvent> domainEvents = new ArrayList<>();
+
+    public Order() {}
+
     public boolean isGuestOrder() {
         return customerId == null;
     }
 
-    // Factory method for guest checkout
+    public void clearDomainEvents() {
+        domainEvents.clear();
+    }
+
     public static Order fromBasketWithGuestDetails(
             Basket basket,
             String guestName,
             String guestEmail,
-            String deliveryAddress) {
+            String deliveryAddress
+    ) {
+        if (basket.isEmpty()) {
+            throw new IllegalStateException("Cannot create order from empty basket");
+        }
 
         List<OrderItem> orderItems = basket.getItems().stream()
                 .map(item -> new OrderItem(
@@ -53,7 +65,7 @@ public class Order {
 
         Order order = new Order();
         order.orderId = OrderId.create();
-        order.customerId = null;  // Guest order
+        order.customerId = null; // Guest order
         order.guestName = guestName;
         order.guestEmail = guestEmail;
         order.deliveryAddress = deliveryAddress;
@@ -64,16 +76,27 @@ public class Order {
         order.createdAt = LocalDateTime.now();
         order.updatedAt = LocalDateTime.now();
 
+        order.domainEvents.add(new OrderCreatedEvent(
+                LocalDateTime.now(),
+                order.orderId.id(),
+                null,
+                order.restaurantId,
+                guestName,
+                guestEmail,
+                deliveryAddress,
+                order.totalPrice
+        ));
+
         return order;
     }
 
-    // Factory method for registered customer
+    // Registered user checkout
     public static Order fromBasket(Basket basket) {
         if (basket.isEmpty()) {
             throw new IllegalStateException("Cannot create order from empty basket");
         }
 
-        return Order.createOrder(
+        Order order = createOrder(
                 basket.getCustomerId(),
                 basket.getRestaurantId(),
                 basket.calculateTotal(),
@@ -88,6 +111,18 @@ public class Order {
                         ))
                         .collect(Collectors.toList())
         );
+        order.domainEvents.add(new OrderCreatedEvent(
+                LocalDateTime.now(),
+                order.orderId.id(),
+                order.customerId,
+                order.restaurantId,
+                null,
+                null,
+                null,
+                order.totalPrice
+        ));
+
+        return order;
     }
 
     public static Order createOrder(
@@ -96,8 +131,8 @@ public class Order {
             double totalPrice,
             OrderStatus orderStatus,
             LocalDateTime createdAt,
-            List<OrderItem> items) {
-
+            List<OrderItem> items
+    ) {
         Order order = new Order();
         order.orderId = OrderId.create();
         order.customerId = customerId;
@@ -107,11 +142,8 @@ public class Order {
         order.createdAt = createdAt;
         order.updatedAt = createdAt;
         order.items = items;
-
         return order;
     }
-
-    public Order() {}
 
     private Double calculateTotal() {
         return items.stream()
@@ -119,7 +151,6 @@ public class Order {
                 .sum();
     }
 
-    // Business logic methods
     public void accept() {
         if (this.status != OrderStatus.PENDING) {
             throw new IllegalStateException("Only pending orders can be accepted");
@@ -136,6 +167,7 @@ public class Order {
         this.rejectionReason = reason;
         this.updatedAt = LocalDateTime.now();
     }
+
     public void cancel() {
         if (this.status == OrderStatus.DELIVERED || this.status == OrderStatus.CANCELLED) {
             throw new IllegalStateException("Cannot cancel delivered or already cancelled order");
@@ -152,5 +184,4 @@ public class Order {
     public boolean isPending() {
         return this.status == OrderStatus.PENDING;
     }
-
 }

@@ -1,6 +1,7 @@
 package be.kdg.keepdishgoing.restaurants.adapter.out.restaurant;
 
 import be.kdg.keepdishgoing.common.commonEnum.commonRestaurantEnum.TypeOfCuisine;
+import be.kdg.keepdishgoing.orders.adapter.out.restaurantProjector.RestaurantProjectorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +24,7 @@ public interface RestaurantJpaRepository extends JpaRepository<RestaurantJpaEnti
     @Query("SELECT r FROM RestaurantJpaEntity r WHERE r.uuid = :restaurantId")
     String nameById(@Param("restaurantId") UUID restaurantId);
 
-
+    Optional<RestaurantJpaEntity> findByOwnerKeycloakId(String keycloakId);
 
     Optional<RestaurantJpaEntity> findByName(String name);
 }

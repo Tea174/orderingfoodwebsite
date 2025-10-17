@@ -1,6 +1,6 @@
 package be.kdg.keepdishgoing.restaurants.adapter.in.response.dish;
 
-import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishState;
+import be.kdg.keepdishgoing.restaurants.domain.dish.DishState;
 
 public record DishStateChangedResponse(
         DishState newState,

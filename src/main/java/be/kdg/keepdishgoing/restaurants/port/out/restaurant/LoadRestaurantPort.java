@@ -16,5 +16,7 @@ public interface LoadRestaurantPort {
     Optional<Restaurant> loadByOwnerId(OwnerId ownerId);
     List<Restaurant> loadByType(TypeOfCuisine typeOfCuisine);
     String loadByNameById(UUID restaurantId);
+    Optional<Restaurant> loadByOwnerKeycloakId(String keycloakId);
+
 
 }

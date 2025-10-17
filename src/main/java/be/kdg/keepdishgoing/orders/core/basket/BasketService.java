@@ -6,6 +6,7 @@ import be.kdg.keepdishgoing.orders.domain.order.Order;
 import be.kdg.keepdishgoing.orders.domain.order.OrderId;
 import be.kdg.keepdishgoing.orders.port.in.basket.*;
 import be.kdg.keepdishgoing.orders.port.out.basket.*;
+import be.kdg.keepdishgoing.orders.port.out.order.PublishOrderEventsPort;
 import be.kdg.keepdishgoing.orders.port.out.order.SaveOrderPort;
 import be.kdg.keepdishgoing.restaurants.domain.dish.DishId;
 import be.kdg.keepdishgoing.restaurants.port.in.dish.GetDishUseCase;
@@ -31,6 +32,7 @@ public class BasketService implements
     private final SaveBasketPort saveBasketPort;
     private final SaveOrderPort saveOrderPort;
     private final GetDishUseCase getDishUseCase;
+    private final PublishOrderEventsPort publishOrderEventsPort;
 
     @Override
     public OrderId checkoutAsGuest(UUID basketId, GuestCheckoutDetails guestDetails) {
@@ -51,10 +53,11 @@ public class BasketService implements
         );
         saveOrderPort.saveOrder(order);
         saveBasketPort.delete(basket);
+        publishOrderEventsPort.publishEvents(order);
         return order.getOrderId();
     }
 
-    // Helper method to validate basket items
+
     private ValidationResult validateBasketItems(Basket basket) {
         if (basket.isEmpty()) {
             return new ValidationResult(false, "Basket is empty", List.of());
@@ -124,7 +127,6 @@ public class BasketService implements
     }
 
     @Override
-    @Transactional
     public OrderId checkout(UUID customerId) {
         Basket basket = loadBasketPort.loadByCustomerId(customerId)
                 .orElseThrow(() -> new IllegalStateException("Basket not found"));
@@ -138,6 +140,7 @@ public class BasketService implements
         Order order = Order.fromBasket(basket);
         saveOrderPort.saveOrder(order);
         saveBasketPort.delete(basket);
+        publishOrderEventsPort.publishEvents(order);
         return order.getOrderId();
     }
 

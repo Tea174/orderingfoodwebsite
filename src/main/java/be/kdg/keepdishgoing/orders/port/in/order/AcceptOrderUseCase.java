@@ -5,7 +5,6 @@ import be.kdg.keepdishgoing.orders.domain.order.OrderId;
 import java.util.UUID;
 
 public interface AcceptOrderUseCase {
-    void acceptOrder(AcceptOrderCommand command);
+    void acceptOrder(UUID orderId);
 
-    record AcceptOrderCommand(OrderId orderId, UUID restaurantId) {}
 }

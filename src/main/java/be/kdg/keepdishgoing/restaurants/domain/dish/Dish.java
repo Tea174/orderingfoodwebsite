@@ -1,7 +1,6 @@
 package be.kdg.keepdishgoing.restaurants.domain.dish;
 
 
-import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishState;
 import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.DishType;
 import be.kdg.keepdishgoing.common.commonEnum.commonDishEnum.FoodTag;
 import be.kdg.keepdishgoing.common.event.DomainEvent;

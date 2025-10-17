@@ -1,32 +1,82 @@
 package be.kdg.keepdishgoing.restaurants.adapter.in.web.owner;
 
+import be.kdg.keepdishgoing.orders.adapter.in.order.request.RejectRequest;
+import be.kdg.keepdishgoing.orders.adapter.out.restaurantProjector.RestaurantProjectorEntity;
+import be.kdg.keepdishgoing.orders.domain.order.OrderId;
+import be.kdg.keepdishgoing.orders.port.in.order.AcceptOrderUseCase;
+import be.kdg.keepdishgoing.orders.port.in.order.RejectOrderUseCase;
 import be.kdg.keepdishgoing.restaurants.adapter.in.request.owner.LoginOwnerRequest;
 import be.kdg.keepdishgoing.restaurants.adapter.in.request.owner.RegisterOwnerRequest;
+import be.kdg.keepdishgoing.restaurants.adapter.in.request.owner.RejectOrderRequest;
 import be.kdg.keepdishgoing.restaurants.adapter.in.response.owner.OwnerLoginResponse;
 import be.kdg.keepdishgoing.restaurants.adapter.in.response.owner.OwnerRegisteredResponse;
 import be.kdg.keepdishgoing.restaurants.domain.owner.Owner;
 import be.kdg.keepdishgoing.restaurants.domain.owner.OwnerId;
+import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
 import be.kdg.keepdishgoing.restaurants.port.in.owner.GetOwnerUseCase;
 import be.kdg.keepdishgoing.restaurants.port.in.owner.RegisterOwnerUseCase;
-import be.kdg.keepdishgoing.security.KeycloakService;
+import be.kdg.keepdishgoing.common.security.KeycloakService;
+import be.kdg.keepdishgoing.restaurants.port.in.restaurant.GetRestaurantUseCase;
+import be.kdg.keepdishgoing.restaurants.port.out.owner.AcceptOrderPort;
+import be.kdg.keepdishgoing.restaurants.port.out.owner.RejectOrderPort;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/owners")
+@AllArgsConstructor
 public class OwnerController {
 
     private final RegisterOwnerUseCase registerOwnerUseCase;
     private final GetOwnerUseCase getOwnerUseCase;
     private final KeycloakService keycloakService;
+    private final GetRestaurantUseCase getRestaurantUseCase;
+    private final AcceptOrderPort acceptOrderPort;
+    private final RejectOrderPort rejectOrderPort;
 
-    public OwnerController(RegisterOwnerUseCase registerOwnerUseCase, GetOwnerUseCase getOwnerUseCase, KeycloakService keycloakService) {
-        this.registerOwnerUseCase = registerOwnerUseCase;
-        this.getOwnerUseCase = getOwnerUseCase;
-        this.keycloakService = keycloakService;
+    @PostMapping("/{restaurantId}/orders/{orderId}/accept")
+    public ResponseEntity<Void> acceptOrder(
+            @PathVariable UUID restaurantId,
+            @PathVariable UUID orderId,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        verifyRestaurantOwnership(restaurantId, jwt);
+        acceptOrderPort.acceptOrder(restaurantId, OrderId.of(orderId));
+
+        return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/{restaurantId}/orders/{orderId}/reject")
+    public ResponseEntity<Void> rejectOrder(
+            @PathVariable UUID restaurantId,
+            @PathVariable UUID orderId,
+            @RequestBody @Valid RejectOrderRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+
+        verifyRestaurantOwnership(restaurantId, jwt);
+        rejectOrderPort.rejectOrder(restaurantId, orderId, request.reason());
+
+        return ResponseEntity.ok().build();
+    }
+
+    private void verifyRestaurantOwnership(UUID restaurantId, Jwt jwt) {
+        String keycloakId = jwt.getSubject();
+        Restaurant restaurant = getRestaurantUseCase
+                .findByOwnerKeycloakId(keycloakId)
+                .orElseThrow(() -> new SecurityException("Restaurant not found for owner"));
+
+        if (!restaurant.getRestaurantId().equals(restaurantId)) {
+            throw new SecurityException("You don't have permission for this restaurant");
+        }
+    }
+
 
 
     @PostMapping("/register")

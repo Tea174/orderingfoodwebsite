@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -43,6 +44,12 @@ public class RestaurantService implements
         return loadRestaurantPort.loadByOwnerId(ownerId)
                 .orElseThrow(() -> new IllegalStateException(
                         "No restaurant found for this owner. Please create a restaurant first."));
+    }
+
+    @Override
+    public Optional<Restaurant> findByOwnerKeycloakId(String keycloakId) {
+        logger.debug("Getting restaurant by owner keycloakId {}", keycloakId);
+        return loadRestaurantPort.loadByOwnerKeycloakId(keycloakId);
     }
 
     @Override

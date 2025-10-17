@@ -1,21 +1,15 @@
 package be.kdg.keepdishgoing.orders.adapter.in.order;
 
-import be.kdg.keepdishgoing.customers.domain.Customer;
-import be.kdg.keepdishgoing.customers.port.in.GetCustomerUseCase;
 import be.kdg.keepdishgoing.orders.adapter.in.order.request.RejectRequest;
 import be.kdg.keepdishgoing.orders.adapter.in.order.request.UpdateStatusRequest;
 import be.kdg.keepdishgoing.orders.adapter.in.order.response.OrderResponse;
-import be.kdg.keepdishgoing.orders.adapter.out.customer.CustomerProjectorEntity;
-import be.kdg.keepdishgoing.orders.adapter.out.customer.CustomerProjectorJpaRepository;
-import be.kdg.keepdishgoing.orders.adapter.out.restaurant.RestaurantProjectorEntity;
-import be.kdg.keepdishgoing.orders.adapter.out.restaurant.RestaurantProjectorJpaRepository;
+import be.kdg.keepdishgoing.orders.adapter.out.customerProjector.CustomerProjectorEntity;
+import be.kdg.keepdishgoing.orders.adapter.out.customerProjector.CustomerProjectorJpaRepository;
+import be.kdg.keepdishgoing.orders.adapter.out.restaurantProjector.RestaurantProjectorEntity;
+import be.kdg.keepdishgoing.orders.adapter.out.restaurantProjector.RestaurantProjectorJpaRepository;
 import be.kdg.keepdishgoing.orders.domain.order.Order;
 import be.kdg.keepdishgoing.orders.domain.order.OrderId;
 import be.kdg.keepdishgoing.orders.port.in.order.*;
-import be.kdg.keepdishgoing.restaurants.domain.owner.Owner;
-import be.kdg.keepdishgoing.restaurants.domain.restaurant.Restaurant;
-import be.kdg.keepdishgoing.restaurants.port.in.owner.GetOwnerUseCase;
-import be.kdg.keepdishgoing.restaurants.port.in.restaurant.GetRestaurantUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -61,33 +55,33 @@ public class OrderController {
             throw new SecurityException("You don't have permission to access this customer's data");
         }
     }
-
-    @PostMapping("/{restaurantId}/orders/{orderId}/accept")
-    public ResponseEntity<Void> acceptOrder(
-            @PathVariable UUID restaurantId,
-            @PathVariable UUID orderId,
-            @AuthenticationPrincipal Jwt jwt) {
-
-        verifyRestaurantOwnership(restaurantId, jwt);
-        acceptOrderUseCase.acceptOrder(
-                new AcceptOrderUseCase.AcceptOrderCommand(OrderId.of(orderId), restaurantId)
-        );
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{restaurantId}/orders/{orderId}/reject")
-    public ResponseEntity<Void> rejectOrder(
-            @PathVariable UUID restaurantId,
-            @PathVariable UUID orderId,
-            @RequestBody RejectRequest request,
-            @AuthenticationPrincipal Jwt jwt) {
-
-        verifyRestaurantOwnership(restaurantId, jwt);
-        rejectOrderUseCase.rejectOrder(
-                new RejectOrderUseCase.RejectOrderCommand(OrderId.of(orderId), restaurantId, request.reason())
-        );
-        return ResponseEntity.ok().build();
-    }
+//
+//    @PostMapping("/{restaurantId}/orders/{orderId}/accept")
+//    public ResponseEntity<Void> acceptOrder(
+//            @PathVariable UUID restaurantId,
+//            @PathVariable UUID orderId,
+//            @AuthenticationPrincipal Jwt jwt) {
+//
+//        verifyRestaurantOwnership(restaurantId, jwt);
+//        acceptOrderUseCase.acceptOrder(
+//                new AcceptOrderUseCase.AcceptOrderCommand(OrderId.of(orderId), restaurantId)
+//        );
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @PostMapping("/{restaurantId}/orders/{orderId}/reject")
+//    public ResponseEntity<Void> rejectOrder(
+//            @PathVariable UUID restaurantId,
+//            @PathVariable UUID orderId,
+//            @RequestBody RejectRequest request,
+//            @AuthenticationPrincipal Jwt jwt) {
+//
+//        verifyRestaurantOwnership(restaurantId, jwt);
+//        rejectOrderUseCase.rejectOrder(
+//                new RejectOrderUseCase.RejectOrderCommand(OrderId.of(orderId), restaurantId, request.reason())
+//        );
+//        return ResponseEntity.ok().build();
+//    }
 
     // Customer Get single order
     @GetMapping("/{orderId}")
