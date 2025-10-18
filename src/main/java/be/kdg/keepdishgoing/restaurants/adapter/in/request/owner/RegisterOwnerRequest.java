@@ -22,8 +22,7 @@ public record RegisterOwnerRequest(
         @Size(min = 8, message = "Password must be at least 8 characters")
         String password,
 
-        @Positive(message = "Phone number must be positive")
-        int phoneNumber,
+        String phoneNumber,
 
         String address
 ) {}

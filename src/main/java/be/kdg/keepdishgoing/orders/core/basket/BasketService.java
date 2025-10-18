@@ -45,17 +45,41 @@ public class BasketService implements
         if (!validation.valid()) {
             throw new IllegalStateException("Cannot checkout: " + validation.message());
         }
+
+        // 3. Create order with complete guest details
         Order order = Order.fromBasketWithGuestDetails(
                 basket,
                 guestDetails.name(),
                 guestDetails.email(),
+                guestDetails.phone(),
                 guestDetails.deliveryAddress()
         );
+
+        saveOrderPort.saveOrder(order);
+        saveBasketPort.delete(basket);
+        publishOrderEventsPort.publishEvents(order);
+
+        return order.getOrderId();
+    }
+
+    @Override
+    public OrderId checkout(UUID customerId) {
+        Basket basket = loadBasketPort.loadByCustomerId(customerId)
+                .orElseThrow(() -> new IllegalStateException("Basket not found"));
+
+        ValidationResult validation = validateBasket(customerId);
+        if (!validation.valid()) {
+            throw new IllegalStateException(
+                    "Cannot checkout: " + validation.message()
+            );
+        }
+        Order order = Order.fromBasket(basket);
         saveOrderPort.saveOrder(order);
         saveBasketPort.delete(basket);
         publishOrderEventsPort.publishEvents(order);
         return order.getOrderId();
     }
+
 
 
     private ValidationResult validateBasketItems(Basket basket) {
@@ -126,23 +150,6 @@ public class BasketService implements
         }
     }
 
-    @Override
-    public OrderId checkout(UUID customerId) {
-        Basket basket = loadBasketPort.loadByCustomerId(customerId)
-                .orElseThrow(() -> new IllegalStateException("Basket not found"));
-
-        ValidationResult validation = validateBasket(customerId);
-        if (!validation.valid()) {
-            throw new IllegalStateException(
-                    "Cannot checkout: " + validation.message()
-            );
-        }
-        Order order = Order.fromBasket(basket);
-        saveOrderPort.saveOrder(order);
-        saveBasketPort.delete(basket);
-        publishOrderEventsPort.publishEvents(order);
-        return order.getOrderId();
-    }
 
     @Override
     public void addItem(UUID customerId, UUID restaurantId, UUID dishId, int quantity) {

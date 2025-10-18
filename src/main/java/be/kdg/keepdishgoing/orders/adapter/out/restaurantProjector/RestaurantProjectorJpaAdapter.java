@@ -19,7 +19,7 @@ public class RestaurantProjectorJpaAdapter {
         logger.debug("Saving restaurant projector Record");
         RestaurantProjectorEntity entity = new RestaurantProjectorEntity();
         entity.setRestaurantId(restaurantProjectorRecord.restaurantId());
-        entity.setOwnerKeycloakId(restaurantProjectorRecord.ownerKeycloakId());
+        entity.setOwnerKeycloakSubjectId(restaurantProjectorRecord.ownerKeycloakId());
         entity.setName(restaurantProjectorRecord.name());
         entity.setAddress(restaurantProjectorRecord.address());
         entity.setCuisine(restaurantProjectorRecord.cuisine());

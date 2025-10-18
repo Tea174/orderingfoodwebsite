@@ -16,17 +16,17 @@ import java.util.List;
 public class Customer {
     private CustomerId customerId;
     private String keycloakSubjectId;
-    private  String firstName;
+    private String firstName;
     private String lastName;
     private String email;
-    private int phoneNumber;
+    private String phoneNumber;
     private String Address;
 
     private final List<DomainEvent> domainEvents = new ArrayList<>();
 
     public static Customer createCustomer(String keycloakSubjectId, String firstName,
                                           String lastName, String email,
-                                          int phoneNumber, String address){
+                                          String phoneNumber, String address){
         Customer customer = new Customer();
         customer.setCustomerId(CustomerId.create());
         customer.setKeycloakSubjectId(keycloakSubjectId);
@@ -39,14 +39,19 @@ public class Customer {
         customer.domainEvents.add(new CustomerCreatedEvent(
                 LocalDateTime.now(),
                 customer.customerId.id(),
-                customer.keycloakSubjectId
+                keycloakSubjectId,
+                firstName,
+                lastName,
+                email,
+                phoneNumber,
+                address
         ));
 
         return customer;
     }
 
 
-    public Customer(CustomerId customerId, String keycloakSubjectId, String firstName, String lastName, String email, int phoneNumber, String address) {
+    public Customer(CustomerId customerId, String keycloakSubjectId, String firstName, String lastName, String email, String phoneNumber, String address) {
         this.customerId = customerId;
         this.keycloakSubjectId = keycloakSubjectId;
         this.firstName = firstName;
@@ -56,7 +61,7 @@ public class Customer {
         Address = address;
     }
 
-    public Customer(CustomerId customerId, String firstName, String lastName, String email, int phoneNumber, String address) {
+    public Customer(CustomerId customerId, String firstName, String lastName, String email, String phoneNumber, String address) {
         this.customerId = customerId;
         this.firstName = firstName;
         this.lastName = lastName;

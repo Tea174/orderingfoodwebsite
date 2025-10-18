@@ -9,7 +9,7 @@ public interface UpdateOwnerProfileUseCase {
             OwnerId ownerId,
             String firstName,
             String lastName,
-            int phoneNumber,
+            String phoneNumber,
             String address
     ) {}
 }

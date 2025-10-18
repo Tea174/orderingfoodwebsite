@@ -35,9 +35,9 @@ public class OrderController {
     private final CustomerProjectorJpaRepository customerRepository;
 
     private void verifyRestaurantOwnership(UUID restaurantId, Jwt jwt) {
-        String keycloakId = jwt.getSubject();
+        String keycloakSubjectId = jwt.getSubject();
         RestaurantProjectorEntity restaurant = restaurantRepository
-                .findByOwnerKeycloakId(keycloakId)
+                .findByOwnerKeycloakSubjectId(keycloakSubjectId)
                 .orElseThrow(() -> new SecurityException("RestaurantProjectorRecord not found for owner"));
 
         if (!restaurant.getRestaurantId().equals(restaurantId)) {
@@ -46,9 +46,9 @@ public class OrderController {
     }
 
     private void verifyCustomership(UUID customerId, Jwt jwt) {
-        String keycloakId = jwt.getSubject();
+        String keycloakSubjectId = jwt.getSubject();
         CustomerProjectorEntity customer = customerRepository
-                .findByKeycloakId(keycloakId)
+                .findByKeycloakId(keycloakSubjectId)
                 .orElseThrow(() -> new SecurityException("Customer not found"));
 
         if (!customer.getCustomerId().equals(customerId)) {

@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface GetRestaurantUseCase {
     Restaurant getRestaurantById(RestaurantId RestaurantId);
     Restaurant getRestaurantByOwnerId(OwnerId ownerId);
-    Optional<Restaurant> findByOwnerKeycloakId(String keycloakId);
+    Optional<Restaurant> findByOwnerIdKeycloakSubjectId(String keycloakSubjectId);
 }

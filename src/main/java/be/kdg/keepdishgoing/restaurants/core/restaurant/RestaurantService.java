@@ -47,9 +47,9 @@ public class RestaurantService implements
     }
 
     @Override
-    public Optional<Restaurant> findByOwnerKeycloakId(String keycloakId) {
-        logger.debug("Getting restaurant by owner keycloakId {}", keycloakId);
-        return loadRestaurantPort.loadByOwnerKeycloakId(keycloakId);
+    public Optional<Restaurant> findByOwnerIdKeycloakSubjectId(String keycloakSubjectId) {
+        logger.debug("Getting restaurant by owner keycloakId {}", keycloakSubjectId);
+        return loadRestaurantPort.loadByOwnerKeycloakId(keycloakSubjectId);
     }
 
     @Override

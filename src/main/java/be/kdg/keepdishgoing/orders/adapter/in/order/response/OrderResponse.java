@@ -1,7 +1,7 @@
 package be.kdg.keepdishgoing.orders.adapter.in.order.response;
 
 import be.kdg.keepdishgoing.orders.domain.order.Order;
-import be.kdg.keepdishgoing.orders.domain.order.OrderStatus;
+import be.kdg.keepdishgoing.common.commonEnum.commonOrderEnum.OrderStatus;
 
 import java.util.List;
 import java.util.UUID;

@@ -20,7 +20,7 @@ public class Owner {
     private String firstName;
     private String lastName;
     private String email;
-    private int phoneNumber;
+    private String phoneNumber;
     private String address;
 
     private final List<DomainEvent> domainEvents = new ArrayList<>();
@@ -29,7 +29,7 @@ public class Owner {
     // Factory method for creating NEW owners (during registration)
     public static Owner createOwner(String keycloakSubjectId, String firstName,
                                     String lastName, String email,
-                                    int phoneNumber, String address) {
+                                    String phoneNumber, String address) {
         Owner owner = new Owner();
         owner.setOwnerId(OwnerId.create());
         owner.setKeycloakSubjectId(keycloakSubjectId);
@@ -51,7 +51,7 @@ public class Owner {
     }
 
     // Business logic methods
-    public void updateProfile(String firstName, String lastName, int phoneNumber, String address) {
+    public void updateProfile(String firstName, String lastName, String phoneNumber, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -70,7 +70,7 @@ public class Owner {
     // Constructor for loading EXISTING owners from database
     public Owner(OwnerId ownerId, String keycloakSubjectId, RestaurantId restaurantId,
                  String firstName, String lastName, String email,
-                 int phoneNumber, String address) {
+                 String phoneNumber, String address) {
         this.ownerId = ownerId;
         this.keycloakSubjectId = keycloakSubjectId;
         this.restaurantId = restaurantId;

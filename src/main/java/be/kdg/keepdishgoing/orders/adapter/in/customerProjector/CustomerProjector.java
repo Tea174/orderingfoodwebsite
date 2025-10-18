@@ -17,17 +17,19 @@ public class CustomerProjector {
         this.jpaAdapter = jpaAdapter;
     }
 
-
     @EventListener
     public void on(CustomerCreatedEvent event) {
         logger.info("Received CustomerCreatedEvent: {}", event);
         CustomerProjectorRecord record = new CustomerProjectorRecord(
                 event.customerId(),
-                event.keycloakId()
+                event.keycloakId(),
+                event.firstName(),
+                event.lastName(),
+                event.email(),
+                event.phoneNumber(),
+                event.address()
         );
         logger.debug(record.toString());
-       jpaAdapter.save(record);
+        jpaAdapter.save(record);
     }
-
-
 }

@@ -14,6 +14,7 @@ import java.util.UUID;
 @Repository
 public interface RestaurantJpaRepository extends JpaRepository<RestaurantJpaEntity, UUID> {
 
+    Optional<RestaurantJpaEntity> findByOwnerIdKeycloakSubjectId(String keycloakSubjectId);
 
     List<RestaurantJpaEntity> findByCuisine(TypeOfCuisine typeOfCuisine);
 
@@ -24,7 +25,7 @@ public interface RestaurantJpaRepository extends JpaRepository<RestaurantJpaEnti
     @Query("SELECT r FROM RestaurantJpaEntity r WHERE r.uuid = :restaurantId")
     String nameById(@Param("restaurantId") UUID restaurantId);
 
-    Optional<RestaurantJpaEntity> findByOwnerKeycloakId(String keycloakId);
+//    Optional<RestaurantJpaEntity> findByOwnerKeycloakId(String keycloakId);
 
     Optional<RestaurantJpaEntity> findByName(String name);
 }

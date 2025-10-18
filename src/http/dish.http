@@ -1,0 +1,71 @@
+### Variables
+@baseUrl = http://localhost:8080/api
+@customerToken = eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJQV2NhT2tKdDR3WTBCX3l0eXpodnlzRF9xdmo1LTNKUDh3OEk3S1dfV040In0.eyJleHAiOjE3NjAzMDA0MTAsImlhdCI6MTc2MDMwMDExMCwianRpIjoib25ydHJvOjQyMDRmMzRmLTU3ZTAtZjRkOC0zZGIxLTJhMWZmOTljMTUzZCIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMva2VlcGRpc2hnb2luZyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI3MTEzNjcwZS1iY2FhLTRhYTAtOTRmOC1hYjE2ZjVhNWYwYzQiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJrZWVwZGlzaGdvaW5nLWNsaWVudCIsInNpZCI6IjJiNTYzZjNkLWQyY2YtNGZjNy04ZmYzLWY4MTUwODhlMDI5ZCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMta2VlcGRpc2hnb2luZyIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJjdXN0b21lciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJuZGZuZ0BleGFtcGxlLmNvbSIsImVtYWlsIjoibmRmbmdAZXhhbXBsZS5jb20ifQ.LAue8SFa8fSqKTITAsDg-cmrMXLSh_-4wtqZwRECQPqJkXaSiAJD5gh5EoHUUIMWGp_XLPpCtHnGBMzLvcvRbB2rlUrb-yZmlqO6eys1fs9femcdNitlt-jcAD-I50wrtNUrgdHpeWsGZo_tWnQnI_g1AKlJ79vQ7UQX20YMT2TyOuR_OD0PcCJz4dBiacpSVpKj-H2UkuZ9MsDoM-V5GeRC2vzMVsDByZSwtdsbasL2otrhjkQZ2lc91DgYLCTcqKmU64vPTnLc0HBsMTBP7jRtFGYDlQ9xva5_XIY5eYW1zSvdAGqqM_SpUQuYI4mqix3E8ixyHFIlZqcySeaOjw
+@ownerToken = eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJfZUw1N01pUmFyRFpHaVJnbFVINDVjMzN4a2ZTaFZ2Wk9GdHlqUFNORENvIn0.eyJleHAiOjE3NjA3OTkzOTUsImlhdCI6MTc2MDc5OTA5NSwianRpIjoib25ydHJvOmUyNzMxYWRlLTVkOWEtNzE1MS04Mjc3LTk2MjYwMzY1M2E0ZSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMva2VlcGRpc2hnb2luZyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJkMzVlNTU2Zi1mZjQ3LTQ5M2YtYTg5OS05OWM3ZjI2NWJjMmEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJrZWVwZGlzaGdvaW5nLWNsaWVudCIsInNpZCI6IjkwY2Q1YjFlLTE3NDQtNGFhMS1iYWY5LWQxY2Y5NDVlZDE3NSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm93bmVyIiwiZGVmYXVsdC1yb2xlcy1rZWVwZGlzaGdvaW5nIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhYmNAZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFiY0BleGFtcGxlLmNvbSJ9.Gq9JEfvrIK_Ug8LNKSl8IfmN_YjOt1mQmqM0c07C6z_pBCS5ccBIx3HaiEr2OPV30tsKPUToUgNYIJF0KhS1-5y7qt2NrSOqC5XWRL_I39qgYLPGBdGyNzTVc0UWtMo-qC2OlNL3NO0Bud__fASrFJelBcqdjZM8rmefwiMIWfMjHTAokcMUKplCLtSbUGsUA-NjgPq5bK1S6hQhViMVGtESiUAJ_80ETwvJu7xgLqg5_NiYOX5U0sz4NGvL9LcoPW1n3EnTSwGy9sMV2s6NKo0ricCYTMpVAMW7MTUKdEru-kT534tCcNrumwp6z2KM-12xg0D5EqUYz16hEMXHBg
+@customerId = 6b02ceca-b4e0-4b30-b35a-dbf19b2e3ca1
+@restaurantId = 91ddc323-3f3f-4554-bde5-fb7558c9eb77
+@basketId = 123e4567-e89b-12d3-a456-426614174002
+@orderId = 123e4567-e89b-12d3-a456-426614174003
+@dishId = d56fc908-e674-4028-a0a8-074b23cefce3
+
+
+
+### Get published dishes by restaurantProjectorRecord
+GET http://localhost:8080/api/dishes/published/restaurantProjectorRecord/1d9822a3-b9cd-42dc-9051-36097b7c55da
+Accept: application/json
+
+
+
+#### delete dishProjectorRecord
+DELETE http://localhost:8080/api/dishes/f6d90cf8-d15c-4330-b907-2cdb9e393455
+Content-Type: application/json
+Authorization: Bearer {{ownerToken}}
+
+#### publish dishProjectorRecord
+PATCH http://localhost:8080/api/dishes/{{dishId}}/publish
+Content-Type: application/json
+Authorization: Bearer {{ownerToken}}
+
+
+
+#### unpublish dishProjectorRecord
+PATCH http://localhost:8080/api/dishes/{{dishId}}/unpublish
+Content-Type: application/json
+Authorization: Bearer  {{ownerToken}}
+
+### mark back in stock
+PATCH http://localhost:8080/api/dishes/{{dishId}}/back-in-stock
+Content-Type: application/json
+Authorization: Bearer {{ownerToken}}
+
+
+#### make dishProjectorRecord out of stock
+PATCH http://localhost:8080/api/dishes/{{dishId}}/out-of-stock
+Content-Type: application/json
+Authorization: Bearer {{ownerToken}}
+
+
+
+#### get my dishes
+GET http://localhost:8080/api/dishes
+Content-Type: application/json
+Authorization: Bearer
+
+
+###
+GET http://localhost:8080/api/restaurants/type/ITALIAN
+Content-Type: application/json
+
+###
+GET http://localhost:8080/api/dishes/filter/tag/VEGETARIAN
+Content-Type: application/json
+
+###
+GET http://localhost:8080/api/dishes/filter/type/main
+Content-Type: application/json
+
+
+###
+PATCH http://localhost:8080/api/dishes/{{dishId}}/back-in-stock
+Content-Type: application/json
+Authorization: Bearer {{ownerToken}}

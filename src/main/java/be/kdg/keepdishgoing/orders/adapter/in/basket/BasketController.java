@@ -58,6 +58,7 @@ public class BasketController {
                 new CheckoutBasketUseCase.GuestCheckoutDetails(
                         request.name(),
                         request.email(),
+                        request.phone(),
                         request.deliveryAddress()
                 )
         );

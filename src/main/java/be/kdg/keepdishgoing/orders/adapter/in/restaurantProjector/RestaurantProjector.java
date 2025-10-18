@@ -1,5 +1,6 @@
 package be.kdg.keepdishgoing.orders.adapter.in.restaurantProjector;
 
+
 import be.kdg.keepdishgoing.common.event.restaurantEvents.RestaurantAcceptedOrderEvent;
 import be.kdg.keepdishgoing.common.event.restaurantEvents.RestaurantCreatedEvent;
 import be.kdg.keepdishgoing.common.event.restaurantEvents.RestaurantRejectedOrderEvent;

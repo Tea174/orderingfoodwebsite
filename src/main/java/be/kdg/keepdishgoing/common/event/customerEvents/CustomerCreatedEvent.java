@@ -8,5 +8,10 @@ import java.util.UUID;
 public record CustomerCreatedEvent(
         LocalDateTime eventPit,
         UUID customerId,
-        String keycloakId
+        String keycloakId,
+        String firstName,
+        String lastName,
+        String email,
+        String phoneNumber,
+        String address
 ) implements DomainEvent {}

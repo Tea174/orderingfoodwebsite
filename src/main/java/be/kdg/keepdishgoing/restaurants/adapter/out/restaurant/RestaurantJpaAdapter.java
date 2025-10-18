@@ -72,7 +72,7 @@ public class RestaurantJpaAdapter implements SaveRestaurantPort, LoadRestaurantP
     @Override
     public Optional<Restaurant> loadByOwnerKeycloakId(String keycloakId) {
         log.debug("Loading restaurant for owner (in restaurantJpaAdapter): {}", keycloakId);
-        return restaurantJpaRepository.findByOwnerKeycloakId(keycloakId)
+        return restaurantJpaRepository.findByOwnerIdKeycloakSubjectId(keycloakId)
                 .map(mapper::toDomainRestaurant);
     }
 
@@ -86,14 +86,6 @@ public class RestaurantJpaAdapter implements SaveRestaurantPort, LoadRestaurantP
         return restaurant;
     }
 
-
-//
-//    @Override
-//    public void update(RestaurantProjectorRecord restaurant) {
-//        log.debug("Updating restaurant: {}", restaurant.getRestaurantId().id());
-//        var entity = mapper.toEntityRestaurant(restaurant);
-//        restaurantJpaRepository.save(entity);
-//    }
 
 
 }

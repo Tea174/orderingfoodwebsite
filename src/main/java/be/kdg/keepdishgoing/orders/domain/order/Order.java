@@ -1,7 +1,8 @@
 package be.kdg.keepdishgoing.orders.domain.order;
 
+import be.kdg.keepdishgoing.common.commonEnum.commonOrderEnum.OrderStatus;
 import be.kdg.keepdishgoing.common.event.DomainEvent;
-import be.kdg.keepdishgoing.common.event.orderEvents.OrderCreatedEvent;
+import be.kdg.keepdishgoing.common.event.orderEvents.forRestaurants.OrderCreatedEvent;
 import be.kdg.keepdishgoing.orders.domain.basket.Basket;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,9 +19,16 @@ public class Order {
     private OrderId orderId;
     private UUID customerId; // null for guest customers
 
-    // Guest customer details
+    // Guest customer details (null for registered customers)
     private String guestName;
     private String guestEmail;
+    private Integer guestPhone;
+
+    // Registered customer details (null for guests)
+    private String customerName;
+    private Integer customerPhone;
+
+    // Delivery details (always present for both guest and customer)
     private String deliveryAddress;
 
     private UUID restaurantId;
@@ -40,14 +48,25 @@ public class Order {
         return customerId == null;
     }
 
+    // Helper methods for delivery
+    public String getRecipientName() {
+        return isGuestOrder() ? guestName : customerName;
+    }
+
+    public Integer getRecipientPhone() {
+        return isGuestOrder() ? guestPhone : customerPhone;
+    }
+
     public void clearDomainEvents() {
         domainEvents.clear();
     }
 
+    // Guest checkout - keeps same signature, adds phone
     public static Order fromBasketWithGuestDetails(
             Basket basket,
             String guestName,
             String guestEmail,
+            Integer guestPhone,
             String deliveryAddress
     ) {
         if (basket.isEmpty()) {
@@ -68,6 +87,7 @@ public class Order {
         order.customerId = null; // Guest order
         order.guestName = guestName;
         order.guestEmail = guestEmail;
+        order.guestPhone = guestPhone;
         order.deliveryAddress = deliveryAddress;
         order.restaurantId = basket.getRestaurantId();
         order.items = orderItems;
@@ -79,18 +99,13 @@ public class Order {
         order.domainEvents.add(new OrderCreatedEvent(
                 LocalDateTime.now(),
                 order.orderId.id(),
-                null,
-                order.restaurantId,
-                guestName,
-                guestEmail,
-                deliveryAddress,
-                order.totalPrice
+                order.restaurantId
         ));
 
         return order;
     }
 
-    // Registered user checkout
+    // Registered customer checkout - FIXED: keeps original signature
     public static Order fromBasket(Basket basket) {
         if (basket.isEmpty()) {
             throw new IllegalStateException("Cannot create order from empty basket");
@@ -111,15 +126,16 @@ public class Order {
                         ))
                         .collect(Collectors.toList())
         );
+
+        // Get delivery details from basket
+        order.customerName = basket.getCustomerName();
+        order.customerPhone = basket.getCustomerPhone();
+        order.deliveryAddress = basket.getDeliveryAddress();
+
         order.domainEvents.add(new OrderCreatedEvent(
                 LocalDateTime.now(),
                 order.orderId.id(),
-                order.customerId,
-                order.restaurantId,
-                null,
-                null,
-                null,
-                order.totalPrice
+                order.restaurantId
         ));
 
         return order;

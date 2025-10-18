@@ -11,20 +11,21 @@ public interface CheckoutBasketUseCase {
     // Guest customer checkout
     OrderId checkoutAsGuest(UUID basketId, GuestCheckoutDetails guestDetails);
 
-    record GuestCheckoutDetails(
+    public record GuestCheckoutDetails(
             String name,
             String email,
+            Integer phone,
             String deliveryAddress
     ) {
         public GuestCheckoutDetails {
             if (name == null || name.isBlank()) {
-                throw new IllegalArgumentException("Name is required");
+                throw new IllegalArgumentException("Guest name is required");
             }
             if (email == null || email.isBlank()) {
-                throw new IllegalArgumentException("Email is required");
+                throw new IllegalArgumentException("Guest email is required");
             }
-            if (deliveryAddress == null || deliveryAddress.isBlank()) {
-                throw new IllegalArgumentException("Delivery address is required");
+            if (phone == null ) {
+                throw new IllegalArgumentException("Guest phone is required");
             }
         }
     }

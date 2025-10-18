@@ -1,11 +1,11 @@
 package be.kdg.keepdishgoing.orders.core.order;
 
 
-import be.kdg.keepdishgoing.common.event.orderEvents.OrderAcceptedEvent;
+import be.kdg.keepdishgoing.common.event.orderEvents.forDelivery.OrderAcceptedEvent;
 import be.kdg.keepdishgoing.orders.domain.order.Order;
 import be.kdg.keepdishgoing.orders.domain.order.OrderId;
 import be.kdg.keepdishgoing.orders.domain.order.OrderItem;
-import be.kdg.keepdishgoing.orders.domain.order.OrderStatus;
+import be.kdg.keepdishgoing.common.commonEnum.commonOrderEnum.OrderStatus;
 import be.kdg.keepdishgoing.orders.port.in.order.*;
 import be.kdg.keepdishgoing.orders.port.out.order.LoadOrderPort;
 import be.kdg.keepdishgoing.orders.port.out.order.PublishOrderEventsPort;
@@ -46,21 +46,25 @@ public class OrderService implements CancelOrderUseCase,
         logger.info("Accepting order: {}", orderId);
         Order order = loadOrderPort.loadOrder(OrderId.of(orderId))
                 .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
+
         order.accept();
         saveOrderPort.saveOrder(order);
+
+        // Publish OrderAcceptedEvent to Delivery BC with complete information
         OrderAcceptedEvent event = new OrderAcceptedEvent(
                 LocalDateTime.now(),
                 order.getOrderId().id(),
-                order.getCustomerId(),
+                order.getCustomerId(),              // null for guest orders
                 order.getRestaurantId(),
-                order.isGuestOrder() ? order.getGuestName() : "Customer",
-                order.isGuestOrder() ? order.getGuestEmail() : null,
-                order.getDeliveryAddress(),
-                null
+                order.getGuestName(),               // null for customer orders
+                order.getGuestEmail(),              // null for customer orders
+                order.getRecipientName(),           // Always present - who receives delivery
+                order.getRecipientPhone(),          // Always present - contact number
+                order.getDeliveryAddress()       // Always present - where to deliver
         );
 
         eventPublisher.publishEvent(event);
-        logger.info("Order {} accepted and OrderAcceptedEvent published", orderId);
+        logger.info("Order {} accepted and OrderAcceptedEvent published to Delivery BC", orderId);
     }
 
 

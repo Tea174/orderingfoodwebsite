@@ -4,7 +4,15 @@ import java.util.UUID;
 
 public record CustomerProjectorRecord(
         UUID customerId,
-        String keycloak
+        String keycloakId,
+        String firstName,
+        String lastName,
+        String email,
+        String phoneNumber,
+        String address
 ) {
-
+    // Helper method for full name
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

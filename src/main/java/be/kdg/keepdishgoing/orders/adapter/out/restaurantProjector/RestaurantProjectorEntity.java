@@ -24,8 +24,8 @@ public class RestaurantProjectorEntity {
     @Column(name = "restaurant_id")
     private UUID restaurantId;
 
-    @Column(name = "owner_keycloak_id", nullable = false)
-    private String ownerKeycloakId;
+    @Column(name = "owner_keycloak_subject_id", nullable = false)
+    private String ownerKeycloakSubjectId;
 
     @Column(nullable = false)
     private String name;

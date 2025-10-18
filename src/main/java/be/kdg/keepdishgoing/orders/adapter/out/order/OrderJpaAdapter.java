@@ -3,7 +3,7 @@ package be.kdg.keepdishgoing.orders.adapter.out.order;
 
 import be.kdg.keepdishgoing.orders.domain.order.Order;
 import be.kdg.keepdishgoing.orders.domain.order.OrderId;
-import be.kdg.keepdishgoing.orders.domain.order.OrderStatus;
+import be.kdg.keepdishgoing.common.commonEnum.commonOrderEnum.OrderStatus;
 import be.kdg.keepdishgoing.orders.port.out.order.LoadOrderPort;
 import be.kdg.keepdishgoing.orders.port.out.order.SaveOrderPort;
 import lombok.AllArgsConstructor;

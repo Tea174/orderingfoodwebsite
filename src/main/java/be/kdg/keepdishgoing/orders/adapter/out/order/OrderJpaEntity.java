@@ -1,12 +1,11 @@
 package be.kdg.keepdishgoing.orders.adapter.out.order;
 
 import be.kdg.keepdishgoing.orders.adapter.out.order.orderItem.OrderItemJpaEntity;
-import be.kdg.keepdishgoing.orders.domain.order.OrderStatus;
+import be.kdg.keepdishgoing.common.commonEnum.commonOrderEnum.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.sql.Timestamp;
-import java.time.Instant;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

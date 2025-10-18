@@ -11,7 +11,7 @@ public interface RegisterOwnerUseCase {
             String email,
             String firstName,
             String lastName,
-            int phoneNumber,
+            String phoneNumber,
             String address
     ) {
         public RegisterOwnerCommand {

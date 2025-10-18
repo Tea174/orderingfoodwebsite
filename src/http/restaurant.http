@@ -1,0 +1,121 @@
+### Variables
+@baseUrl = http://localhost:8080/api
+@ownerToken = eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJfZUw1N01pUmFyRFpHaVJnbFVINDVjMzN4a2ZTaFZ2Wk9GdHlqUFNORENvIn0.eyJleHAiOjE3NjA3OTkzOTUsImlhdCI6MTc2MDc5OTA5NSwianRpIjoib25ydHJvOmUyNzMxYWRlLTVkOWEtNzE1MS04Mjc3LTk2MjYwMzY1M2E0ZSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMva2VlcGRpc2hnb2luZyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJkMzVlNTU2Zi1mZjQ3LTQ5M2YtYTg5OS05OWM3ZjI2NWJjMmEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJrZWVwZGlzaGdvaW5nLWNsaWVudCIsInNpZCI6IjkwY2Q1YjFlLTE3NDQtNGFhMS1iYWY5LWQxY2Y5NDVlZDE3NSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm93bmVyIiwiZGVmYXVsdC1yb2xlcy1rZWVwZGlzaGdvaW5nIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhYmNAZXhhbXBsZS5jb20iLCJlbWFpbCI6ImFiY0BleGFtcGxlLmNvbSJ9.Gq9JEfvrIK_Ug8LNKSl8IfmN_YjOt1mQmqM0c07C6z_pBCS5ccBIx3HaiEr2OPV30tsKPUToUgNYIJF0KhS1-5y7qt2NrSOqC5XWRL_I39qgYLPGBdGyNzTVc0UWtMo-qC2OlNL3NO0Bud__fASrFJelBcqdjZM8rmefwiMIWfMjHTAokcMUKplCLtSbUGsUA-NjgPq5bK1S6hQhViMVGtESiUAJ_80ETwvJu7xgLqg5_NiYOX5U0sz4NGvL9LcoPW1n3EnTSwGy9sMV2s6NKo0ricCYTMpVAMW7MTUKdEru-kT534tCcNrumwp6z2KM-12xg0D5EqUYz16hEMXHBg
+@restaurantId = ffaa5320-286e-4bf5-90eb-cc9e8e2425ee
+@basketId = 123e4567-e89b-12d3-a456-426614174002
+@orderId = 123e4567-e89b-12d3-a456-426614174003
+@dishId = 920e8baa-6dd0-42eb-8780-2cab6e51c64b
+
+POST http://localhost:8080/api/owners/register
+Content-Type: application/json
+
+{
+  "firstName": "abc",
+  "lastName": "abc",
+  "email": "abc@example.com",
+  "password": "password123",
+  "phoneNumber": 123456789,
+  "address": "123 Main St"
+}
+
+### log in
+POST http://localhost:8080/api/owners/login
+Content-Type: application/json
+
+{
+  "email": "abc@example.com",
+  "password": "password123"
+}
+
+#### test creating restaurantProjectorRecord
+POST http://localhost:8080/api/restaurants
+Content-Type: application/json
+Authorization: Bearer {{ownerToken}}
+
+
+{
+  "name": "14 Oct",
+  "address": "987 small Place, adsv",
+  "email": "contact@labellaitalia.be",
+  "pictureURL": "https://example.com/restaurantProjectorRecord.jpg",
+  "cuisine": "SPANISH",
+  "preparationTime": "00:70:00",
+  "openingTime": "15:00:00",
+  "minPrice": 6.00,
+  "maxPrice": 50.00,
+  "estimatedDeliveryTime": "00:20:00" ,
+  "dishes": [
+    {
+      "name": "Margherita Pizza",
+      "dishType": "main",
+      "foodTags": ["PIZZA", "VEGETARIAN"],
+      "description": "Classic tomato and mozzarella pizza",
+      "price": 10.50,
+      "pictureURL": "https://example.com/margherita.jpg"
+    },
+    {
+      "name": "Tiramisu",
+      "dishType": "dessert",
+      "foodTags": ["ITALIAN", "SWEET"],
+      "description": "Traditional Italian dessert",
+      "price": 6.00,
+      "pictureURL": "https://example.com/tiramisu.jpg"
+    }
+  ]
+}
+
+#### test creating restaurant
+POST http://localhost:8080/api/restaurants
+Content-Type: application/json
+Authorization: Bearer {{ownerToken}}
+
+
+{
+  "name": "22h50 uiii",
+  "address": "67 small Place, adsv",
+  "email": "avds@labellaitalia.be",
+  "pictureURL": "https://example.com/restaurantProjectorRecord.jpg",
+  "cuisine": "SWISS",
+  "preparationTime": "00:70:00",
+  "openingTime": "15:00:00",
+  "minPrice": 7.00,
+  "maxPrice": 80.00,
+  "estimatedDeliveryTime": "00:20:00" ,
+  "dishes": []
+}
+
+
+#### add dish after login
+POST http://localhost:8080/api/dishes
+Content-Type: application/json
+Authorization: Bearer {{ownerToken}}
+
+{
+
+  "restaurantId": "d73328b3-f3a8-40e2-8d6b-fae14229659d",
+  "name": "hjmk, Pizza",
+  "dishType": "main",
+  "foodTags": ["VEGETARIAN", "ITALIAN"],
+  "description": "Classic Italian pizza with fresh mozzarella",
+  "price": 10.00,
+  "pictureURL": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002"
+}
+
+###
+POST http://localhost:8080/api/dishes
+Content-Type: application/json
+Authorization: Bearer {{ownerToken}}
+
+{
+  "restaurantId": "91ddc323-3f3f-4554-bde5-fb7558c9eb77",
+  "name": "testing event",
+  "dishType": "main",
+  "foodTags": ["PIZZA", "VEGETARIAN"],
+  "description": "Classic tomato and mozzarella pizza",
+  "price": 10.50,
+  "pictureURL": "https://example.com/margherita.jpg"
+}
+
+
+### owner accept the order
+POST http://localhost:8080/api/owners/{{restaurantId}}/orders/{{orderId}}/accept

@@ -8,5 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface RestaurantProjectorJpaRepository extends JpaRepository<RestaurantProjectorEntity, UUID> {
-    Optional<RestaurantProjectorEntity> findByOwnerKeycloakId(String keycloakId);
+    Optional<RestaurantProjectorEntity> findByOwnerKeycloakSubjectId(String keycloakSubjectId);
 }

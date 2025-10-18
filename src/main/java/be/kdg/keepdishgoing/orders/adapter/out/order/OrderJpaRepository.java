@@ -1,7 +1,7 @@
 package be.kdg.keepdishgoing.orders.adapter.out.order;
 
 
-import be.kdg.keepdishgoing.orders.domain.order.OrderStatus;
+import be.kdg.keepdishgoing.common.commonEnum.commonOrderEnum.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

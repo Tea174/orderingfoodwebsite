@@ -1,10 +1,6 @@
 package be.kdg.keepdishgoing.restaurants.adapter.in.web.owner;
 
-import be.kdg.keepdishgoing.orders.adapter.in.order.request.RejectRequest;
-import be.kdg.keepdishgoing.orders.adapter.out.restaurantProjector.RestaurantProjectorEntity;
 import be.kdg.keepdishgoing.orders.domain.order.OrderId;
-import be.kdg.keepdishgoing.orders.port.in.order.AcceptOrderUseCase;
-import be.kdg.keepdishgoing.orders.port.in.order.RejectOrderUseCase;
 import be.kdg.keepdishgoing.restaurants.adapter.in.request.owner.LoginOwnerRequest;
 import be.kdg.keepdishgoing.restaurants.adapter.in.request.owner.RegisterOwnerRequest;
 import be.kdg.keepdishgoing.restaurants.adapter.in.request.owner.RejectOrderRequest;
@@ -17,8 +13,8 @@ import be.kdg.keepdishgoing.restaurants.port.in.owner.GetOwnerUseCase;
 import be.kdg.keepdishgoing.restaurants.port.in.owner.RegisterOwnerUseCase;
 import be.kdg.keepdishgoing.common.security.KeycloakService;
 import be.kdg.keepdishgoing.restaurants.port.in.restaurant.GetRestaurantUseCase;
-import be.kdg.keepdishgoing.restaurants.port.out.owner.AcceptOrderPort;
-import be.kdg.keepdishgoing.restaurants.port.out.owner.RejectOrderPort;
+import be.kdg.keepdishgoing.restaurants.port.out.owner.AcceptPurchasePort;
+import be.kdg.keepdishgoing.restaurants.port.out.owner.RejectPurchasePort;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,8 +34,8 @@ public class OwnerController {
     private final GetOwnerUseCase getOwnerUseCase;
     private final KeycloakService keycloakService;
     private final GetRestaurantUseCase getRestaurantUseCase;
-    private final AcceptOrderPort acceptOrderPort;
-    private final RejectOrderPort rejectOrderPort;
+    private final AcceptPurchasePort acceptPurchasePort;
+    private final RejectPurchasePort rejectPurchasePort;
 
     @PostMapping("/{restaurantId}/orders/{orderId}/accept")
     public ResponseEntity<Void> acceptOrder(
@@ -48,7 +44,7 @@ public class OwnerController {
             @AuthenticationPrincipal Jwt jwt) {
 
         verifyRestaurantOwnership(restaurantId, jwt);
-        acceptOrderPort.acceptOrder(restaurantId, OrderId.of(orderId));
+        acceptPurchasePort.acceptOrder(restaurantId, OrderId.of(orderId));
 
         return ResponseEntity.ok().build();
     }
@@ -61,7 +57,7 @@ public class OwnerController {
             @AuthenticationPrincipal Jwt jwt) {
 
         verifyRestaurantOwnership(restaurantId, jwt);
-        rejectOrderPort.rejectOrder(restaurantId, orderId, request.reason());
+        rejectPurchasePort.rejectOrder(restaurantId, orderId, request.reason());
 
         return ResponseEntity.ok().build();
     }
@@ -69,7 +65,7 @@ public class OwnerController {
     private void verifyRestaurantOwnership(UUID restaurantId, Jwt jwt) {
         String keycloakId = jwt.getSubject();
         Restaurant restaurant = getRestaurantUseCase
-                .findByOwnerKeycloakId(keycloakId)
+                .findByOwnerIdKeycloakSubjectId(keycloakId)
                 .orElseThrow(() -> new SecurityException("Restaurant not found for owner"));
 
         if (!restaurant.getRestaurantId().equals(restaurantId)) {

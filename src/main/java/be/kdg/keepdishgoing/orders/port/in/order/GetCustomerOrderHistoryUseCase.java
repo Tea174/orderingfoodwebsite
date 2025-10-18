@@ -1,8 +1,7 @@
 package be.kdg.keepdishgoing.orders.port.in.order;
 
-import be.kdg.keepdishgoing.orders.domain.order.Order;
 import be.kdg.keepdishgoing.orders.domain.order.OrderId;
-import be.kdg.keepdishgoing.orders.domain.order.OrderStatus;
+import be.kdg.keepdishgoing.common.commonEnum.commonOrderEnum.OrderStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;

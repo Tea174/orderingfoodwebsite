@@ -15,9 +15,16 @@ import java.util.UUID;
 @ToString
 public class Basket {
     private BasketId basketId;
-    private UUID customerId;
+    private UUID customerId; // null for guest
     private UUID restaurantId;
-    private List<BasketItem> items = new ArrayList<>();
+    private List<BasketItem> items;
+
+    // Delivery details - should be in Basket
+    private String deliveryAddress;
+
+    // For registered customers (fetched from customer profile or specified)
+    private String customerName;
+    private Integer customerPhone;
 
 
     // Add item to basket
