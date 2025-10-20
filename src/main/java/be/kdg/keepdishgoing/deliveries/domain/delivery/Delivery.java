@@ -53,17 +53,19 @@ public class Delivery {
 
     // Constructor for guest
     public static Delivery forGuest(UUID orderId, UUID restaurantId, String guestName,
-                    String guestEmail, String deliveryAddress) {
+                                    String guestEmail, String deliveryAddress) {
         Delivery delivery = new Delivery();
         delivery.deliveryId = DeliveryId.create();
         delivery.orderId = orderId;
         delivery.customerId = null;
         delivery.restaurantId = restaurantId;
+        delivery.guestName = guestName;
+        delivery.guestEmail = guestEmail;
         delivery.deliveryAddress = deliveryAddress;
         delivery.status = DeliveryStatus.PENDING;
-        delivery.pickedUpAt = LocalDateTime.now();
-        delivery.deliveredAt = LocalDateTime.now();
-        delivery.estimatedDeliveryTime = LocalDateTime.now();
+        delivery.pickedUpAt = null;
+        delivery.deliveredAt = null;
+        delivery.estimatedDeliveryTime = null;   //  will be calculated
         return delivery;
     }
 
@@ -72,9 +74,8 @@ public class Delivery {
     }
 
     public void calculateEstimatedDeliveryTime(int deliveryTimeMinutes,
-                                               int preparationTimeMinutes,
-                                               int busynessFactor) {
-        int totalMinutes = (deliveryTimeMinutes + preparationTimeMinutes) * busynessFactor;
+                                               int preparationTimeMinutes) {
+        int totalMinutes = deliveryTimeMinutes + preparationTimeMinutes;
         this.estimatedDeliveryTime = LocalDateTime.now().plusMinutes(totalMinutes);
     }
 

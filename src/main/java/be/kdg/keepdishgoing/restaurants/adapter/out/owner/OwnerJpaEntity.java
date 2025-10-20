@@ -29,7 +29,7 @@ public class OwnerJpaEntity {
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
-    private Integer phoneNumber;
+    private String phoneNumber;
     @Column(nullable = false)
     private String address;
     @Column
@@ -41,13 +41,4 @@ public class OwnerJpaEntity {
         this.uuid = UUID.randomUUID();
     }
 
-    public OwnerJpaEntity(UUID uuid, RestaurantJpaEntity restaurant, String firstName, String lastName, String email, Integer phoneNumber, String address) {
-        this.uuid = uuid;
-        this.restaurant = restaurant;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.address = address;
-    }
 }

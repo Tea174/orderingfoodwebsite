@@ -23,19 +23,28 @@ public class OrderJpaEntity {
     @Column(name = "customer_id")
     private UUID customerId;
 
-    // Guest customer fields
+    // Guest customer fields (null for registered customers)
     @Column(name = "guest_name")
     private String guestName;
 
     @Column(name = "guest_email")
     private String guestEmail;
 
+    @Column(name = "guest_phone")
+    private String guestPhone;
+
+    // Registered customer fields (null for guests)
+    @Column(name = "customer_name")
+    private String customerName;
+
+    @Column(name = "customer_phone")
+    private String customerPhone;
+
     @Column(name = "delivery_address", length = 500)
     private String deliveryAddress;
 
     @Column(name = "restaurant_id", nullable = false)
     private UUID restaurantId;
-
 
     @Column(name = "total_price", nullable = false)
     private Double totalPrice;

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record OrderCreatedEvent(
         LocalDateTime eventPit,
-        UUID orderId,       // null for guest orders
+        UUID orderId,
         UUID restaurantId
 ) implements DomainEvent {
 }

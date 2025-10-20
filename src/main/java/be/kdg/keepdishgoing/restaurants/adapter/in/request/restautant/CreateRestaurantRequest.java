@@ -28,7 +28,7 @@ public record CreateRestaurantRequest(
         TypeOfCuisine cuisine,
 
         @NotNull(message = "Preparation time is required")
-        Time preparationTime,
+        Integer preparationTime,
 
         @NotNull(message = "Opening time is required")
         Time openingTime,

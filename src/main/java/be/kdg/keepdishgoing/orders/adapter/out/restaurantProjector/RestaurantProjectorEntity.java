@@ -38,7 +38,7 @@ public class RestaurantProjectorEntity {
     private TypeOfCuisine cuisine;
 
     @Column(name = "estimated_delivery_time")
-    private Time estimatedDeliveryTime;
+    private Integer preparationTime;
 
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<DishProjectorEntity> dishes;

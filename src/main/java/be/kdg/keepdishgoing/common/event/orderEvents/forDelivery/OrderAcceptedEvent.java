@@ -10,10 +10,11 @@ public record OrderAcceptedEvent(
         UUID orderId,
         UUID customerId,
         UUID restaurantId,
+        int preparationTimeMinutes,
         String guestName,
         String guestEmail,           // null for customer orders
         String recipientName,        // Who receives delivery (always present)
-        Integer recipientPhone,       // Contact number (always present)
+        String recipientPhone,       // Contact number (always present)
         String deliveryAddress   // Where to deliver (always present)
 
 ) implements DomainEvent {

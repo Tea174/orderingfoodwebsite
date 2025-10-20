@@ -39,7 +39,7 @@ public class DeliveryJpaEntity {
     @Column(nullable = false, length = 50)
     private DeliveryStatus status;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
@@ -53,4 +53,19 @@ public class DeliveryJpaEntity {
 
     @Column(length = 500)
     private String cancellationReason;
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+        if (updatedAt == null) {
+            updatedAt = LocalDateTime.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

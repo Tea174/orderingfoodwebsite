@@ -2,10 +2,10 @@
 @baseUrl = http://localhost:8080/api/baskets
 @customerToken = eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJQV2NhT2tKdDR3WTBCX3l0eXpodnlzRF9xdmo1LTNKUDh3OEk3S1dfV040In0.eyJleHAiOjE3NjA0NzU0MDEsImlhdCI6MTc2MDQ3NTEwMSwianRpIjoib25ydHJvOjE3MGJmZGI3LTQxYTUtN2VjZC1mNzI5LTZjZTIxMTFhZTcyYiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODE4MC9yZWFsbXMva2VlcGRpc2hnb2luZyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJhN2EwNWRlZS05ZTRhLTQ1MGQtYmYxNy03NmYzOWY1ZjNmNzAiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJrZWVwZGlzaGdvaW5nLWNsaWVudCIsInNpZCI6IjYwMzlmNDA0LTU2OGEtNGQ3MC05ODkyLWM5OTY5NmUzZTM2YSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMta2VlcGRpc2hnb2luZyIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJjdXN0b21lciJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJvaXlAZXhhbXBsZS5jb20iLCJlbWFpbCI6Im9peUBleGFtcGxlLmNvbSJ9.JzU0BFAhnSkum23bGs2wX6s0bx-o-6NtrgUcwxg5GxHrLgsd6VhmURyp6hjz3jpJvVZD9KyI-S2FB9k9S0-pcQ2uGdho-lqY70AKr2RFqgq1HpIfwvcid202c3WP_yyfWYd4t2MMVBHHhQuqZBUNacuSKHabO4ODvp8En2Wbpkl5ckoStSr-rsw55qbYixSt6wemuXBEKMklhPIsWeFu6gePHTVQQKnpnF8ecOpKi0rr5oDh8WYa81H9uwlHOVbWhfLUfCctL9QbISF5c8C1FuQXgw3-SE0f7VmeyIBERMfz8LU7lPxpZjJ2C3IzVyMKvLlhmBDFtMFsw-P0jQ6kfg
 @customerId = 32adadfe-60a2-4f4f-8811-09c4d7d84ada
-@restaurantId = 91ddc323-3f3f-4554-bde5-fb7558c9eb77
-@dishId = d4ddaa86-3985-4243-9061-5eeb4a8594f0
+@restaurantId = 72088d63-0753-4f36-86eb-03d4ee54e793
+@dishId = 7198a4c9-259c-4fa8-8ce2-74d44adf15c7
 @dishId2 = bf0ac3f2-25aa-4a31-8669-afb3a9410a93
-@guestBasketId = 1af3db10-242f-40a2-aa49-9e6ee4d93801
+@guestBasketId = cfad63ca-e9f8-4fe1-b4fb-5980fd6c246d
 
 ### ========== GUEST BASKET FLOW ==========
 
@@ -19,7 +19,7 @@ Content-Type: application/json
 {
   "restaurantId": "{{restaurantId}}",
   "dishId": "{{dishId}}",
-  "quantity": 2
+  "quantity": 4
 }
 
 ### 3. Add another item to guest basket
@@ -37,8 +37,9 @@ POST {{baseUrl}}/checkout/guest/{{guestBasketId}}
 Content-Type: application/json
 
 {
-  "name": "John Guest",
+  "name": "Testtt Guest",
   "email": "guest@example.com",
+  "phone": "874385834",
   "deliveryAddress": "123 Guest Street, City, Country"
 }
 

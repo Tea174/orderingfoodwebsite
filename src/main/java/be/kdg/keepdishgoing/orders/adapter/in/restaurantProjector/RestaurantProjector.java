@@ -24,16 +24,17 @@ public class RestaurantProjector {
 
     @EventListener
     public void on(RestaurantCreatedEvent event) {
-        logger.debug("Creating restaurant event" + event.toString());
+        logger.debug("Creating restaurant event{}", event.toString());
         RestaurantProjectorRecord restaurant = new RestaurantProjectorRecord(
                 event.restaurantId(),
                 event.ownerKeycloakId(),
                 event.restaurantName(),
                 event.address(),
                 event.cuisine(),
-                event.estimatedDeliveryTime()
+                event.preparationTime()
         );
         logger.debug(restaurant.toString());
+        logger.info("Creating restaurant event{}", event);
         jpaAdapter.save(restaurant);
     }
 

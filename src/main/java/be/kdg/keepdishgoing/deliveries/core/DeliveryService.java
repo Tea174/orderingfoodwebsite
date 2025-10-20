@@ -24,15 +24,8 @@ public class DeliveryService implements DeliveryUseCase {
         logger.info("Creating delivery for customer order: {}", orderId);
 
         Delivery delivery = Delivery.forCustomer(orderId, customerId, restaurantId, deliveryAddress);
-
-        // Calculate busyness factor
-        int busynessFactor = calculateBusynessFactor(restaurantId);
-
-        // Fixed delivery time: 20 minutes
         int deliveryTimeMinutes = 20;
-
-        // Calculate estimated delivery time
-        delivery.calculateEstimatedDeliveryTime(deliveryTimeMinutes, preparationTime, busynessFactor);
+        delivery.calculateEstimatedDeliveryTime(deliveryTimeMinutes, preparationTime);
 
         return loadDeliveryPort.save(delivery);
     }
@@ -43,18 +36,22 @@ public class DeliveryService implements DeliveryUseCase {
         logger.info("Creating delivery for guest order: {}", orderId);
 
         Delivery delivery = Delivery.forGuest(orderId, restaurantId, guestName, guestEmail, deliveryAddress);
-
-        // Calculate busyness factor
-        int busynessFactor = calculateBusynessFactor(restaurantId);
-
-        // Fixed delivery time: 20 minutes
         int deliveryTimeMinutes = 20;
-
-        // Calculate estimated delivery time
-        delivery.calculateEstimatedDeliveryTime(deliveryTimeMinutes, preparationTime, busynessFactor);
-
+        delivery.calculateEstimatedDeliveryTime(deliveryTimeMinutes, preparationTime);
         return loadDeliveryPort.save(delivery);
     }
+
+    @Override
+    public int calculateBusynessFactor(UUID restaurantId) {
+        long pendingOrders = loadDeliveryPort.countByRestaurantIdAndStatus(
+                restaurantId,
+                DeliveryStatus.PENDING
+        );
+        // Busyness factor: minimum 1, increases with pending orders
+        return (int) Math.max(1, pendingOrders);
+    }
+
+
 
     @Override
     public Delivery getDeliveryByOrderId(UUID orderId) {
@@ -85,15 +82,5 @@ public class DeliveryService implements DeliveryUseCase {
         Delivery delivery = getDeliveryByOrderId(orderId);
         delivery.markAsCancelled(reason);
         loadDeliveryPort.save(delivery);
-    }
-
-    @Override
-    public int calculateBusynessFactor(UUID restaurantId) {
-        long pendingOrders = loadDeliveryPort.countByRestaurantIdAndStatus(
-                restaurantId,
-                DeliveryStatus.PENDING
-        );
-        // Busyness factor: minimum 1, increases with pending orders
-        return (int) Math.max(1, pendingOrders);
     }
 }

@@ -40,12 +40,18 @@ public class DeliveryJpaAdapter implements LoadDeliveryPort {
         DeliveryJpaEntity entity = new DeliveryJpaEntity();
         entity.setId(delivery.getDeliveryId().id());
         entity.setOrderId(delivery.getOrderId());
+        entity.setCustomerId(delivery.getCustomerId());
         entity.setRestaurantId(delivery.getRestaurantId());
+        entity.setGuestName(delivery.getGuestName());
+        entity.setGuestEmail(delivery.getGuestEmail());
+        entity.setDeliveryAddress(delivery.getDeliveryAddress());
         entity.setStatus(delivery.getStatus());
         entity.setCreatedAt(delivery.getCreatedAt());
+        entity.setUpdatedAt(delivery.getUpdatedAt());
         entity.setPickedUpAt(delivery.getPickedUpAt());
         entity.setDeliveredAt(delivery.getDeliveredAt());
         entity.setEstimatedDeliveryTime(delivery.getEstimatedDeliveryTime());
+        entity.setCancellationReason(delivery.getCancellationReason());
         return entity;
     }
 

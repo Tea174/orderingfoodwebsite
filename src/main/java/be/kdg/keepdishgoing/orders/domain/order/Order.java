@@ -22,11 +22,11 @@ public class Order {
     // Guest customer details (null for registered customers)
     private String guestName;
     private String guestEmail;
-    private Integer guestPhone;
+    private String guestPhone;
 
     // Registered customer details (null for guests)
     private String customerName;
-    private Integer customerPhone;
+    private String customerPhone;
 
     // Delivery details (always present for both guest and customer)
     private String deliveryAddress;
@@ -53,7 +53,7 @@ public class Order {
         return isGuestOrder() ? guestName : customerName;
     }
 
-    public Integer getRecipientPhone() {
+    public String getRecipientPhone() {  // ✅ Changed return type to String
         return isGuestOrder() ? guestPhone : customerPhone;
     }
 
@@ -61,12 +61,12 @@ public class Order {
         domainEvents.clear();
     }
 
-    // Guest checkout - keeps same signature, adds phone
+    // Guest checkout
     public static Order fromBasketWithGuestDetails(
             Basket basket,
             String guestName,
             String guestEmail,
-            Integer guestPhone,
+            String guestPhone,
             String deliveryAddress
     ) {
         if (basket.isEmpty()) {
@@ -105,7 +105,7 @@ public class Order {
         return order;
     }
 
-    // Registered customer checkout - FIXED: keeps original signature
+    // Registered customer checkout
     public static Order fromBasket(Basket basket) {
         if (basket.isEmpty()) {
             throw new IllegalStateException("Cannot create order from empty basket");

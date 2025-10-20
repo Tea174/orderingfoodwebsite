@@ -18,7 +18,7 @@ public record CreateRestaurantResponse(
         String email,
         String pictureURL,
         TypeOfCuisine cuisine,
-        Time preparationTime,
+        Integer preparationTime,
         Time openingTime,
         Double minPrice,
         Double maxPrice,

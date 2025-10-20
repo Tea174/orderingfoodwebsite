@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -14,8 +15,8 @@ import java.util.UUID;
 @Setter
 public class PurchaseProjectorEntity {
     @Id
-    private UUID id;
     private UUID purchaseId;
     private UUID restaurantId;
+    private LocalDateTime receivedAt;
 
 }

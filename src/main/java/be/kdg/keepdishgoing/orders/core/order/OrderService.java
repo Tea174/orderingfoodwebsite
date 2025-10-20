@@ -6,10 +6,12 @@ import be.kdg.keepdishgoing.orders.domain.order.Order;
 import be.kdg.keepdishgoing.orders.domain.order.OrderId;
 import be.kdg.keepdishgoing.orders.domain.order.OrderItem;
 import be.kdg.keepdishgoing.common.commonEnum.commonOrderEnum.OrderStatus;
+import be.kdg.keepdishgoing.orders.domain.restaurantRecord.RestaurantProjectorRecord;
 import be.kdg.keepdishgoing.orders.port.in.order.*;
 import be.kdg.keepdishgoing.orders.port.out.order.LoadOrderPort;
 import be.kdg.keepdishgoing.orders.port.out.order.PublishOrderEventsPort;
 import be.kdg.keepdishgoing.orders.port.out.order.SaveOrderPort;
+import be.kdg.keepdishgoing.orders.port.out.restaurantProjector.LoadRestaurantProjectorPort;
 import be.kdg.keepdishgoing.restaurants.port.out.restaurant.LoadRestaurantPort;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -37,15 +39,23 @@ public class OrderService implements CancelOrderUseCase,
     private final LoadOrderPort loadOrderPort;
     private final SaveOrderPort saveOrderPort;
     private final LoadRestaurantPort loadRestaurantPort;
-    private final PublishOrderEventsPort  publishOrderEventsPort;
     private final ApplicationEventPublisher eventPublisher;
+    private final LoadRestaurantProjectorPort loadRestaurantProjectorPort;
 
 
     @Override
     public void acceptOrder(UUID orderId) {
         logger.info("Accepting order: {}", orderId);
+
         Order order = loadOrderPort.loadOrder(OrderId.of(orderId))
                 .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
+        logger.info("Order details - recipientName: {}, recipientPhone: {}, deliveryAddress: {}",
+                order.getRecipientName(),
+                order.getRecipientPhone(),
+                order.getDeliveryAddress());
+
+        RestaurantProjectorRecord restaurant = loadRestaurantProjectorPort.findById(order.getRestaurantId())
+                .orElseThrow(() -> new IllegalStateException("Restaurant not found"));
 
         order.accept();
         saveOrderPort.saveOrder(order);
@@ -56,6 +66,7 @@ public class OrderService implements CancelOrderUseCase,
                 order.getOrderId().id(),
                 order.getCustomerId(),              // null for guest orders
                 order.getRestaurantId(),
+                restaurant.preparationTime(),
                 order.getGuestName(),               // null for customer orders
                 order.getGuestEmail(),              // null for customer orders
                 order.getRecipientName(),           // Always present - who receives delivery

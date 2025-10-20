@@ -1,8 +1,9 @@
 package be.kdg.keepdishgoing.restaurants.core.owner;
 
+import be.kdg.keepdishgoing.common.event.restaurantEvents.OrderTimeoutEvent;
 import be.kdg.keepdishgoing.common.event.restaurantEvents.RestaurantAcceptedOrderEvent;
 import be.kdg.keepdishgoing.common.event.restaurantEvents.RestaurantRejectedOrderEvent;
-import be.kdg.keepdishgoing.orders.domain.order.OrderId;
+import be.kdg.keepdishgoing.restaurants.core.scheduler.OrderTimeoutScheduler;
 import be.kdg.keepdishgoing.restaurants.domain.purchaseRecord.PurchaseProjectorRecord;
 import be.kdg.keepdishgoing.restaurants.domain.owner.Owner;
 import be.kdg.keepdishgoing.restaurants.domain.owner.OwnerId;
@@ -15,13 +16,17 @@ import be.kdg.keepdishgoing.restaurants.port.out.owner.LoadOwnerPort;
 import be.kdg.keepdishgoing.restaurants.port.out.owner.RejectPurchasePort;
 import be.kdg.keepdishgoing.restaurants.port.out.owner.UpdateOwnerPort;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+import static be.kdg.keepdishgoing.restaurants.core.OrderTimeoutConfig.TIMEOUT_SECONDS;
 
 @Service
 @Transactional
@@ -31,54 +36,77 @@ public class OwnerService implements
         UpdateOwnerProfileUseCase,
         GetOwnerUseCase,
         AcceptPurchasePort,
-        RejectPurchasePort
+        RejectPurchasePort {
 
-{
+    private static final Logger log = LoggerFactory.getLogger(OwnerService.class);
+
 
     private final UpdateOwnerPort updateOwnerPort;
     private final LoadOwnerPort loadOwnerPort;
     private final LoadPurchaseProjectorPort loadPurchaseProjectorPort;
     private final ApplicationEventPublisher eventPublisher;
-
+    private final OrderTimeoutScheduler orderTimeoutScheduler;
 
     @Override
-    public void acceptOrder(UUID restaurantId, OrderId orderId) {
-        // Verify order exists and belongs to this restaurant
-        PurchaseProjectorRecord orderRecord = loadPurchaseProjectorPort.findByOrderId(orderId.id())
-                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId.id()));
+    public void acceptOrder(UUID restaurantId, UUID purchaseId) {
+        PurchaseProjectorRecord orderRecord = loadPurchaseProjectorPort.findByPurchaseId(purchaseId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + purchaseId));
 
         if (!orderRecord.restaurantId().equals(restaurantId)) {
             throw new IllegalArgumentException("Order does not belong to this restaurant");
         }
-        // Restaurant BC just publishes that it accepted the order
+        // Check if timeout already passed
+        Duration timeElapsed = Duration.between(orderRecord.receivedAt(), LocalDateTime.now());
+        if (timeElapsed.getSeconds() > TIMEOUT_SECONDS) {
+            throw new IllegalStateException(
+                    "Cannot accept order - timeout period has expired (" + TIMEOUT_SECONDS + " seconds)"
+            );
+        }
+        // Cancel the scheduled auto-rejection
+        orderTimeoutScheduler.cancelOrderTimeout(purchaseId);
+
+        // Publish acceptance event
         RestaurantAcceptedOrderEvent event = new RestaurantAcceptedOrderEvent(
                 LocalDateTime.now(),
-                orderId.id(),
+                purchaseId,
                 restaurantId
         );
 
         eventPublisher.publishEvent(event);
+        log.info("Order {} accepted by restaurant {}", purchaseId, restaurantId);
     }
 
     @Override
-    public void rejectOrder(UUID restaurantId, UUID orderId, String reason) {
-        // Verify order exists and belongs to this restaurant
-        PurchaseProjectorRecord orderRecord = loadPurchaseProjectorPort.findByOrderId(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
+    public void rejectOrder(UUID restaurantId, UUID purchaseId, String reason) {
+        PurchaseProjectorRecord orderRecord = loadPurchaseProjectorPort.findByPurchaseId(purchaseId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + purchaseId));
 
         if (!orderRecord.restaurantId().equals(restaurantId)) {
             throw new IllegalArgumentException("Order does not belong to this restaurant");
         }
 
-        // Restaurant BC just publishes that it rejected the order
+        // Cancel the scheduled auto-rejection (if manually rejecting)
+        orderTimeoutScheduler.cancelOrderTimeout(purchaseId);
+
+        // Publish rejection event
         RestaurantRejectedOrderEvent event = new RestaurantRejectedOrderEvent(
                 LocalDateTime.now(),
-                orderId,
+                purchaseId,
                 restaurantId,
                 reason
         );
 
         eventPublisher.publishEvent(event);
+        log.info("Order {} rejected by restaurant {}: {}", purchaseId, restaurantId, reason);
+    }
+
+    @EventListener
+    public void handleOrderTimeout(OrderTimeoutEvent event) {
+        rejectOrder(
+                event.restaurantId(),
+                event.orderId(),
+                "Restaurant did not respond within 15 seconds"
+        );
     }
 
 

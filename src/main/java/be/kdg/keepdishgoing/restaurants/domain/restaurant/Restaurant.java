@@ -24,7 +24,7 @@ public class Restaurant {
     private String email;
     private String pictureURL;
     private TypeOfCuisine cuisine;
-    private Time preparationTime;
+    private Integer preparationTime;
     private Time openingTime;
     private Double minPrice;
     private Double maxPrice;
@@ -46,7 +46,7 @@ public class Restaurant {
             String email,
             String pictureURL,
             TypeOfCuisine cuisine,
-            Time preparationTime,
+            Integer preparationTime,
             Time openingTime,
             Double minPrice,
             Double maxPrice,
@@ -87,7 +87,7 @@ public class Restaurant {
 
         return restaurant;
     }
-    public Restaurant(RestaurantId restaurantId, OwnerId ownerId, String name, String address, String email, String pictureURL, TypeOfCuisine cuisine, Time preparationTime, Time openingTime, Double minPrice, Double maxPrice,Time estimatedDeliveryTime, List<Dish> dishes) {
+    public Restaurant(RestaurantId restaurantId, OwnerId ownerId, String name, String address, String email, String pictureURL, TypeOfCuisine cuisine, Integer preparationTime, Time openingTime, Double minPrice, Double maxPrice,Time estimatedDeliveryTime, List<Dish> dishes) {
         this.restaurantId = restaurantId;
         this.ownerId = ownerId;
         this.name = name;

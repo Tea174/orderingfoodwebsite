@@ -1,6 +1,6 @@
 package be.kdg.keepdishgoing.restaurants.adapter.in.web.owner;
 
-import be.kdg.keepdishgoing.orders.domain.order.OrderId;
+
 import be.kdg.keepdishgoing.restaurants.adapter.in.request.owner.LoginOwnerRequest;
 import be.kdg.keepdishgoing.restaurants.adapter.in.request.owner.RegisterOwnerRequest;
 import be.kdg.keepdishgoing.restaurants.adapter.in.request.owner.RejectOrderRequest;
@@ -17,6 +17,8 @@ import be.kdg.keepdishgoing.restaurants.port.out.owner.AcceptPurchasePort;
 import be.kdg.keepdishgoing.restaurants.port.out.owner.RejectPurchasePort;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,39 +38,44 @@ public class OwnerController {
     private final GetRestaurantUseCase getRestaurantUseCase;
     private final AcceptPurchasePort acceptPurchasePort;
     private final RejectPurchasePort rejectPurchasePort;
+    private final Logger log = LoggerFactory.getLogger(OwnerController.class);
 
-    @PostMapping("/{restaurantId}/orders/{orderId}/accept")
+    @PostMapping("/{restaurantId}/orders/{purchaseId}/accept")
     public ResponseEntity<Void> acceptOrder(
             @PathVariable UUID restaurantId,
-            @PathVariable UUID orderId,
+            @PathVariable UUID purchaseId,
             @AuthenticationPrincipal Jwt jwt) {
 
         verifyRestaurantOwnership(restaurantId, jwt);
-        acceptPurchasePort.acceptOrder(restaurantId, OrderId.of(orderId));
+        acceptPurchasePort.acceptOrder(restaurantId, purchaseId);
 
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{restaurantId}/orders/{orderId}/reject")
+    @PostMapping("/{restaurantId}/orders/{purchaseId}/reject")
     public ResponseEntity<Void> rejectOrder(
             @PathVariable UUID restaurantId,
-            @PathVariable UUID orderId,
+            @PathVariable UUID purchaseId,
             @RequestBody @Valid RejectOrderRequest request,
             @AuthenticationPrincipal Jwt jwt) {
 
         verifyRestaurantOwnership(restaurantId, jwt);
-        rejectPurchasePort.rejectOrder(restaurantId, orderId, request.reason());
+        rejectPurchasePort.rejectOrder(restaurantId, purchaseId, request.reason());
 
         return ResponseEntity.ok().build();
     }
-
     private void verifyRestaurantOwnership(UUID restaurantId, Jwt jwt) {
         String keycloakId = jwt.getSubject();
+        log.info("Verifying ownership: keycloakId={}, requestedRestaurantId={}", keycloakId, restaurantId);
+
         Restaurant restaurant = getRestaurantUseCase
                 .findByOwnerIdKeycloakSubjectId(keycloakId)
                 .orElseThrow(() -> new SecurityException("Restaurant not found for owner"));
 
-        if (!restaurant.getRestaurantId().equals(restaurantId)) {
+        log.info("Found restaurant: restaurantId={}", restaurant.getRestaurantId());
+
+        if (!restaurant.getRestaurantId().id().equals(restaurantId)) {
+            log.error("Restaurant ID mismatch: expected={}, got={}", restaurant.getRestaurantId(), restaurantId);
             throw new SecurityException("You don't have permission for this restaurant");
         }
     }

@@ -9,7 +9,7 @@ public record OwnerResponse(
         String firstName,
         String lastName,
         String email,
-        int phoneNumber,
+        String phoneNumber,
         String address
 ) {
     public static OwnerResponse fromDomain(Owner owner) {

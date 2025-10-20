@@ -6,10 +6,11 @@ public record RequestProjectorRecord(
         UUID orderId,
         UUID restaurantId,
         UUID customerId,
+        Integer preparationTime,
         String guestName,
         String guestEmail,
         String recipientName,
-        Integer recipientPhone,
+        String recipientPhone,
         String deliveryAddress
 ){
 }

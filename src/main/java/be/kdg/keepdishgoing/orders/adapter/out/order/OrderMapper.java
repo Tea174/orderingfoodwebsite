@@ -16,9 +16,19 @@ public class OrderMapper {
         OrderJpaEntity entity = new OrderJpaEntity();
         entity.setOrderId(order.getOrderId().id());
         entity.setCustomerId(order.getCustomerId());  // can be null
+
+        // Guest details
         entity.setGuestName(order.getGuestName());
         entity.setGuestEmail(order.getGuestEmail());
+        entity.setGuestPhone(order.getGuestPhone());
+
+        // Customer details
+        entity.setCustomerName(order.getCustomerName());
+        entity.setCustomerPhone(order.getCustomerPhone());
+
+        // Delivery
         entity.setDeliveryAddress(order.getDeliveryAddress());
+
         entity.setRestaurantId(order.getRestaurantId());
         entity.setTotalPrice(order.getTotalPrice());
         entity.setStatus(order.getStatus());
@@ -35,9 +45,19 @@ public class OrderMapper {
         Order order = new Order();
         order.setOrderId(new OrderId(entity.getOrderId()));
         order.setCustomerId(entity.getCustomerId());
+
+        // Guest details
         order.setGuestName(entity.getGuestName());
         order.setGuestEmail(entity.getGuestEmail());
+        order.setGuestPhone(entity.getGuestPhone());
+
+        // Customer details
+        order.setCustomerName(entity.getCustomerName());
+        order.setCustomerPhone(entity.getCustomerPhone());
+
+        // Delivery
         order.setDeliveryAddress(entity.getDeliveryAddress());
+
         order.setRestaurantId(entity.getRestaurantId());
         order.setTotalPrice(entity.getTotalPrice());
         order.setStatus(entity.getStatus());

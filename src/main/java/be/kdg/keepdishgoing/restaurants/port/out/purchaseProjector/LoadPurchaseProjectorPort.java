@@ -6,5 +6,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface LoadPurchaseProjectorPort {
-    Optional<PurchaseProjectorRecord> findByOrderId(UUID orderId);
+    Optional<PurchaseProjectorRecord> findByPurchaseId(UUID purchaseId) ;
 }

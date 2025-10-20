@@ -4,6 +4,8 @@ import be.kdg.keepdishgoing.restaurants.domain.dish.Dish;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +19,16 @@ public class Basket {
     private BasketId basketId;
     private UUID customerId; // null for guest
     private UUID restaurantId;
-    private List<BasketItem> items;
+    private List<BasketItem> items = new ArrayList<>();
 
     // Delivery details - should be in Basket
     private String deliveryAddress;
 
     // For registered customers (fetched from customer profile or specified)
     private String customerName;
-    private Integer customerPhone;
+    private String customerPhone;
+
+    private final Logger log =  LoggerFactory.getLogger(Basket.class);
 
 
     // Add item to basket
@@ -94,10 +98,13 @@ public class Basket {
 
     // Validate all items belong to same restaurant
     public void validateSingleRestaurant(UUID newDishRestaurantId) {
+        log.info("Validating restaurant: current={}, new={}", restaurantId, newDishRestaurantId);
+
         if (restaurantId != null && !restaurantId.equals(newDishRestaurantId)) {
             throw new IllegalStateException("Cannot add dishes from different restaurants");
         }
         if (restaurantId == null) {
+            log.info("Setting basket restaurantId to: {}", newDishRestaurantId);
             this.restaurantId = newDishRestaurantId;
         }
     }

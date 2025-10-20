@@ -16,14 +16,20 @@ public class RequestProjectorJpaAdapter {
     }
 
     public void save(RequestProjectorRecord requestProjectorRecord) {
-        logger.debug("Saving order record {}", requestProjectorRecord);
-        RequestProjectorEntity requestProjectorEntity = new RequestProjectorEntity();
-        requestProjectorEntity.setRequestId(requestProjectorRecord.orderId());
-        requestProjectorEntity.setRestaurantId(requestProjectorRecord.restaurantId());
-        logger.debug("Saving order record {}", requestProjectorEntity);
-        repository.save(requestProjectorEntity);
+        logger.debug("Saving request record {}", requestProjectorRecord);
 
+        RequestProjectorEntity entity = new RequestProjectorEntity();
+        entity.setRequestId(requestProjectorRecord.orderId());
+        entity.setRestaurantId(requestProjectorRecord.restaurantId());
+        entity.setCustomerId(requestProjectorRecord.customerId());
+        entity.setGuestName(requestProjectorRecord.guestName());
+        entity.setGuestEmail(requestProjectorRecord.guestEmail());
+        entity.setRecipientName(requestProjectorRecord.recipientName());
+        entity.setRecipientPhone(requestProjectorRecord.recipientPhone());
+        entity.setDeliveryAddress(requestProjectorRecord.deliveryAddress());
 
+        repository.save(entity);
+        logger.debug("Saved request record {}", entity);
     }
 
 

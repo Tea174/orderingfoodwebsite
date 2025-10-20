@@ -5,5 +5,5 @@ import be.kdg.keepdishgoing.orders.domain.order.OrderId;
 import java.util.UUID;
 
 public interface AcceptPurchasePort {
-    void acceptOrder(UUID restaurantId, OrderId orderId);
+    void acceptOrder(UUID restaurantId, UUID purchaseId);
 }

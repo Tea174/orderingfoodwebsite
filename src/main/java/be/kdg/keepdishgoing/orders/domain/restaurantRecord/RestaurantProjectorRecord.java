@@ -11,5 +11,5 @@ public record RestaurantProjectorRecord(
         String name,
         String address,
         TypeOfCuisine cuisine,
-        Time estimatedDeliveryTime
+        Integer preparationTime
 ) {}

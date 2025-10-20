@@ -40,7 +40,7 @@ public class RestaurantJpaEntity {
     private TypeOfCuisine cuisine;
 
     @Column(nullable = false)
-    private Time preparationTime;
+    private Integer preparationTime;
     @Column(nullable = false)
     private Time openingTime;
 
@@ -75,7 +75,7 @@ public class RestaurantJpaEntity {
         return ownerId != null ? ownerId.getUuid() : null;
     }
 
-    public RestaurantJpaEntity(UUID uuid, OwnerJpaEntity ownerId, String name, String address, String email, String pictureURL, TypeOfCuisine cuisine, Time preparationTime, Time openingTime, List<DishJpaEntity> dishes) {
+    public RestaurantJpaEntity(UUID uuid, OwnerJpaEntity ownerId, String name, String address, String email, String pictureURL, TypeOfCuisine cuisine, Integer preparationTime, Time openingTime, List<DishJpaEntity> dishes) {
         this.uuid = uuid;
         this.ownerId = ownerId;
         this.name = name;

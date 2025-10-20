@@ -12,6 +12,8 @@ import be.kdg.keepdishgoing.restaurants.domain.dish.DishId;
 import be.kdg.keepdishgoing.restaurants.port.in.dish.GetDishUseCase;
 import be.kdg.keepdishgoing.restaurants.port.in.dish.GetDishUseCase.PublishedDishDto;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +35,7 @@ public class BasketService implements
     private final SaveOrderPort saveOrderPort;
     private final GetDishUseCase getDishUseCase;
     private final PublishOrderEventsPort publishOrderEventsPort;
+    private final Logger log = LoggerFactory.getLogger(BasketService.class);
 
     @Override
     public OrderId checkoutAsGuest(UUID basketId, GuestCheckoutDetails guestDetails) {
@@ -155,6 +158,8 @@ public class BasketService implements
     public void addItem(UUID customerId, UUID restaurantId, UUID dishId, int quantity) {
         // 1. Get dish details from RestaurantProjectorRecord BC
         PublishedDishDto dish = getDishUseCase.getPublishedDish(new DishId(dishId));
+        log.info("DEBUG - Dish restaurantId: '{}', Requested restaurantId: '{}'",
+                dish.restaurantId().id(), restaurantId);
         if (!dish.inStock()) {
             throw new IllegalStateException("DishProjectorRecord is out of stock");
         }
@@ -163,6 +168,7 @@ public class BasketService implements
         }
         Basket basket = loadBasketPort.loadByCustomerId(customerId)
                 .orElse(Basket.createBasket(customerId, restaurantId, new ArrayList<>()));
+
         basket.validateSingleRestaurant(restaurantId);
         basket.addItem(dishId, dish.name(), dish.price(), quantity);
         saveBasketPort.save(basket);
@@ -172,9 +178,19 @@ public class BasketService implements
     public void addItemToGuestBasket(UUID basketId, UUID restaurantId, UUID dishId, int quantity) {
         Basket basket = loadBasketPort.loadById(basketId)
                 .orElseThrow(() -> new IllegalStateException("Basket not found"));
+
         PublishedDishDto dish = getDishUseCase.getPublishedDish(new DishId(dishId));
+        log.info("DEBUG - Dish restaurantId: '{}', Requested restaurantId: '{}'",
+                dish.restaurantId().id(), restaurantId);
+
+        // Validate dish belongs to the restaurant
+        if (!dish.restaurantId().id().equals(restaurantId)) {
+            throw new IllegalArgumentException("Dish does not belong to this restaurant");
+        }
+
+        basket.validateSingleRestaurant(restaurantId);
         basket.addItem(dishId, dish.name(), dish.price(), quantity);
-        basket.setRestaurantId(restaurantId);
+
         saveBasketPort.save(basket);
     }
 

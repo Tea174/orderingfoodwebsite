@@ -14,7 +14,7 @@ public interface CheckoutBasketUseCase {
     public record GuestCheckoutDetails(
             String name,
             String email,
-            Integer phone,
+            String phone,
             String deliveryAddress
     ) {
         public GuestCheckoutDetails {
